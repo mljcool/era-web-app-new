@@ -86,7 +86,7 @@ export const navigation: FuseNavigation[] = [
                 title: 'Coming Soon',
                 type: 'item',
                 icon: 'alarm',
-                url: '/pages/coming-soon'
+                url: '/clients'
             },
             {
                 id: 'errors',
