@@ -3,3 +3,9 @@
 
 // Import app.theme.scss
 @import 'app/app.theme'; /* You can add global styles to this file, and also import other style files */
+body {
+    background: #d8d8d8 !important;
+    .main-root {
+        background: white;
+    }
+}
