@@ -2,13 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-assistance',
-  template: `
-    <p>
-      assistance works!
-    </p>
-  `,
-  styles: [
-  ]
+  templateUrl: './assistance.component.html',
+  styleUrls: ['./assistance.component.scss']
 })
 export class AssistanceComponent implements OnInit, OnDestroy {
 

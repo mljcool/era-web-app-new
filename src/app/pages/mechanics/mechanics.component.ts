@@ -2,13 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-mechanics',
-  template: `
-    <p>
-      mechanics works!
-    </p>
-  `,
-  styles: [
-  ]
+  templateUrl: './mechanics.component.html',
+  styleUrls: ['./mechanics.component.scss']
 })
 export class MechanicsComponent implements OnInit, OnDestroy {
 

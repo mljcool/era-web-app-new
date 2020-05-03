@@ -2,13 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-orders',
-  template: `
-    <p>
-      orders works!
-    </p>
-  `,
-  styles: [
-  ]
+  templateUrl: './orders.component.html',
+  styleUrls: ['./orders.component.scss']
 })
 export class OrdersComponent implements OnInit {
 

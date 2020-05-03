@@ -2,13 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-shopservices',
-  template: `
-    <p>
-      shopservices works!
-    </p>
-  `,
-  styles: [
-  ]
+  templateUrl: './shopservices.component.html',
+  styleUrls: ['./shopservices.component.scss']
 })
 export class ShopservicesComponent implements OnInit {
 

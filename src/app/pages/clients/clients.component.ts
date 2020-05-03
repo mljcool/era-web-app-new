@@ -3,13 +3,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-clients',
-  template: `
-    <p>
-      clients works!
-    </p>
-  `,
-  styles: [
-  ]
+  templateUrl: './clients.component.html',
+  styleUrls: ['./clients.component.scss']
 })
 export class ClientsComponent implements OnInit, OnDestroy {
 
