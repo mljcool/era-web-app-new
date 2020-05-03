@@ -11,75 +11,9 @@ export const navigation: FuseNavigation[] = [
             {
                 id: 'authentication',
                 title: 'Authentication',
-                type: 'collapsable',
+                type: 'item',
                 icon: 'lock',
-                badge: {
-                    title: '10',
-                    bg: '#525e8a',
-                    fg: '#FFFFFF'
-                },
-                children: [
-                    {
-                        id: 'login',
-                        title: 'Login',
-                        type: 'item',
-                        url: '/pages/auth/login'
-                    },
-                    {
-                        id: 'login-v2',
-                        title: 'Login v2',
-                        type: 'item',
-                        url: '/pages/auth/login-2'
-                    },
-                    {
-                        id: 'register',
-                        title: 'Register',
-                        type: 'item',
-                        url: '/pages/auth/register'
-                    },
-                    {
-                        id: 'register-v2',
-                        title: 'Register v2',
-                        type: 'item',
-                        url: '/pages/auth/register-2'
-                    },
-                    {
-                        id: 'forgot-password',
-                        title: 'Forgot Password',
-                        type: 'item',
-                        url: '/pages/auth/forgot-password'
-                    },
-                    {
-                        id: 'forgot-password-v2',
-                        title: 'Forgot Password v2',
-                        type: 'item',
-                        url: '/pages/auth/forgot-password-2'
-                    },
-                    {
-                        id: 'reset-password',
-                        title: 'Reset Password',
-                        type: 'item',
-                        url: '/pages/auth/reset-password'
-                    },
-                    {
-                        id: 'reset-password-v2',
-                        title: 'Reset Password v2',
-                        type: 'item',
-                        url: '/pages/auth/reset-password-2'
-                    },
-                    {
-                        id: 'lock-screen',
-                        title: 'Lock Screen',
-                        type: 'item',
-                        url: '/pages/auth/lock'
-                    },
-                    {
-                        id: 'mail-confirmation',
-                        title: 'Mail Confirmation',
-                        type: 'item',
-                        url: '/pages/auth/mail-confirm'
-                    }
-                ]
+                url: '/login'
             },
             {
                 id: 'coming-soon',

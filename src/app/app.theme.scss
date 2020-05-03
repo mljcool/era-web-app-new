@@ -68,7 +68,7 @@ $typography: mat-typography-config(
     $body-2: mat-typography-level(14px, 24px, 600),
     $button: mat-typography-level(14px, 14px, 600),
     $input: mat-typography-level(16px, 1.125, 400)
-        // line-height must be unitless !!!,,,,
+        // line-height must be unitless !!!,,,,,
 );
 
 // Setup the typography
@@ -119,9 +119,12 @@ $typography: mat-typography-config(
 
 // @import 'src/app/main/ui/cards/cards.theme';
 
+@import 'src/app/pages/login/login.theme';
+
 // Define a mixin for easier access
 @mixin components-theme($theme) {
-    // Layout components
+    // pages
+    @include login-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------
