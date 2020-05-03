@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
 
@@ -9,7 +9,7 @@ import { fuseAnimations } from '@fuse/animations';
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(private _fuseConfigService: FuseConfigService, ) {
     this._fuseConfigService.config = {
@@ -31,6 +31,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+
   }
 
 }

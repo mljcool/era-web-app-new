@@ -1,3 +1,4 @@
+import { ClientService } from './../@appCore/services/client.service';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Platform } from '@angular/cdk/platform';
@@ -38,7 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private _fuseConfigService: FuseConfigService,
     private _fuseNavigationService: FuseNavigationService,
     private _fuseSplashScreenService: FuseSplashScreenService,
-    private _platform: Platform
+    private _platform: Platform,
+    private _clientSrvc: ClientService
   ) {
     // Get default navigation
     this.setNavigationAndPlatforms();

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { ClientService } from './../../../@appCore/services/client.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-clients',
@@ -10,11 +11,20 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class ClientsComponent implements OnInit {
+export class ClientsComponent implements OnInit, OnDestroy {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private _clientSrvc: ClientService) {
   }
+  ngOnInit(): void {
+    this._clientSrvc.onUserChanges.subscribe(response => {
+      console.log(response);
+    }).unsubscribe();
+  }
+
+
+  ngOnDestroy(): void {
+    console.log('here');
+  }
+
 
 }

@@ -17,6 +17,7 @@ import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from
 import { fuseConfig } from 'app/fuse-config';
 
 import { LayoutModule } from 'app/layout/layout.module';
+import { ServicesSharedModule } from '@appCore/shared/sharedServices.module';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { LayoutModule } from 'app/layout/layout.module';
 
     // App modules
     LayoutModule,
+    ServicesSharedModule.forRoot()
 
   ],
   providers: [],

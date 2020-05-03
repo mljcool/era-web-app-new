@@ -13,28 +13,28 @@ export const navigation: FuseNavigation[] = [
                 title: 'Road Assistance',
                 type: 'item',
                 icon: 'build',
-                url: '/login2'
+                url: '/assistance'
             },
             {
                 id: 'appointments',
                 title: 'Appointments',
                 type: 'item',
                 icon: 'today',
-                url: '/clients4'
+                url: '/appointments'
             },
             {
                 id: 'orders',
                 title: 'Orders',
                 type: 'item',
                 icon: 'add_shopping_cart',
-                url: '/clients5'
+                url: '/orders'
             },
             {
-                id: 'Mechanics',
+                id: 'progress',
                 title: 'View Progress',
                 type: 'item',
                 icon: 'alarm',
-                url: '/clients6'
+                url: '/progress'
             },
         ]
     },
@@ -46,19 +46,19 @@ export const navigation: FuseNavigation[] = [
         children: [
 
             {
-                id: 'mechanic',
-                title: 'Mechanic',
+                id: 'mechanics',
+                title: 'Mechanics',
                 type: 'item',
                 icon: 'assignment_ind',
-                url: '/pages/auth/login2'
+                url: '/mechanics'
             },
 
             {
-                id: 'services',
-                title: 'Services',
+                id: 'shopservices',
+                title: 'Shop Services',
                 type: 'item',
                 icon: 'check_circle',
-                url: '/pages/auth/login2'
+                url: '/shopservices'
             },
 
             {
@@ -66,7 +66,7 @@ export const navigation: FuseNavigation[] = [
                 title: 'Products',
                 type: 'item',
                 icon: 'shopping_basket',
-                url: '/pages/auth/login2'
+                url: '/products'
             },
 
 
