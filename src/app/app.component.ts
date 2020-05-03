@@ -6,13 +6,9 @@ import { takeUntil } from 'rxjs/operators';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
-import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
-import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
 
 import { navigation } from 'app/navigation/navigation';
-import { locale as navigationEnglish } from 'app/navigation/i18n/en';
-import { locale as navigationTurkish } from 'app/navigation/i18n/tr';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +30,6 @@ export class AppComponent implements OnInit, OnDestroy {
    * @param {FuseNavigationService} _fuseNavigationService
    * @param {FuseSidebarService} _fuseSidebarService
    * @param {FuseSplashScreenService} _fuseSplashScreenService
-   * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
    * @param {Platform} _platform
    * @param {TranslateService} _translateService
    */
@@ -42,29 +37,12 @@ export class AppComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any,
     private _fuseConfigService: FuseConfigService,
     private _fuseNavigationService: FuseNavigationService,
-    private _fuseSidebarService: FuseSidebarService,
     private _fuseSplashScreenService: FuseSplashScreenService,
-    private _fuseTranslationLoaderService: FuseTranslationLoaderService,
     private _platform: Platform
   ) {
     // Get default navigation
-    this.navigation = navigation;
+    this.setNavigationAndPlatforms();
 
-    // Register the navigation to the service
-    this._fuseNavigationService.register('main', this.navigation);
-
-    // Set the main navigation as our current navigation
-    this._fuseNavigationService.setCurrentNavigation('main');
-
-
-
-    // Add is-mobile class to the body if the platform is mobile
-    if (this._platform.ANDROID || this._platform.IOS) {
-      this.document.body.classList.add('is-mobile');
-    }
-
-    // Set the private defaults
-    this._unsubscribeAll = new Subject();
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -112,16 +90,18 @@ export class AppComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ Public methods
-  // -----------------------------------------------------------------------------------------------------
 
-  /**
-   * Toggle sidebar open
-   *
-   * @param key
-   */
-  toggleSidebarOpen(key): void {
-    this._fuseSidebarService.getSidebar(key).toggleOpen();
+  setNavigationAndPlatforms(): void {
+
+    this.navigation = navigation;
+    this._fuseNavigationService.register('main', this.navigation);
+    this._fuseNavigationService.setCurrentNavigation('main');
+
+    // Add is-mobile class to the body if the platform is mobile
+    if (this._platform.ANDROID || this._platform.IOS) {
+      this.document.body.classList.add('is-mobile');
+    }
+    // Set the private defaults
+    this._unsubscribeAll = new Subject();
   }
 }

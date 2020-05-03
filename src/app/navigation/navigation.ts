@@ -4,138 +4,74 @@ export const navigation: FuseNavigation[] = [
 
     {
         id: 'pages',
-        title: 'Pages',
+        title: 'Service Request',
         type: 'group',
         icon: 'pages',
         children: [
             {
-                id: 'authentication',
-                title: 'Authentication',
-                type: 'item',
-                icon: 'lock',
-                url: '/login'
-            },
-            {
-                id: 'coming-soon',
-                title: 'Coming Soon',
-                type: 'item',
-                icon: 'alarm',
-                url: '/clients'
-            },
-            {
-                id: 'errors',
-                title: 'Errors',
-                type: 'collapsable',
-                icon: 'error',
-                children: [
-                    {
-                        id: '404',
-                        title: '404',
-                        type: 'item',
-                        url: '/pages/errors/error-404'
-                    },
-                    {
-                        id: '500',
-                        title: '500',
-                        type: 'item',
-                        url: '/pages/errors/error-500'
-                    }
-                ]
-            },
-            {
-                id: 'invoice',
-                title: 'Invoice',
-                type: 'collapsable',
-                icon: 'receipt',
-                children: [
-                    {
-                        id: 'modern',
-                        title: 'Modern',
-                        type: 'item',
-                        url: '/pages/invoices/modern'
-                    },
-                    {
-                        id: 'compact',
-                        title: 'Compact',
-                        type: 'item',
-                        url: '/pages/invoices/compact'
-                    }
-                ]
-            },
-            {
-                id: 'maintenance',
-                title: 'Maintenance',
+                id: 'assistance',
+                title: 'Road Assistance',
                 type: 'item',
                 icon: 'build',
-                url: '/pages/maintenance'
+                url: '/login2'
             },
             {
-                id: 'pricing',
-                title: 'Pricing',
-                type: 'collapsable',
-                icon: 'attach_money',
-                children: [
-                    {
-                        id: 'style-1',
-                        title: 'Style 1',
-                        type: 'item',
-                        url: '/pages/pricing/style-1'
-                    },
-                    {
-                        id: 'style-2',
-                        title: 'Style 2',
-                        type: 'item',
-                        url: '/pages/pricing/style-2'
-                    },
-                    {
-                        id: 'style-3',
-                        title: 'Style 3',
-                        type: 'item',
-                        url: '/pages/pricing/style-3'
-                    }
-                ]
-            },
-            {
-                id: 'profile',
-                title: 'Profile',
+                id: 'appointments',
+                title: 'Appointments',
                 type: 'item',
-                icon: 'person',
-                url: '/pages/profile'
+                icon: 'today',
+                url: '/clients4'
             },
             {
-                id: 'search',
-                title: 'Search',
-                type: 'collapsable',
-                icon: 'search',
-                children: [
-                    {
-                        id: 'search-classic',
-                        title: 'Classic',
-                        type: 'item',
-                        url: '/pages/search/classic'
-                    },
-                    {
-                        id: 'search-modern',
-                        title: 'Modern',
-                        type: 'item',
-                        url: '/pages/search/modern'
-                    }
-                ]
-            },
-            {
-                id: 'faq',
-                title: 'Faq',
+                id: 'orders',
+                title: 'Orders',
                 type: 'item',
-                icon: 'help',
-                url: '/pages/faq'
+                icon: 'add_shopping_cart',
+                url: '/clients5'
             },
             {
-                id: 'knowledge-base',
-                title: 'Knowledge Base',
+                id: 'Mechanics',
+                title: 'View Progress',
                 type: 'item',
-                icon: 'import_contacts',
-                url: '/pages/knowledge-base'
-            }
+                icon: 'alarm',
+                url: '/clients6'
+            },
         ]
     },
+    {
+        id: 'management',
+        title: 'Manage My',
+        type: 'group',
+        icon: 'pages',
+        children: [
+
+            {
+                id: 'mechanic',
+                title: 'Mechanic',
+                type: 'item',
+                icon: 'assignment_ind',
+                url: '/pages/auth/login2'
+            },
+
+            {
+                id: 'services',
+                title: 'Services',
+                type: 'item',
+                icon: 'check_circle',
+                url: '/pages/auth/login2'
+            },
+
+            {
+                id: 'products',
+                title: 'Products',
+                type: 'item',
+                icon: 'shopping_basket',
+                url: '/pages/auth/login2'
+            },
+
+
+        ]
+
+
+    }
 ];

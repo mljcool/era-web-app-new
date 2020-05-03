@@ -4,6 +4,11 @@ fuse-sidebar {
     &.navbar-fuse-sidebar {
         overflow: hidden;
 
+        .logo-icon {
+            border: solid #ffffff 1px;
+            border-radius: 50%;
+            background: white;
+        }
         &.folded:not(.unfolded) {
             navbar {
                 navbar-vertical-style-1 {

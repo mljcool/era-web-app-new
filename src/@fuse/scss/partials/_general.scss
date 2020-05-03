@@ -18,10 +18,9 @@ body {
 // @ Boxed body
 // -----------------------------------------------------------------------------------------------------
 body {
-
     // Boxed
     &.boxed {
-        max-width: 1600px;
+        max-width: 1550px;
         margin: 0 auto;
 
         @include mat-elevation(8);
@@ -40,7 +39,8 @@ body {
     -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
 
-    &:before, &:after {
+    &:before,
+    &:after {
         box-sizing: border-box;
     }
 
