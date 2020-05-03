@@ -1,0 +1,13 @@
+{
+    "hosting": {
+        "site": "era-web-app-new",
+        "public": "dist/ERA-WEB-APP",
+        "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+        "rewrites": [
+            {
+                "source": "**",
+                "destination": "/index.html"
+            }
+        ]
+    }
+}
