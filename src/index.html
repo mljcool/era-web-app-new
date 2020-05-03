@@ -6,8 +6,42 @@
         <base href="/" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/x-icon" href="favicon.ico" />
+        <link href="assets/icons/meteocons/style.css" rel="stylesheet" />
+        <link
+            href="assets/icons/material-icons/outline/style.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700"
+            rel="stylesheet"
+        />
+        <!--  Splash Screen CSS -->
+        <link rel="stylesheet" href="assets/splash/splash.css" />
     </head>
     <body>
+        <fuse-splash-screen id="fuse-splash-screen">
+            <div class="center">
+                <div class="logo">
+                    <img width="128" src="assets/images/logos/fuse.svg" />
+                </div>
+
+                <!-- Material Design Spinner -->
+                <div class="spinner-wrapper">
+                    <div class="spinner">
+                        <div class="inner">
+                            <div class="gap"></div>
+                            <div class="left">
+                                <div class="half-circle"></div>
+                            </div>
+                            <div class="right">
+                                <div class="half-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- / Material Design Spinner -->
+            </div>
+        </fuse-splash-screen>
         <app-root></app-root>
     </body>
 </html>
