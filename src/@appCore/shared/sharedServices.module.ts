@@ -3,6 +3,7 @@ import { FirebaseUIModule } from 'firebaseui-angular';
 import { NgModule, ModuleWithProviders } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ClientService } from '@appCore/services/client.service';
+import { CheckerServices } from '@appCore/services/checker.service';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ export class ServicesSharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: ServicesSharedModule,
-      providers: [ClientService],
+      providers: [ClientService, CheckerServices],
     }
   }
 

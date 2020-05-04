@@ -1,3 +1,4 @@
+import { CheckerServices } from './../@appCore/services/checker.service';
 import { ClientService } from './../@appCore/services/client.service';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -39,8 +40,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private _fuseConfigService: FuseConfigService,
     private _fuseNavigationService: FuseNavigationService,
     private _fuseSplashScreenService: FuseSplashScreenService,
+    private _clientSrvc: ClientService,
+    private _checkerSrvc: CheckerServices,
     private _platform: Platform,
-    private _clientSrvc: ClientService
   ) {
     // Get default navigation
     this.setNavigationAndPlatforms();
@@ -61,7 +63,6 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe((config) => {
 
         this.fuseConfig = config;
-
         // Boxed
         if (this.fuseConfig.layout.width === 'boxed') {
           this.document.body.classList.add('boxed');

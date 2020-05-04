@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
@@ -23,12 +24,16 @@ import { environment } from 'environments/environment';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { firebaseUiAuthConfig } from '@appCore/firebase/auth-config';
 import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
+import { ClientCheckerModalComponent } from '@appCore/modals/checker/checker.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ClientCheckerModalComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +48,8 @@ import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
     // Material
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
+    MatProgressBarModule,
 
     // Fuse modules
     FuseModule.forRoot(fuseConfig),
@@ -50,7 +57,7 @@ import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
     FuseSharedModule,
     FuseSidebarModule,
     FuseThemeOptionsModule,
-
+    MatToolbarModule,
     // App modules
     LayoutModule,
     ServicesSharedModule.forRoot(),
@@ -58,9 +65,11 @@ import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
 
 
-
   ],
   providers: [AuthServiceGuard],
+  entryComponents: [
+    ClientCheckerModalComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
