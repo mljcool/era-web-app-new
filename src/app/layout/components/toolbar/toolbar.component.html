@@ -42,11 +42,14 @@
                 <div fxLayout="row" fxLayoutAlign="center center">
                     <img
                         class="avatar mr-0 mr-sm-16"
-                        src="assets/images/avatars/Velazquez.jpg"
+                        [src]="userInfo.photoURL"
+                        (error)="
+                            this.src = 'assets/images/avatars/Velazquez.jpg'
+                        "
                     />
-                    <span class="username mr-12" fxHide fxShow.gt-sm
-                        >Charlie Adams</span
-                    >
+                    <span class="username mr-12" fxHide fxShow.gt-sm>{{
+                        userInfo.displayName || 'Loading...'
+                    }}</span>
                     <mat-icon class="s-16" fxHide.xs
                         >keyboard_arrow_down</mat-icon
                     >
@@ -58,7 +61,7 @@
                     <mat-icon>account_circle</mat-icon>
                     <span>Account</span>
                 </button>
-                <button mat-menu-item class="">
+                <button mat-menu-item class="" (click)="logoutUser()">
                     <mat-icon>exit_to_app</mat-icon>
                     <span>Logout</span>
                 </button>

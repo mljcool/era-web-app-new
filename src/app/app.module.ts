@@ -18,6 +18,13 @@ import { fuseConfig } from 'app/fuse-config';
 
 import { LayoutModule } from 'app/layout/layout.module';
 import { ServicesSharedModule } from '@appCore/shared/sharedServices.module';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'environments/environment';
+import { FirebaseUIModule } from 'firebaseui-angular';
+import { firebaseUiAuthConfig } from '@appCore/firebase/auth-config';
+import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
+
+
 
 @NgModule({
   declarations: [
@@ -46,10 +53,14 @@ import { ServicesSharedModule } from '@appCore/shared/sharedServices.module';
 
     // App modules
     LayoutModule,
-    ServicesSharedModule.forRoot()
+    ServicesSharedModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+
+
 
   ],
-  providers: [],
+  providers: [AuthServiceGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

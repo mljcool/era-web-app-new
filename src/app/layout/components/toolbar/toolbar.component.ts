@@ -1,3 +1,4 @@
+import { IUser } from './../../../../@appCore/models/User';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,6 +8,7 @@ import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 
 import { navigation } from 'app/navigation/navigation';
+import { ClientService } from '@appCore/services/client.service';
 
 @Component({
     selector: 'toolbar',
@@ -23,20 +25,17 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
+    userInfo: IUser;
 
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseConfigService} _fuseConfigService
-     * @param {FuseSidebarService} _fuseSidebarService
-     */
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
+        private _clientSrvc: ClientService,
     ) {
+
         // Set the defaults
         this.userStatusOptions = [
             {
@@ -85,10 +84,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         this._unsubscribeAll = new Subject();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
     /**
      * On init
      */
@@ -100,6 +95,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
                 this.horizontalNavbar = settings.layout.navbar.position === 'top';
                 this.rightNavbar = settings.layout.navbar.position === 'right';
                 this.hiddenNavbar = settings.layout.navbar.hidden === true;
+            });
+
+        this._clientSrvc.onUserDataInfo
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((userInfo) => {
+                this.userInfo = userInfo;
             });
 
         // Set the selected language from default languages
@@ -144,5 +145,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      */
     setLanguage(lang): void {
 
+    }
+
+    logoutUser(): void {
+        this._clientSrvc.logOut();
     }
 }
