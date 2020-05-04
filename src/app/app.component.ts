@@ -12,6 +12,7 @@ import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 
 import { navigation } from 'app/navigation/navigation';
 import { Router, NavigationEnd } from '@angular/router';
+import { StoreServices } from '@appCore/services/store.services';
 
 @Component({
   selector: 'app-root',
@@ -44,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private _fuseSplashScreenService: FuseSplashScreenService,
     private _clientSrvc: ClientService,
     private _checkerSrvc: CheckerServices,
+    private _StoreServices: StoreServices,
     private _platform: Platform,
     private _router: Router
   ) {
@@ -53,6 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this._clientSrvc.onUserInLoggedIn.pipe(takeUntil(this._unsubscribeAll))
       .subscribe((islog) => {
         if (islog) {
+          this._StoreServices.getMassiveData();
           this._checkerSrvc.checkClienthasRegistration();
         }
       });

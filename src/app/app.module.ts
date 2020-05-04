@@ -1,3 +1,4 @@
+import { MaterialModule } from '@fuse/material.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,7 +28,10 @@ import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
 import { ClientCheckerModalComponent } from '@appCore/modals/checker/checker.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { StoreServices } from '@appCore/services/store.services';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 
@@ -47,18 +51,14 @@ import { StoreServices } from '@appCore/services/store.services';
     MatMomentDateModule,
 
     // Material
-    MatButtonModule,
-    MatIconModule,
-    MatDialogModule,
-    MatProgressBarModule,
-
+    MaterialModule,
     // Fuse modules
     FuseModule.forRoot(fuseConfig),
     FuseProgressBarModule,
     FuseSharedModule,
     FuseSidebarModule,
     FuseThemeOptionsModule,
-    MatToolbarModule,
+
     // App modules
     LayoutModule,
     ServicesSharedModule.forRoot(),
@@ -67,7 +67,7 @@ import { StoreServices } from '@appCore/services/store.services';
 
 
   ],
-  providers: [AuthServiceGuard, StoreServices],
+  providers: [AuthServiceGuard],
   entryComponents: [
     ClientCheckerModalComponent
   ],
