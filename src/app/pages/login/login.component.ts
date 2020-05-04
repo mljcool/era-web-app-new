@@ -65,9 +65,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   successCallback(
     signInSuccessData: FirebaseUISignInSuccessWithAuthResult
   ): void {
-    if (!!signInSuccessData) {
-      this._clientSrvc.checkIfUserIsLogin();
-    }
   }
 
   errorCallback(errorData: FirebaseUISignInFailure): void {

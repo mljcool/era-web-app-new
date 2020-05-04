@@ -27,6 +27,7 @@ import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
 import { ClientCheckerModalComponent } from '@appCore/modals/checker/checker.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { StoreServices } from '@appCore/services/store.services';
 
 
 
@@ -66,7 +67,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
   ],
-  providers: [AuthServiceGuard],
+  providers: [AuthServiceGuard, StoreServices],
   entryComponents: [
     ClientCheckerModalComponent
   ],

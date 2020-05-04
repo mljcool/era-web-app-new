@@ -43,7 +43,7 @@
                     <img
                         class="avatar mr-0 mr-sm-16"
                         [src]="userInfo.photoURL"
-                        (error)="
+                        onError="
                             this.src = 'assets/images/avatars/Velazquez.jpg'
                         "
                     />

@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IUser } from '@appCore/models/User';
+import { ClientService } from '@appCore/services/client.service';
 
 @Component({
   selector: 'app-checker',
@@ -10,12 +11,18 @@ import { IUser } from '@appCore/models/User';
 })
 export class ClientCheckerModalComponent implements OnInit {
 
-  clientData: IUser;
+  clientData: IUser = {
+    uid: '',
+    photoURL: 'Loading....',
+    displayName: './assets/images/avatars/avatar.jpg'
+  };
 
   constructor(public matDialogRef: MatDialogRef<ClientCheckerModalComponent>,
-    @Inject(MAT_DIALOG_DATA) private _data: any) {
-    this.clientData = (_data || {}).userInfo;
-    console.log(_data);
+    @Inject(MAT_DIALOG_DATA) private _data: any, private _clientSrvc: ClientService) {
+
+    this._clientSrvc.onUserDataInfo.subscribe(userData => {
+      this.clientData = userData;
+    });
   }
   ngOnInit(): void { }
 }

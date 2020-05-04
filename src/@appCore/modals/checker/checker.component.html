@@ -14,7 +14,9 @@
             <img
                 [src]="clientData.photoURL"
                 class="avatar contact-avatar huge m-0"
-                [alt]="clientData.displayName"
+                onError="
+                this.src = 'assets/images/avatars/avatar.jpg'
+            "
             />
             <div class="contact-name mt-8"></div>
         </mat-toolbar-row>
@@ -38,7 +40,7 @@
             (click)="matDialogRef.close()"
             aria-label="SAVE"
         >
-            ADD
+            Close
         </button>
     </div>
 </div>

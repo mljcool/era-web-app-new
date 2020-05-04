@@ -4,18 +4,19 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Platform } from '@angular/cdk/platform';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 
 import { navigation } from 'app/navigation/navigation';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
   fuseConfig: any;
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // Private
   private _unsubscribeAll: Subject<any>;
+  private _unsubscribeNavigate: Subject<any>;
 
   /**
    * Constructor
@@ -43,10 +45,17 @@ export class AppComponent implements OnInit, OnDestroy {
     private _clientSrvc: ClientService,
     private _checkerSrvc: CheckerServices,
     private _platform: Platform,
+    private _router: Router
   ) {
     // Get default navigation
     this.setNavigationAndPlatforms();
-
+    this._clientSrvc.checkIfUserIsLogin();
+    this._clientSrvc.onUserInLoggedIn.pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((islog) => {
+        if (islog) {
+          this._checkerSrvc.checkClienthasRegistration();
+        }
+      });
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -61,13 +70,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this._fuseConfigService.config
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((config) => {
-
         this.fuseConfig = config;
         // Boxed
         if (this.fuseConfig.layout.width === 'boxed') {
           this.document.body.classList.add('boxed');
-        }
-        else {
+        } else {
           this.document.body.classList.remove('boxed');
         }
 
@@ -93,9 +100,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
-
   setNavigationAndPlatforms(): void {
-
     this.navigation = navigation;
     this._fuseNavigationService.register('main', this.navigation);
     this._fuseNavigationService.setCurrentNavigation('main');
@@ -106,5 +111,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     // Set the private defaults
     this._unsubscribeAll = new Subject();
+    this._unsubscribeNavigate = new Subject();
   }
 }

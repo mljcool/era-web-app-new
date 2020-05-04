@@ -12,6 +12,7 @@ export class ClientService {
 
   public datas = '';
   public canLoadModule: boolean = false;
+  public userRawData: any = {};
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {
     this.onUserChanges = new BehaviorSubject({});
@@ -20,7 +21,6 @@ export class ClientService {
     });
     this.onUserInLoggedIn = new BehaviorSubject(false);
     console.log('I been called once!');
-    this.checkIfUserIsLogin();
   }
 
   checkIfUserIsLogin() {
@@ -31,9 +31,9 @@ export class ClientService {
 
       this.canLoadModule = !!response;
       if (!!response) {
-        console.log('userData', userData);
         this.onUserInLoggedIn.next(true);
         this.onUserDataInfo.next(userData);
+        this.userRawData = userData;
       }
     });
   }
