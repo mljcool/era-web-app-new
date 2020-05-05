@@ -8,12 +8,12 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 
 import { OrdersComponent } from './orders.component';
-import { EcommerceOrderComponent } from './order/order.component';
-import { EcommerceOrderService } from './order/order.service';
 import { AgmMapModule } from '@fuse/agMap.module';
+import { OrderDetailsService } from './order-details/order-details.service';
+import { OrderDetailsComponent } from './order-details/order-details.component';
 
 @NgModule({
-  declarations: [OrdersComponent, EcommerceOrderComponent],
+  declarations: [OrdersComponent, OrderDetailsComponent],
   imports: [
     CommonModule,
     OrdersRoutingModule,
@@ -24,7 +24,7 @@ import { AgmMapModule } from '@fuse/agMap.module';
   ],
   providers: [
     EcommerceOrdersService,
-    EcommerceOrderService
+    OrderDetailsService
   ]
 })
 export class OrdersModule { }

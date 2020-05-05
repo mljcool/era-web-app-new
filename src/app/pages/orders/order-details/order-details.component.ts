@@ -4,19 +4,19 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations';
-import { EcommerceOrderService } from './order.service';
-import { Order } from './order.model';
-import { orderStatuses } from './order-statuses';
+import { OrderDetailsService } from './order-details.service';
+import { OrderDetails } from './order-details.model';
+import { orderStatuses } from './order-details-statuses';
 
 @Component({
-    selector: 'e-commerce-order',
-    templateUrl: './order.component.html',
-    styleUrls: ['./order.component.scss'],
+    selector: 'order-details',
+    templateUrl: './order-details.component.html',
+    styleUrls: ['./order-details.component.scss'],
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations
 })
-export class EcommerceOrderComponent implements OnInit, OnDestroy {
-    order: Order;
+export class OrderDetailsComponent implements OnInit, OnDestroy {
+    order: OrderDetails;
     orderStatuses: any;
     statusForm: FormGroup;
 
@@ -30,11 +30,11 @@ export class EcommerceOrderComponent implements OnInit, OnDestroy {
      * @param {FormBuilder} _formBuilder
      */
     constructor(
-        private _ecommerceOrderService: EcommerceOrderService,
+        private _ecommerceOrderService: OrderDetailsService,
         private _formBuilder: FormBuilder
     ) {
         // Set the defaults
-        this.order = new Order();
+        this.order = new OrderDetails();
         this.orderStatuses = orderStatuses;
 
         // Set the private defaults
@@ -53,7 +53,7 @@ export class EcommerceOrderComponent implements OnInit, OnDestroy {
         this._ecommerceOrderService.onOrderChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(order => {
-                this.order = new Order(order);
+                this.order = new OrderDetails(order);
             });
 
         this.statusForm = this._formBuilder.group({

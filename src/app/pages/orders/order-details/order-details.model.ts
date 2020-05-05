@@ -1,7 +1,6 @@
 import { FuseUtils } from '@fuse/utils';
 
-export class Order
-{
+export class OrderDetails {
     id: string;
     reference: string;
     subtotal: string;
@@ -20,8 +19,7 @@ export class Order
      *
      * @param order
      */
-    constructor(order?)
-    {
+    constructor(order?) {
         order = order || {};
         this.id = order.id || FuseUtils.generateGUID();
         this.reference = order.reference || FuseUtils.generateGUID();

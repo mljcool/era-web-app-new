@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { OrdersComponent } from './orders.component';
-import { EcommerceOrderComponent } from './order/order.component';
 import { EcommerceOrdersService } from './orders.service';
-import { EcommerceOrderService } from './order/order.service';
+import { OrderDetailsService } from './order-details/order-details.service';
+import { OrderDetailsComponent } from './order-details/order-details.component';
 
 const routes: Routes = [
   {
@@ -14,9 +14,9 @@ const routes: Routes = [
   },
   {
     path: 'details/:id',
-    component: EcommerceOrderComponent,
+    component: OrderDetailsComponent,
     resolve: {
-      data: EcommerceOrderService
+      data: OrderDetailsService
     },
   }
 
