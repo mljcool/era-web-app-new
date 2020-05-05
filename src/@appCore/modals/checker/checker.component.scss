@@ -1,40 +1,46 @@
 @import 'src/@fuse/scss/fuse';
 
 .checker-dialog {
-    @include media-breakpoint('xs') {
-        width: 100%;
+  .pac-container,
+  .pac-item {
+    width: inherit !important;
+    cursor: pointer !important;
+    padding: 2 5px !important;
+  }
+  @include media-breakpoint('xs') {
+    width: 100%;
+  }
+
+  @include media-breakpoint('gt-xs') {
+    width: 400px;
+  }
+
+  .mat-dialog-container {
+    padding: 0;
+
+    .mat-toolbar {
+      flex: 1 0 auto;
+      min-height: initial;
     }
 
-    @include media-breakpoint('gt-xs') {
-        width: 400px;
+    .toolbar-bottom {
+      height: auto;
     }
+  }
 
-    .mat-dialog-container {
-        padding: 0;
-
-        .mat-toolbar {
-            flex: 1 0 auto;
-            min-height: initial;
-        }
-
-        .toolbar-bottom {
-            height: auto;
-        }
+  .dialog-content-wrapper {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    .validating-account {
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
-
-    .dialog-content-wrapper {
-        max-height: 85vh;
-        display: flex;
-        flex-direction: column;
-        .validating-account {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        .dialog-title {
-            span {
-                font-size: 15px;
-            }
-        }
+    .dialog-title {
+      span {
+        font-size: 15px;
+      }
     }
+  }
 }

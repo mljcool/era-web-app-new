@@ -3,19 +3,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IUser } from '@appCore/models/User';
 import { ClientService } from '@appCore/services/client.service';
 import { StoreServices } from '@appCore/services/store.services';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrudServiceShop } from '@appCore/services/crud.shop';
 import { firebase } from '@appCore/firebase/firebase-config';
 import * as moment from 'moment';
-import Swal from 'sweetalert2'
-
-import LatLng = google.maps.LatLng;
-import { LocationPickerModule } from "ng-location-picker";
-
-
-
-
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-checker',
@@ -33,6 +25,8 @@ export class ClientCheckerModalComponent implements OnInit {
   isReg: boolean = false;
   isLoad: boolean = false;
   contactForm: FormGroup;
+  shopLocation: any = {};
+  private fgn: String;
 
   constructor(
     public matDialogRef: MatDialogRef<ClientCheckerModalComponent>,
@@ -61,17 +55,26 @@ export class ClientCheckerModalComponent implements OnInit {
   ngOnInit(): void { }
 
   createContactForm(): FormGroup {
+    const phone = '^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-s./0-9]*$';
+    const mobilePattern = '^((\\+91-?)|0)?[0-9]{10}$';
+    const urlPattern = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+
     return this._formBuilder.group({
-      name: [],
-      secondName: [],
-      mobile: [],
-      phone: [],
-      email: [],
-      domain: [],
-      founded: [],
-      address: [],
+      name: ['', Validators.required],
+      secondName: ['', Validators.required],
+      mobile: ['', [Validators.required, Validators.pattern(mobilePattern)]],
+      phone: ['', [Validators.required, Validators.pattern(phone)]],
+      email: ['', [Validators.required, Validators.email]],
+      domain: ['', [Validators.required, Validators.pattern(urlPattern)]],
+      founded: ['', Validators.required],
+      address: ['', Validators.required],
       notes: [],
     });
+  }
+
+  patchValuesHere(data) {
+    console.log(data);
+    this.contactForm.patchValue({ address: data });
   }
 
   onSave(): void {
@@ -80,15 +83,21 @@ export class ClientCheckerModalComponent implements OnInit {
     formData.status = 'PENDING';
     formData.founded = moment(formData.founded).format('dddd, MMMM Do YYYY');
     formData.dateCreated = firebase.firestore.Timestamp.fromDate(new Date());
-    Swal.fire('Good job!', 'Submission completed!', 'success');
+    formData.shopLocation = this.shopLocation;
 
     console.log(formData);
-    // this._CrudServiceShop.insertNewShop(formData).then(() => {
 
-    // })
+    this._CrudServiceShop.insertNewShop(formData).then(() => {
+      Swal.fire('Good job!', 'Submission completed!', 'success');
+    })
   }
 
-  handleAddressChange(location: any) {
-    console.log(location);
+  handleAddressChange(googleProps: any) {
+    this.contactForm.patchValue({ address: googleProps.formatted_address });
+    const { location } = googleProps.geometry;
+    this.shopLocation = {
+      latitude: location.lat(),
+      longitude: location.lng(),
+    };
   }
 }

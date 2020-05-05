@@ -38,14 +38,24 @@
           <mat-label>Mobile number</mat-label>
           <mat-icon matSuffix class="secondary-text">phone</mat-icon>
           <input name="mobile" formControlName="mobile" matInput />
+          <mat-error *ngIf="contactForm.controls.mobile.errors">
+            <ng-container *ngIf="contactForm.controls.mobile.errors.pattern">
+              Invalid Mobile number
+            </ng-container>
+          </mat-error>
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxLayoutAlign="start start">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Phone number</mat-label>
+          <mat-label>Telephone number</mat-label>
           <mat-icon matSuffix class="secondary-text">phone</mat-icon>
           <input name="phone" formControlName="phone" matInput />
+          <mat-error *ngIf="contactForm.controls.phone.errors">
+            <ng-container *ngIf="contactForm.controls.phone.errors.pattern">
+              Invalid Phone number
+            </ng-container>
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -54,21 +64,37 @@
           <mat-label>Email</mat-label>
           <mat-icon matSuffix class="secondary-text">email</mat-icon>
           <input name="email" formControlName="email" matInput type="email" />
+          <mat-error
+            *ngIf="!contactForm.get('email').hasError('required') && contactForm.get('email').hasError('email')"
+          >
+            Please enter a valid email address
+          </mat-error>
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxLayoutAlign="start start">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>domain</mat-label>
-          <mat-icon matSuffix class="secondary-text">domain</mat-icon>
+          <mat-label>Page Link or Domain</mat-label>
+          <mat-icon matSuffix class="secondary-text">link</mat-icon>
           <input name="domain" formControlName="domain" matInput />
+          <mat-error *ngIf="contactForm.controls.domain.errors">
+            <ng-container *ngIf="contactForm.controls.domain.errors.pattern">
+              Invalid URL
+            </ng-container>
+          </mat-error>
         </mat-form-field>
       </div>
 
       <div fxLayout="row" fxLayoutAlign="start start">
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Founded</mat-label>
-          <input matInput [matDatepicker]="birthdayDatePicker" name="founded" formControlName="founded" />
+          <input
+            matInput
+            [matDatepicker]="birthdayDatePicker"
+            (click)="birthdayDatePicker.open()"
+            name="founded"
+            formControlName="founded"
+          />
           <mat-datepicker-toggle matSuffix [for]="birthdayDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #birthdayDatePicker></mat-datepicker>
         </mat-form-field>
@@ -76,18 +102,19 @@
 
       <div fxLayout="row" fxLayoutAlign="start start">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Address</mat-label>
+          <mat-label>Address </mat-label>
           <mat-icon matSuffix class="secondary-text">home</mat-icon>
           <input
+            matTooltip="(approximate location or any landmarks will do)"
             ngx-google-places-autocomplete
             [options]="{
-              types: [],
-              componentRestrictions: { country: 'PH' }
+              types: []
             }"
-            (onAddressChange)="handleAddressChange($event)"
             #placesRef="ngx-places"
+            (onAddressChange)="handleAddressChange($event)"
             name="address"
             formControlName="address"
+            (blur)="patchValuesHere(contactForm.value.address)"
             matInput
           />
         </mat-form-field>
@@ -102,7 +129,7 @@
     </form>
   </div>
   <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center" fxFill>
-    <button mat-raised-button class="save-button" (click)="onSave()" aria-label="SAVE">
+    <button mat-raised-button class="save-button" (click)="onSave()" [disabled]="contactForm.invalid" aria-label="SAVE">
       Save
     </button>
   </div>
