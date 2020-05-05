@@ -9,6 +9,7 @@ export class FakeDbService implements InMemoryDbService {
             // Calendar
             'calendar': CalendarFakeDb.data,
             'e-commerce-orders': ECommerceFakeDb.orders,
+            'e-commerce-products': ECommerceFakeDb.products,
 
         };
     }
