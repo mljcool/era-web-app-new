@@ -56,7 +56,7 @@ export const navigation: FuseNavigation[] = [
 
             {
                 id: 'mechanics',
-                title: 'Mechanics',
+                title: 'Personnel',
                 type: 'item',
                 icon: 'assignment_ind',
                 url: '/mechanics'

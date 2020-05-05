@@ -128,7 +128,8 @@
       </div>
     </form>
   </div>
-  <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center" fxFill>
+
+  <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center" *ngIf="isLoad" fxFill>
     <button mat-raised-button class="save-button" (click)="onSave()" [disabled]="contactForm.invalid" aria-label="SAVE">
       Save
     </button>
