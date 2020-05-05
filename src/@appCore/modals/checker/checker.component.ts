@@ -24,6 +24,7 @@ export class ClientCheckerModalComponent implements OnInit {
   };
   isReg: boolean = false;
   isLoad: boolean = false;
+  isSaving: boolean = false;
   contactForm: FormGroup;
   shopLocation: any = {};
   private fgn: String;
@@ -78,6 +79,7 @@ export class ClientCheckerModalComponent implements OnInit {
   }
 
   onSave(): void {
+    this.isSaving = true;
     const formData = this.contactForm.getRawValue();
     formData.uid = this.clientData.uid;
     formData.status = 'PENDING';
@@ -86,10 +88,14 @@ export class ClientCheckerModalComponent implements OnInit {
     formData.shopLocation = this.shopLocation;
 
     console.log(formData);
+    setTimeout(() => {
+      this._CrudServiceShop.insertNewShop(formData).then(() => {
+        Swal.fire('Good job!', 'Submission completed!', 'success');
+        this.isSaving = false;
+      })
+    }, 1000)
 
-    this._CrudServiceShop.insertNewShop(formData).then(() => {
-      Swal.fire('Good job!', 'Submission completed!', 'success');
-    })
+
   }
 
   handleAddressChange(googleProps: any) {
