@@ -27,7 +27,8 @@ export const navigation: FuseNavigation[] = [
                 title: 'Orders',
                 type: 'item',
                 icon: 'add_shopping_cart',
-                url: '/orders'
+                url: '/orders',
+                exactMatch: true
             },
             {
                 id: 'progress',
@@ -36,6 +37,14 @@ export const navigation: FuseNavigation[] = [
                 icon: 'alarm',
                 url: '/progress'
             },
+            {
+                id: 'orderDetail',
+                title: 'Order Detail',
+                type: 'item',
+                url: '/orders/details/1',
+                exactMatch: true,
+                hidden: true
+            }
         ]
     },
     {

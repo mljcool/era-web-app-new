@@ -3,22 +3,28 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { OrdersRoutingModule } from './orders-routing.module';
-import { OrdersComponent } from './orders.component';
 import { EcommerceOrdersService } from './orders.service';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseWidgetModule } from '@fuse/components/widget/widget.module';
 
+import { OrdersComponent } from './orders.component';
+import { EcommerceOrderComponent } from './order/order.component';
+import { EcommerceOrderService } from './order/order.service';
+import { AgmMapModule } from '@fuse/agMap.module';
+
 @NgModule({
-  declarations: [OrdersComponent],
+  declarations: [OrdersComponent, EcommerceOrderComponent],
   imports: [
     CommonModule,
     OrdersRoutingModule,
     MaterialModule,
     FuseSharedModule,
-    FuseWidgetModule
+    FuseWidgetModule,
+    AgmMapModule
   ],
   providers: [
-    EcommerceOrdersService
+    EcommerceOrdersService,
+    EcommerceOrderService
   ]
 })
 export class OrdersModule { }
