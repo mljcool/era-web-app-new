@@ -3,29 +3,33 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 import { Injectable } from '@angular/core';
 import { firebase } from '@appCore/firebase/firebase-config';
+import { IShop } from '@appCore/models/Shop';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StoreServices {
 
-  onAutoShop: BehaviorSubject<any>;
+  onAutoShop: BehaviorSubject<IShop>;
 
   constructor() {
     this.onAutoShop = new BehaviorSubject({});
 
   }
 
-  getMassiveData() {
+  getMassiveData(uid: string) {
     const getData = firebase.firestore().collection('newShopList');
     getData.onSnapshot((snapshot) => {
       const allShop = snapshot.docs.map((shop) => ({
-        id: shop.id,
+        key: shop.id,
         ...shop.data(),
-      }));
-      console.info('newShopList', allShop);
+      })).find((shop: IShop) => shop.uid === uid);
+
       this.onAutoShop.next(allShop);
+      console.log(allShop);
     });
   }
+
+
 
 }

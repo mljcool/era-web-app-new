@@ -52,13 +52,16 @@ export class AppComponent implements OnInit, OnDestroy {
     // Get default navigation
     this.setNavigationAndPlatforms();
     this._clientSrvc.checkIfUserIsLogin();
-    this._clientSrvc.onUserInLoggedIn.pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((islog) => {
-        if (islog) {
-          this._StoreServices.getMassiveData();
-          this._checkerSrvc.checkClienthasRegistration();
-        }
-      });
+    this._clientSrvc.onUserInLoggedIn.pipe(takeUntil(this._unsubscribeAll)).subscribe((islog) => {
+      if (islog) {
+        this._checkerSrvc.checkClienthasRegistration();
+      }
+    });
+    this._clientSrvc.onUserDataInfo.pipe(takeUntil(this._unsubscribeAll)).subscribe((islog) => {
+      if (islog.uid) {
+        this._StoreServices.getMassiveData(islog.uid);
+      }
+    });
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -70,28 +73,26 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     // Subscribe to config changes
-    this._fuseConfigService.config
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((config) => {
-        this.fuseConfig = config;
-        // Boxed
-        if (this.fuseConfig.layout.width === 'boxed') {
-          this.document.body.classList.add('boxed');
-        } else {
-          this.document.body.classList.remove('boxed');
+    this._fuseConfigService.config.pipe(takeUntil(this._unsubscribeAll)).subscribe((config) => {
+      this.fuseConfig = config;
+      // Boxed
+      if (this.fuseConfig.layout.width === 'boxed') {
+        this.document.body.classList.add('boxed');
+      } else {
+        this.document.body.classList.remove('boxed');
+      }
+
+      // Color theme - Use normal for loop for IE11 compatibility
+      for (let i = 0; i < this.document.body.classList.length; i++) {
+        const className = this.document.body.classList[i];
+
+        if (className.startsWith('theme-')) {
+          this.document.body.classList.remove(className);
         }
+      }
 
-        // Color theme - Use normal for loop for IE11 compatibility
-        for (let i = 0; i < this.document.body.classList.length; i++) {
-          const className = this.document.body.classList[i];
-
-          if (className.startsWith('theme-')) {
-            this.document.body.classList.remove(className);
-          }
-        }
-
-        this.document.body.classList.add(this.fuseConfig.colorTheme);
-      });
+      this.document.body.classList.add(this.fuseConfig.colorTheme);
+    });
   }
 
   /**

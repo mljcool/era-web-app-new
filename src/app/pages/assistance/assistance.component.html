@@ -1,3 +1,27 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
-    <h2>Assistance</h2>
+<div class="page-layout blank" fusePerfectScrollbar>
+  <div class="content-card pad-10">
+    <!-- Widget 6 -->
+    <div class="pb-24 font-size-18 font-weight-300">
+      Where are your clients?
+    </div>
+
+    <div class="fuse-card auto-width">
+      <agm-map
+        class="h-640 w-100-p map-container"
+        [minZoom]="2"
+        [maxZoom]="20"
+        [fullscreenControl]="true"
+        [rotateControl]="true"
+        [zoomControl]="true"
+        [scaleControl]="true"
+        [streetViewControl]="true"
+        [scrollwheel]="true"
+        [latitude]="latitude"
+        [longitude]="longitude"
+        [zoom]="12"
+      >
+      </agm-map>
+    </div>
+    <!-- / Widget 6 -->
+  </div>
 </div>

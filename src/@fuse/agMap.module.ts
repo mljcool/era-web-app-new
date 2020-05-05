@@ -12,4 +12,4 @@ import { AgmDirectionModule } from "agm-direction";
     ],
     exports: [AgmDirectionModule, AgmCoreModule]
 })
-export class AgmMapModule {}
+export class AgmMapModule { }

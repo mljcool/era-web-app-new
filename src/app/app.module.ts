@@ -8,10 +8,6 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
-
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
@@ -27,6 +23,8 @@ import { firebaseUiAuthConfig } from '@appCore/firebase/auth-config';
 import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
 import { ClientCheckerModalComponent } from '@appCore/modals/checker/checker.component';
 import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { FakeDbService } from '@appCore/models/fake-db.service';
 
 
 
@@ -60,7 +58,11 @@ import { GooglePlaceModule } from "ngx-google-places-autocomplete";
     ServicesSharedModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
-    GooglePlaceModule,
+    InMemoryWebApiModule.forRoot(FakeDbService, {
+      delay: 0,
+      passThruUnknownUrl: true
+    }),
+    GooglePlaceModule
 
   ],
   providers: [AuthServiceGuard],

@@ -38,12 +38,15 @@ export class ClientCheckerModalComponent implements OnInit {
     private _CrudServiceShop: CrudServiceShop
   ) {
     this._clientSrvc.onUserDataInfo.subscribe((userData) => {
+
       this.clientData = userData;
     });
     this._StoreServices.onAutoShop.subscribe((response) => {
+
       setTimeout(() => {
-        if (!!response.length && !!this.clientData.uid) {
-          this.isReg = response.some((data) => data.uid === this.clientData.uid);
+        console.log(response.uid);
+        if (!!response.uid) {
+          this.isReg = true;
           this.isLoad = true;
           if (this.isReg) {
             this.matDialogRef.close();
