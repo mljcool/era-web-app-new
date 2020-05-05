@@ -1,13 +1,8 @@
-import { environment } from './../../environments/environment';
-import { Injectable } from '@angular/core';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
-
-firebase.initializeApp(environment.firebase);
-
-
+import { Injectable } from '@angular/core';
+import { firebase } from '@appCore/firebase/firebase-config';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +23,7 @@ export class StoreServices {
         id: shop.id,
         ...shop.data(),
       }));
-      console.info('autoShop', allShop);
+      console.info('newShopList', allShop);
       this.onAutoShop.next(allShop);
     });
   }

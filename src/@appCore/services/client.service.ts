@@ -16,9 +16,7 @@ export class ClientService {
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {
     this.onUserChanges = new BehaviorSubject({});
-    this.onUserDataInfo = new BehaviorSubject({
-      uid: null,
-    });
+    this.onUserDataInfo = new BehaviorSubject({ uid: null });
     this.onUserInLoggedIn = new BehaviorSubject(false);
     console.log('I been called once!');
   }

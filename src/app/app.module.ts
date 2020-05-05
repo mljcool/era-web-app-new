@@ -26,12 +26,8 @@ import { FirebaseUIModule } from 'firebaseui-angular';
 import { firebaseUiAuthConfig } from '@appCore/firebase/auth-config';
 import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
 import { ClientCheckerModalComponent } from '@appCore/modals/checker/checker.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+
 
 
 
@@ -64,7 +60,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ServicesSharedModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
-
+    GooglePlaceModule,
 
   ],
   providers: [AuthServiceGuard],

@@ -1,48 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>ERA Application</title>
-        <base href="/" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-            name="google-site-verification"
-            content="7YyWSmnM1hjGn5w55e8C3EyJ5yX5MBbD5P4MW_OshHs"
-        />
+  <head>
+    <meta charset="utf-8" />
+    <title>ERA Application</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google-site-verification" content="7YyWSmnM1hjGn5w55e8C3EyJ5yX5MBbD5P4MW_OshHs" />
 
-        <link rel="icon" type="image/x-icon" href="favicon.ico" />
-        <link href="assets/icons/meteocons/style.css" rel="stylesheet" />
-        <link
-            href="assets/icons/material-icons/outline/style.css"
-            rel="stylesheet"
-        />
-        <link
-            href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700"
-            rel="stylesheet"
-        />
-        <!--  Splash Screen CSS -->
-        <link rel="stylesheet" href="assets/splash/splash.css" />
-    </head>
-    <body>
-        <fuse-splash-screen id="fuse-splash-screen">
-            <div class="center">
-                <!-- Material Design Spinner -->
-                <div class="spinner-wrapper">
-                    <div class="spinner">
-                        <div class="inner">
-                            <div class="gap"></div>
-                            <div class="left">
-                                <div class="half-circle"></div>
-                            </div>
-                            <div class="right">
-                                <div class="half-circle"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- / Material Design Spinner -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
+    <link href="assets/icons/meteocons/style.css" rel="stylesheet" />
+    <link href="assets/icons/material-icons/outline/style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM9feJhmKCUUsDv9zg6dQcYeAHEAHwM08&libraries=places&language=en"></script>
+    <!--  Splash Screen CSS -->
+    <link rel="stylesheet" href="assets/splash/splash.css" />
+  </head>
+  <body>
+    <fuse-splash-screen id="fuse-splash-screen">
+      <div class="center">
+        <!-- Material Design Spinner -->
+        <div class="spinner-wrapper">
+          <div class="spinner">
+            <div class="inner">
+              <div class="gap"></div>
+              <div class="left">
+                <div class="half-circle"></div>
+              </div>
+              <div class="right">
+                <div class="half-circle"></div>
+              </div>
             </div>
-        </fuse-splash-screen>
-        <app-root class="main-root"></app-root>
-    </body>
+          </div>
+        </div>
+        <!-- / Material Design Spinner -->
+      </div>
+    </fuse-splash-screen>
+    <app-root class="main-root"></app-root>
+  </body>
 </html>

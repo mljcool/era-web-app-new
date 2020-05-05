@@ -4,12 +4,25 @@ import { IUser } from '@appCore/models/User';
 import { ClientService } from '@appCore/services/client.service';
 import { StoreServices } from '@appCore/services/store.services';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CrudServiceShop } from '@appCore/services/crud.shop';
+import { firebase } from '@appCore/firebase/firebase-config';
+import * as moment from 'moment';
+import Swal from 'sweetalert2'
+
+import LatLng = google.maps.LatLng;
+import { LocationPickerModule } from "ng-location-picker";
+
+
+
+
+
 
 @Component({
   selector: 'app-checker',
   templateUrl: './checker.component.html',
   styleUrls: ['./checker.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [CrudServiceShop],
 })
 export class ClientCheckerModalComponent implements OnInit {
   clientData: IUser = {
@@ -26,7 +39,8 @@ export class ClientCheckerModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private _data: any,
     private _clientSrvc: ClientService,
     private _StoreServices: StoreServices,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _CrudServiceShop: CrudServiceShop
   ) {
     this._clientSrvc.onUserDataInfo.subscribe((userData) => {
       this.clientData = userData;
@@ -34,9 +48,7 @@ export class ClientCheckerModalComponent implements OnInit {
     this._StoreServices.onAutoShop.subscribe((response) => {
       setTimeout(() => {
         if (!!response.length && !!this.clientData.uid) {
-          this.isReg = response.some(
-            (data) => data.uid === this.clientData.uid
-          );
+          this.isReg = response.some((data) => data.uid === this.clientData.uid);
           this.isLoad = true;
           if (this.isReg) {
             this.matDialogRef.close();
@@ -50,18 +62,33 @@ export class ClientCheckerModalComponent implements OnInit {
 
   createContactForm(): FormGroup {
     return this._formBuilder.group({
-      id: [],
       name: [],
-      lastName: [],
-      avatar: [],
-      nickname: [],
-      company: [],
-      jobTitle: [],
-      email: [],
+      secondName: [],
+      mobile: [],
       phone: [],
+      email: [],
+      domain: [],
+      founded: [],
       address: [],
-      birthday: [],
       notes: [],
     });
+  }
+
+  onSave(): void {
+    const formData = this.contactForm.getRawValue();
+    formData.uid = this.clientData.uid;
+    formData.status = 'PENDING';
+    formData.founded = moment(formData.founded).format('dddd, MMMM Do YYYY');
+    formData.dateCreated = firebase.firestore.Timestamp.fromDate(new Date());
+    Swal.fire('Good job!', 'Submission completed!', 'success');
+
+    console.log(formData);
+    // this._CrudServiceShop.insertNewShop(formData).then(() => {
+
+    // })
+  }
+
+  handleAddressChange(location: any) {
+    console.log(location);
   }
 }
