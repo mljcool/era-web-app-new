@@ -67,7 +67,7 @@ $typography: mat-typography-config(
   $title: mat-typography-level(20px, 32px, 600),
   $body-2: mat-typography-level(14px, 24px, 600),
   $button: mat-typography-level(14px, 14px, 600),
-  $input: mat-typography-level(16px, 1.125, 400) // line-height must be unitless !!!,,,,,,,,,,
+  $input: mat-typography-level(16px, 1.125, 400) // line-height must be unitless !!!,,,,,,,,,,,,,
 );
 
 // Setup the typography
@@ -119,12 +119,14 @@ $typography: mat-typography-config(
 
 @import 'src/app/pages/login/login.theme';
 @import 'src/app/pages/appointments/calendar.theme';
+@import 'src/app/pages/orders/orders.theme';
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
   // pages
   @include login-theme($theme);
   @include calendar-theme($theme);
+  @include e-commerce-orders-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------

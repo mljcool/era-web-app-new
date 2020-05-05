@@ -1,11 +1,11 @@
 import { Directive, Input, OnInit, HostListener, OnDestroy, HostBinding } from '@angular/core';
-import { MediaObserver } from '@angular/flex-layout';
+import { MatSidenav } from '@angular/material/sidenav';
+import { ObservableMedia } from '@angular/flex-layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FuseMatchMediaService } from '@fuse/services/match-media.service';
 import { FuseMatSidenavHelperService } from '@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service';
-import { MatSidenav } from '@angular/material/sidenav';
 
 @Directive({
     selector: '[fuseMatSidenavHelper]'
@@ -29,13 +29,13 @@ export class FuseMatSidenavHelperDirective implements OnInit, OnDestroy {
      * @param {FuseMatchMediaService} _fuseMatchMediaService
      * @param {FuseMatSidenavHelperService} _fuseMatSidenavHelperService
      * @param {MatSidenav} _matSidenav
-     * @param {MediaObserver } _observableMedia
+     * @param {ObservableMedia} _observableMedia
      */
     constructor(
         private _fuseMatchMediaService: FuseMatchMediaService,
         private _fuseMatSidenavHelperService: FuseMatSidenavHelperService,
         private _matSidenav: MatSidenav,
-        private _observableMedia: MediaObserver
+        private _observableMedia: ObservableMedia
     ) {
         // Set the defaults
         this.isLockedOpen = true;
