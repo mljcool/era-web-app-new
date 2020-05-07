@@ -1,14 +1,17 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil, startWith, map } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { ShopServiceDetailsService } from './shopservice-details.service';
 import { ShopServiceDetailsModel } from './shopservice-details.model';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 
 @Component({
     selector: 'shopservice-details',
@@ -18,9 +21,30 @@ import { ShopServiceDetailsModel } from './shopservice-details.model';
     animations: fuseAnimations
 })
 export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
-    product: ShopServiceDetailsModel;
+    serviceModel: ShopServiceDetailsModel;
     pageType: string;
-    productForm: FormGroup;
+    serviceForm: FormGroup;
+
+
+    visible = true;
+    selectable = true;
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+
+    categoriestCtrl = new FormControl();
+    filteredCategories: Observable<string[]>;
+    serviceCategory: string[] = ['Lemon'];
+    allCategories: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+
+
+    personneltCtrl = new FormControl();
+    filteredPersonnels: Observable<string[]>;
+    servicePersonnel: string[] = ['Sample'];
+    allPersonnel: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+
+    @ViewChild('personnelInput') personnelInput: ElementRef<HTMLInputElement>;
+    @ViewChild('categoriesInput') categoriesInput: ElementRef<HTMLInputElement>;
+    @ViewChild('auto') matAutocomplete: MatAutocomplete;
+
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -40,10 +64,11 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         private _matSnackBar: MatSnackBar
     ) {
         // Set the default
-        this.product = new ShopServiceDetailsModel();
+        this.serviceModel = new ShopServiceDetailsModel();
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -54,22 +79,34 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-        // Subscribe to update product on changes
+        // Subscribe to update serviceModel on changes
         this._ecommerceProductService.onProductChanged
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(product => {
+            .subscribe(serviceModel => {
 
-                if (product) {
-                    this.product = new ShopServiceDetailsModel(product);
+                if (serviceModel) {
+                    this.serviceModel = new ShopServiceDetailsModel(serviceModel);
                     this.pageType = 'edit';
                 }
                 else {
                     this.pageType = 'new';
-                    this.product = new ShopServiceDetailsModel();
+                    this.serviceModel = new ShopServiceDetailsModel();
                 }
 
-                this.productForm = this.createProductForm();
+                this.serviceForm = this.createServiceForm();
             });
+
+        this.filteredCategories = this.categoriestCtrl.valueChanges.pipe(
+            startWith(null),
+            map((category: string | null) => category ? this._filter(category) : this.allCategories.slice()));
+
+        // =====================================
+
+        this.filteredPersonnels = this.personneltCtrl.valueChanges.pipe(
+            startWith(null),
+            map((personnel: string | null) => personnel ? this._filterPersonnel(personnel) : this.allPersonnel.slice()));
+
+
     }
 
     /**
@@ -85,40 +122,126 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
+
+    add(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = event.value;
+
+        if ((value || '').trim()) {
+            let index = this.serviceCategory.indexOf(value.trim())
+            if (index == -1)
+                this.serviceCategory.push(value.trim());
+        }
+
+        // Reset the input value
+        if (input) {
+            input.value = '';
+        }
+
+        this.categoriestCtrl.setValue(null);
+    }
+
+    remove(fruit: string): void {
+        const index = this.serviceCategory.indexOf(fruit);
+
+        if (index >= 0) {
+            this.serviceCategory.splice(index, 1);
+        }
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+
+        if ((event.option.viewValue || '').trim()) {
+            let index = this.serviceCategory.indexOf(event.option.viewValue.trim())
+            if (index == -1)
+                this.serviceCategory.push(event.option.viewValue.trim());
+        }
+
+        this.categoriesInput.nativeElement.value = '';
+        this.categoriestCtrl.setValue(null);
+    }
+
+    private _filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+
+        return this.allCategories.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+
+    // ---------------------------------------------------------------------
+
+
+    addPersonnel(event: MatChipInputEvent): void {
+        const input = event.input;
+        const value = event.value;
+
+        if ((value || '').trim()) {
+            let index = this.servicePersonnel.indexOf(value.trim())
+            if (index == -1)
+                this.servicePersonnel.push(value.trim());
+        }
+
+        // Reset the input value
+        if (input) {
+            input.value = '';
+        }
+
+        this.personneltCtrl.setValue(null);
+    }
+
+    removePersonnel(personnel: string): void {
+        const index = this.servicePersonnel.indexOf(personnel);
+
+        if (index >= 0) {
+            this.servicePersonnel.splice(index, 1);
+        }
+    }
+
+    selectedPersonnel(event: MatAutocompleteSelectedEvent): void {
+
+        if ((event.option.viewValue || '').trim()) {
+            let index = this.servicePersonnel.indexOf(event.option.viewValue.trim())
+            if (index == -1)
+                this.servicePersonnel.push(event.option.viewValue.trim());
+        }
+
+        this.personnelInput.nativeElement.value = '';
+        this.personneltCtrl.setValue(null);
+    }
+
+    private _filterPersonnel(value: string): string[] {
+        const filterValue = value.toLowerCase();
+
+        return this.allPersonnel.filter(personnel => personnel.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+
     /**
-     * Create product form
+     * Create serviceModel form
      *
      * @returns {FormGroup}
      */
-    createProductForm(): FormGroup {
+    createServiceForm(): FormGroup {
         return this._formBuilder.group({
-            id: [this.product.id],
-            name: [this.product.name],
-            handle: [this.product.handle],
-            description: [this.product.description],
-            categories: [this.product.categories],
-            tags: [this.product.tags],
-            images: [this.product.images],
-            priceTaxExcl: [this.product.priceTaxExcl],
-            priceTaxIncl: [this.product.priceTaxIncl],
-            taxRate: [this.product.taxRate],
-            comparedPrice: [this.product.comparedPrice],
-            quantity: [this.product.quantity],
-            sku: [this.product.sku],
-            width: [this.product.width],
-            height: [this.product.height],
-            depth: [this.product.depth],
-            weight: [this.product.weight],
-            extraShippingFee: [this.product.extraShippingFee],
-            active: [this.product.active]
+            id: [this.serviceModel.id],
+            name: [this.serviceModel.name],
+            handle: [this.serviceModel.handle],
+            description: [this.serviceModel.description],
+            categories: [this.serviceModel.categories],
+            tags: [this.serviceModel.tags],
+            price: [this.serviceModel.price],
+            taxRate: [this.serviceModel.taxRate],
+            quantity: [this.serviceModel.quantity],
+            hours: [this.serviceModel.hours],
+            active: [this.serviceModel.active]
         });
     }
 
     /**
-     * Save product
+     * Save serviceModel
      */
     saveProduct(): void {
-        const data = this.productForm.getRawValue();
+        const data = this.serviceForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
 
         this._ecommerceProductService.saveProduct(data)
@@ -136,10 +259,10 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Add product
+     * Add serviceModel
      */
     addProduct(): void {
-        const data = this.productForm.getRawValue();
+        const data = this.serviceForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
 
         this._ecommerceProductService.addProduct(data)
@@ -155,7 +278,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                 });
 
                 // Change the location with new one
-                this._location.go('apps/e-commerce/products/' + this.product.id + '/' + this.product.handle);
+                this._location.go('apps/e-commerce/products/' + this.serviceModel.id + '/' + this.serviceModel.handle);
             });
     }
 }

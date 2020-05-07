@@ -18,12 +18,12 @@ export class StoreServices {
   }
 
   getMassiveData(uid: string) {
-    const getData = firebase.firestore().collection('newShopList');
+    const getData = firebase.firestore().collection('newShopList').where('uid', '==', uid);
     getData.onSnapshot((snapshot) => {
       const allShop = snapshot.docs.map((shop) => ({
         key: shop.id,
         ...shop.data(),
-      })).find((shop: IShop) => shop.uid === uid);
+      }))[0];
 
       this.onAutoShop.next(allShop);
       console.log(allShop);
