@@ -14,6 +14,13 @@ const routes: Routes = [
 
   },
   {
+    path: 'create/:id',
+    component: ProductDetailsComponent,
+    resolve: {
+      data: ProductDetailsService
+    }
+  },
+  {
     path: 'details/:id/:handle',
     component: ProductDetailsComponent,
     resolve: {

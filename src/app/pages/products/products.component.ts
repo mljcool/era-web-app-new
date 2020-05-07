@@ -23,7 +23,7 @@ import { ProductsService } from './products.service';
 })
 export class ProductsComponent implements OnInit {
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id', 'image', 'name', 'category', 'price', 'quantity', 'active'];
+  displayedColumns = ['id', 'name', 'category', 'price', 'quantity', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
