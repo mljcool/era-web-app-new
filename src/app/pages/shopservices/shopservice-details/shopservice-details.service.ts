@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ProductFinderModalComponent } from '@appCore/modals/productFinder/productFinder.component';
 
 @Injectable()
 export class ShopServiceDetailsService implements Resolve<any>
 {
     routeParams: any;
     product: any;
+    dialogRef: any;
     onProductChanged: BehaviorSubject<any>;
 
     /**
@@ -16,7 +19,8 @@ export class ShopServiceDetailsService implements Resolve<any>
      * @param {HttpClient} _httpClient
      */
     constructor(
-        private _httpClient: HttpClient
+        private _httpClient: HttpClient,
+        private _matDialog: MatDialog,
     ) {
         // Set the defaults
         this.onProductChanged = new BehaviorSubject({});
@@ -95,5 +99,18 @@ export class ShopServiceDetailsService implements Resolve<any>
                     resolve(response);
                 }, reject);
         });
+    }
+
+    openModalProductFinder(): Observable<any> {
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.autoFocus = true;
+        dialogConfig.panelClass = 'product-finder-dialogs';
+        dialogConfig.width = '600px';
+        dialogConfig.maxHeight = '700px';
+
+        this.dialogRef = this._matDialog.open(ProductFinderModalComponent, dialogConfig);
+
+        return this.dialogRef.afterClosed()
     }
 }

@@ -1,10 +1,6 @@
-<div id="products" class="page-layout carded fullwidth inner-scroll">
-  <!-- TOP BACKGROUND -->
-  <div class="top-bg accent"></div>
-  <!-- / TOP BACKGROUND -->
-
+<div id="products" class="page-layout carded fullwidth">
   <!-- CENTER -->
-  <div class="center">
+  <div class="center prods">
     <!-- HEADER -->
     <div
       class="header accent"
@@ -14,33 +10,18 @@
       fxLayoutAlign.gt-sm="space-between center"
     >
       <!-- APP TITLE -->
-      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
-        <mat-icon class="logo-icon s-32 mr-16" [@animate]="{ value: '*', params: { delay: '50ms', scale: '0.2' } }">
-          directions_car
-        </mat-icon>
-        <span class="logo-text h1" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">
-          Services
-        </span>
-      </div>
+
       <!-- / APP TITLE -->
 
       <!-- SEARCH -->
       <div class="search-wrapper mx-32 mx-md-0">
         <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
           <mat-icon>search</mat-icon>
-          <input #filter placeholder="Search for a service" />
+          <input #filter placeholder="Search for a product" />
         </div>
       </div>
       <!-- / SEARCH -->
 
-      <!-- ADD BUTTON -->
-      <button
-        mat-raised-button
-        [routerLink]="'/shopservices/create/new'"
-        class="add-product-button fuse-white mt-24 mt-md-0"
-      >
-        <span>ADD NEW SERVICE</span>
-      </button>
       <!-- / ADD BUTTON -->
     </div>
     <!-- / HEADER -->
@@ -53,7 +34,7 @@
         [dataSource]="dataSource"
         matSort
         [@animateStagger]="{ value: '50' }"
-        fusePerfectScrollbar
+        inner-scroll
       >
         <!-- ID Column -->
         <ng-container matColumnDef="id">
@@ -86,14 +67,14 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
           <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
             <p class="price text-truncate">
-              {{ product.priceTaxIncl | currency: '₱':'symbol' }}
+              {{ product.priceTaxIncl | currency: 'USD':'symbol' }}
             </p>
           </mat-cell>
         </ng-container>
 
         <!-- Quantity Column -->
         <ng-container matColumnDef="quantity">
-          <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Hours</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
           <mat-cell *matCellDef="let product" fxHide fxShow.gt-sm>
             <span
               class="quantity-indicator text-truncate"
@@ -125,7 +106,7 @@
           *matRowDef="let product; columns: displayedColumns"
           class="product"
           matRipple
-          [routerLink]="'/shopservices/details/' + product.id + '/' + product.handle"
+          [routerLink]="'/products/details/' + product.id + '/' + product.handle"
         >
         </mat-row>
       </mat-table>
@@ -134,7 +115,7 @@
         #paginator
         [length]="dataSource.filteredData.length"
         [pageIndex]="0"
-        [pageSize]="10"
+        [pageSize]="5"
         [pageSizeOptions]="[5, 10, 25, 100]"
       >
       </mat-paginator>

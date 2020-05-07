@@ -1,0 +1,147 @@
+@import 'src/@fuse/scss/fuse';
+
+.product-finder-dialogs {
+  @include media-breakpoint('xs') {
+    width: 100%;
+  }
+
+  @include media-breakpoint('gt-xs') {
+    width: 400px;
+  }
+
+  .mat-dialog-container {
+    padding: 0 !important;
+  }
+
+  .dialog-content-wrapper {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+
+    .dialog-title {
+      span {
+        font-size: 15px;
+      }
+    }
+  }
+
+  #products {
+    .prods {
+      padding: 0 !important;
+    }
+    .top-bg {
+      @include media-breakpoint('lt-md') {
+        height: 256px;
+      }
+    }
+
+    > .center {
+      > .header {
+        .search-wrapper {
+          width: 100%;
+          border-radius: 28px;
+          overflow: hidden;
+
+          @include media-breakpoint('xs') {
+            width: 100%;
+          }
+
+          .search {
+            width: 100%;
+            height: 48px;
+            line-height: 48px;
+            padding: 0 18px;
+
+            input {
+              width: 100%;
+              height: 48px;
+              min-height: 48px;
+              max-height: 48px;
+              padding: 0 16px;
+              border: none;
+              outline: none;
+            }
+          }
+        }
+
+        @include media-breakpoint('lt-md') {
+          padding: 8px 0;
+          height: 192px !important;
+          min-height: 192px !important;
+          max-height: 192px !important;
+        }
+      }
+    }
+  }
+
+  .products-table {
+    flex: 1 1 auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .mat-header-row {
+      min-height: 64px;
+    }
+
+    .product {
+      position: relative;
+      cursor: pointer;
+      height: 84px;
+    }
+
+    .mat-cell {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .mat-column-id {
+      flex: 0 1 84px;
+    }
+
+    .mat-column-image {
+      flex: 0 1 84px;
+
+      .product-image {
+        width: 52px;
+        height: 52px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+      }
+    }
+
+    .mat-column-category {
+      flex: 0 1 240px;
+    }
+
+    .mat-column-price {
+      flex: 0 1 160px;
+    }
+
+    .mat-column-quantity {
+      flex: 0 1 160px;
+    }
+
+    .mat-column-active {
+      flex: 0 1 80px;
+    }
+
+    .quantity-indicator {
+      display: inline-block;
+      vertical-align: middle;
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      margin-right: 8px;
+
+      & + span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    .active-icon {
+      border-radius: 50%;
+    }
+  }
+}

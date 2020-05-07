@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { ProductFinderModalComponent } from '@appCore/modals/productFinder/productFinder.component';
 import { ShopServiceDetailsService } from './shopservice-details/shopservice-details.service';
 import { ShopServiceDetailsComponent } from './shopservice-details/shopservice-details.component';
 import { ShopservicesRoutingModule } from './shopservices-routing.module';
@@ -12,7 +13,11 @@ import { FuseWidgetModule } from '@fuse/components';
 
 
 @NgModule({
-  declarations: [ShopservicesComponent, ShopServiceDetailsComponent],
+  declarations: [
+    ShopservicesComponent,
+    ShopServiceDetailsComponent,
+    ProductFinderModalComponent
+  ],
   imports: [
     CommonModule,
     ShopservicesRoutingModule,
@@ -23,7 +28,10 @@ import { FuseWidgetModule } from '@fuse/components';
   ],
   providers: [
     ShopOffersService,
-    ShopServiceDetailsService
+    ShopServiceDetailsService,
+  ],
+  entryComponents: [
+    ProductFinderModalComponent
   ]
 })
 export class ShopservicesModule { }

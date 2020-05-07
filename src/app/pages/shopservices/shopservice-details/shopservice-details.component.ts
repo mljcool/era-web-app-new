@@ -26,6 +26,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     serviceForm: FormGroup;
 
 
+
     visible = true;
     selectable = true;
     separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -44,6 +45,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     @ViewChild('personnelInput') personnelInput: ElementRef<HTMLInputElement>;
     @ViewChild('categoriesInput') categoriesInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto') matAutocomplete: MatAutocomplete;
+    @ViewChild('auto') matAutocompletePersonnel: MatAutocomplete;
 
 
     // Private
@@ -52,13 +54,13 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     /**
      * Constructor
      *
-     * @param {EcommerceProductService} _ecommerceProductService
+     * @param {EcommerceProductService} _shopServiceDetailsService
      * @param {FormBuilder} _formBuilder
      * @param {Location} _location
      * @param {MatSnackBar} _matSnackBar
      */
     constructor(
-        private _ecommerceProductService: ShopServiceDetailsService,
+        private _shopServiceDetailsService: ShopServiceDetailsService,
         private _formBuilder: FormBuilder,
         private _location: Location,
         private _matSnackBar: MatSnackBar
@@ -80,7 +82,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         // Subscribe to update serviceModel on changes
-        this._ecommerceProductService.onProductChanged
+        this._shopServiceDetailsService.onProductChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(serviceModel => {
 
@@ -98,13 +100,13 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
         this.filteredCategories = this.categoriestCtrl.valueChanges.pipe(
             startWith(null),
-            map((category: string | null) => category ? this._filter(category) : this.allCategories.slice()));
+            map((category: string | null) => category ? this._filter(category) : this.allCategories.slice())).pipe(takeUntil(this._unsubscribeAll));
 
         // =====================================
 
         this.filteredPersonnels = this.personneltCtrl.valueChanges.pipe(
             startWith(null),
-            map((personnel: string | null) => personnel ? this._filterPersonnel(personnel) : this.allPersonnel.slice()));
+            map((personnel: string | null) => personnel ? this._filterPersonnel(personnel) : this.allPersonnel.slice())).pipe(takeUntil(this._unsubscribeAll));
 
 
     }
@@ -116,6 +118,12 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+    }
+
+    openProducFinder(): void {
+        this._shopServiceDetailsService.openModalProductFinder().subscribe(response => {
+
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -244,11 +252,11 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         const data = this.serviceForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
 
-        this._ecommerceProductService.saveProduct(data)
+        this._shopServiceDetailsService.saveProduct(data)
             .then(() => {
 
                 // Trigger the subscription with new data
-                this._ecommerceProductService.onProductChanged.next(data);
+                this._shopServiceDetailsService.onProductChanged.next(data);
 
                 // Show the success message
                 this._matSnackBar.open('ShopServiceDetailsModel saved', 'OK', {
@@ -265,11 +273,11 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         const data = this.serviceForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
 
-        this._ecommerceProductService.addProduct(data)
+        this._shopServiceDetailsService.addProduct(data)
             .then(() => {
 
                 // Trigger the subscription with new data
-                this._ecommerceProductService.onProductChanged.next(data);
+                this._shopServiceDetailsService.onProductChanged.next(data);
 
                 // Show the success message
                 this._matSnackBar.open('ShopServiceDetailsModel added', 'OK', {
