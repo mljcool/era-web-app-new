@@ -101,7 +101,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
             tags: [this.product.tags],
             images: [this.product.images],
             priceTaxExcl: [this.product.priceTaxExcl],
-            priceTaxIncl: [this.product.priceTaxIncl],
+            price: [this.product.price],
             taxRate: [this.product.taxRate],
             comparedPrice: [this.product.comparedPrice],
             quantity: [this.product.quantity],

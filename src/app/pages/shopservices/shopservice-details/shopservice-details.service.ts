@@ -5,11 +5,21 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProductFinderModalComponent } from '@appCore/modals/productFinder/productFinder.component';
 
+import {
+    AngularFirestore,
+    AngularFirestoreCollection,
+} from '@angular/fire/firestore';
+
+
 @Injectable({
     providedIn: 'root'
 })
 export class ShopServiceDetailsService implements Resolve<any>
 {
+    private dbPath = '/newShopServices';
+    newShopServicesRef: AngularFirestoreCollection<any> = null;
+
+
     routeParams: any;
     product: any;
     dialogRef: any;
@@ -24,7 +34,10 @@ export class ShopServiceDetailsService implements Resolve<any>
     constructor(
         private _httpClient: HttpClient,
         private _matDialog: MatDialog,
+        private db: AngularFirestore
     ) {
+
+        this.newShopServicesRef = db.collection(this.dbPath);
         // Set the defaults
         this.onServiceChanged = new BehaviorSubject({});
         this.setProducts = new BehaviorSubject({});
@@ -116,5 +129,9 @@ export class ShopServiceDetailsService implements Resolve<any>
         this.dialogRef = this._matDialog.open(ProductFinderModalComponent, dialogConfig);
 
         return this.dialogRef.afterClosed()
+    }
+
+    insertNewServices(data: any): Promise<any> {
+        return this.newShopServicesRef.add(data);
     }
 }

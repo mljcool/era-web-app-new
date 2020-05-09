@@ -16,7 +16,7 @@ export class ProductDetails {
         type: string
     }[];
     priceTaxExcl: number;
-    priceTaxIncl: number;
+    price: number;
     taxRate: number;
     comparedPrice: number;
     quantity: number;
@@ -27,6 +27,7 @@ export class ProductDetails {
     depth: string;
     weight: string;
     extraShippingFee: number;
+    srvcQty: number;
     active: boolean;
 
     /**
@@ -44,7 +45,7 @@ export class ProductDetails {
         this.tags = product.tags || [];
         this.images = product.images || [];
         this.priceTaxExcl = product.priceTaxExcl || 0;
-        this.priceTaxIncl = product.priceTaxIncl || 0;
+        this.price = product.price || 0;
         this.taxRate = product.taxRate || 0;
         this.comparedPrice = product.comparedPrice || 0;
         this.quantity = product.quantity || 0;
@@ -55,6 +56,7 @@ export class ProductDetails {
         this.depth = product.depth || 0;
         this.weight = product.weight || 0;
         this.extraShippingFee = product.extraShippingFee || 0;
+        this.srvcQty = product.srvcQty || 0;
         this.active = product.active || true;
     }
 

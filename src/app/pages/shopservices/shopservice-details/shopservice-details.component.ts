@@ -91,12 +91,12 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                         verticalPosition: 'top',
                         duration: 1000
                     });
+                    products.srvcQty = 1;
                     this.producsNeeded.push(products);
                     const uniqueArray = this.producsNeeded.filter((item, pos, self) => {
                         return self.indexOf(item) == pos;
                     })
                     this.computeValues();
-                    console.log('totalValues', this.totalValues);
                 }
             })
 
@@ -146,14 +146,17 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     computeValues() {
         this.totalValues = 0;
         const totalvalues = this.producsNeeded.reduce((result, item: any) => {
-            const sum: any = parseInt(item.priceTaxIncl, 10) * parseInt(item.quantity, 10);
-            console.log(sum);
+            const sum: any = parseFloat(item.price) * parseInt(item.srvcQty, 10);
             return result + sum;
         }, 0);
         const servicePrice: any = this.serviceForm.get('servicePrice').value;
         this.totalValues = totalvalues;
-        this.serviceForm.patchValue({ totalPrice: this.totalValues });
-        this.serviceForm.patchValue({ grandTotal: this.totalValues + parseInt(servicePrice) });
+
+        const roundOftotalValues = FuseUtils.round(this.totalValues, 2);
+        const roundOfgrandTotal = FuseUtils.round((roundOftotalValues + parseInt(servicePrice)), 2);
+
+        this.serviceForm.patchValue({ totalPrice: roundOftotalValues });
+        this.serviceForm.patchValue({ grandTotal: roundOfgrandTotal });
     }
 
     onItemsQty(type: string, item) {
@@ -161,20 +164,24 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
         console.log(type);
         if (type === 'remove') {
-            const deductedQty = this.producsNeeded[itemIndex].quantity - 1;
+            const deductedQty = this.producsNeeded[itemIndex].srvcQty - 1;
             if (deductedQty < 1) {
                 return;
             }
-            this.producsNeeded[itemIndex].quantity = deductedQty;
+            this.producsNeeded[itemIndex].srvcQty = deductedQty;
         } else {
-            const addeddQty = this.producsNeeded[itemIndex].quantity + 1;
+            const addeddQty = this.producsNeeded[itemIndex].srvcQty + 1;
             const origQty = this.producsNeeded[itemIndex].origQty;
             if (addeddQty > origQty) {
                 return;
             }
-            this.producsNeeded[itemIndex].quantity = addeddQty;
+            this.producsNeeded[itemIndex].srvcQty = addeddQty;
         }
 
+        setTimeout(() => {
+            this.computeValues();
+
+        }, 200)
         // console.log(items);
 
     }
@@ -190,7 +197,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
     openProducFinder(): void {
         this._shopServiceDetailsService.openModalProductFinder().subscribe(response => {
-
+            this.computeValues();
         });
     }
 
@@ -301,20 +308,29 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         return this._formBuilder.group({
             id: [this.serviceModel.id],
             name: [this.serviceModel.name],
-            handle: [this.serviceModel.handle],
             description: [this.serviceModel.description],
             categories: [this.serviceModel.categories],
-            tags: [this.serviceModel.tags],
-            taxRate: [this.serviceModel.taxRate],
-            quantity: [this.serviceModel.quantity],
+            personnels: [this.serviceModel.personnels],
+            products: [this.serviceModel.products],
             hours: [this.serviceModel.hours],
             active: [this.serviceModel.active],
-            servicePrice: [this.serviceModel.price],
-            // totalPrice: [{ value: this.serviceModel.totalPrice, disabled: true }],
+            servicePrice: [this.serviceModel.servicePrice],
             totalPrice: new FormControl({ value: this.serviceModel.totalPrice, disabled: true }),
             grandTotal: new FormControl({ value: this.serviceModel.grandTotal, disabled: true }),
         });
     }
+
+
+    removeItems(item) {
+        const index = this.producsNeeded.indexOf(item);
+        console.log(index);
+        if (index >= 0) {
+            this.producsNeeded.splice(index, 1);
+            this.computeValues();
+        }
+    }
+
+
 
     /**
      * Save serviceModel
@@ -337,35 +353,55 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
             });
     }
 
-    removeItems(item) {
-        const index = this.producsNeeded.indexOf(item);
-        console.log(index);
-        if (index >= 0) {
-            this.producsNeeded.splice(index, 1);
-            this.computeValues();
-        }
-    }
+
     /**
      * Add serviceModel
      */
-    addProduct(): void {
-        const data = this.serviceForm.getRawValue();
-        data.handle = FuseUtils.handleize(data.name);
+    addService(): void {
 
-        this._shopServiceDetailsService.addProduct(data)
-            .then(() => {
+        const newData = this.structFormatData();
+        setTimeout(() => {
+            this._shopServiceDetailsService.
+                insertNewServices(newData).then(() => {
 
-                // Trigger the subscription with new data
-                this._shopServiceDetailsService.onServiceChanged.next(data);
+                    //         // Show the success message
+                    this._matSnackBar.open('ShopServiceDetailsModel added', 'OK', {
+                        verticalPosition: 'top',
+                        duration: 2000
+                    });
 
-                // Show the success message
-                this._matSnackBar.open('ShopServiceDetailsModel added', 'OK', {
-                    verticalPosition: 'top',
-                    duration: 2000
-                });
+                })
+        }, 100);
+        // this._shopServiceDetailsService.addProduct(data)
+        //     .then(() => {
 
-                // Change the location with new one
-                this._location.go('apps/e-commerce/products/' + this.serviceModel.id + '/' + this.serviceModel.handle);
-            });
+        //         // Trigger the subscription with new data
+        //         this._shopServiceDetailsService.onServiceChanged.next(data);
+
+        //         // Show the success message
+        //         this._matSnackBar.open('ShopServiceDetailsModel added', 'OK', {
+        //             verticalPosition: 'top',
+        //             duration: 2000
+        //         });
+
+        //         // Change the location with new one
+        //         this._location.go('apps/e-commerce/products/' + this.serviceModel.id + '/' + this.serviceModel.handle);
+        //     });
     }
+
+
+    structFormatData() {
+        const data = this.serviceForm.getRawValue();
+        data.categories = this.serviceCategory;
+        data.personnels = this.servicePersonnel;
+        data.products = this.producsNeeded.map(product => ({ id: product.id, name: product.name, quantity: product.srvcQty, price: product.price }));
+        data.handle = FuseUtils.handleize(data.name);
+        data.shopuid = localStorage.getItem('shopId');
+
+        console.log(data);
+        console.log(this.producsNeeded);
+        return data;
+
+    }
+
 }

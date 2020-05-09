@@ -86,7 +86,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
           <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
             <p class="price text-truncate">
-              {{ product.priceTaxIncl | currency: '₱':'symbol' }}
+              {{ product.price | currency: '₱':'symbol' }}
             </p>
           </mat-cell>
         </ng-container>

@@ -1,4 +1,3 @@
-import { MatChipInputEvent } from '@angular/material/chips';
 
 import { FuseUtils } from '@fuse/utils';
 
@@ -8,11 +7,13 @@ export class ShopServiceDetailsModel {
     handle: string;
     description: string;
     categories: string[];
-    tags: string[];
+    personnels: string[];
+    products: string[];
     price: number;
     taxRate: number;
     quantity: number;
     servicePrice: number;
+    srvcQty: number;
     totalPrice: number;
     grandTotal: number;
     hours: string;
@@ -30,14 +31,17 @@ export class ShopServiceDetailsModel {
         this.handle = product.handle || FuseUtils.handleize(this.name);
         this.description = product.description || '';
         this.categories = product.categories || [];
-        this.tags = product.tags || [];
+        this.personnels = product.personnels || [];
+        this.products = product.products || [];
         this.taxRate = product.taxRate || 0;
         this.quantity = product.quantity || 0;
         this.hours = product.hours || 0;
         this.active = product.active || true;
+        this.price = product.price || 0;
         this.servicePrice = product.servicePrice || 0;
         this.totalPrice = product.totalPrice || 0;
         this.grandTotal = product.grandTotal || 0;
+        this.srvcQty = product.srvcQty || 0;
     }
 
 }

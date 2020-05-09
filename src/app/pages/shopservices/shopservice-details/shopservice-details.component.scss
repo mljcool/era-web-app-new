@@ -8,6 +8,9 @@
   .content {
     .simple {
       box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+      .add-prod-header {
+        text-align: right;
+      }
     }
     .mat-tab-group,
     .mat-tab-body-wrapper,
@@ -19,7 +22,15 @@
     .mat-tab-body-content {
       display: flex;
     }
-
+    .grand-total {
+      color: #43a047 !important;
+    }
+    .mat-input-element {
+      color: black;
+    }
+    .mat-form-field-label {
+      color: black !important;
+    }
     .mat-tab-label {
       height: 64px;
     }

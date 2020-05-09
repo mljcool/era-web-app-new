@@ -201,7 +201,7 @@ export class FilesDataSource extends DataSource<any>
           [propertyA, propertyB] = [a.categories[0], b.categories[0]];
           break;
         case 'price':
-          [propertyA, propertyB] = [a.priceTaxIncl, b.priceTaxIncl];
+          [propertyA, propertyB] = [a.price, b.price];
           break;
         case 'quantity':
           [propertyA, propertyB] = [a.quantity, b.quantity];

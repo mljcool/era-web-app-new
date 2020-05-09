@@ -18,7 +18,6 @@ export class ClientService {
     this.onUserChanges = new BehaviorSubject({});
     this.onUserDataInfo = new BehaviorSubject({ uid: null });
     this.onUserInLoggedIn = new BehaviorSubject(false);
-    console.log('I been called once!');
   }
 
   checkIfUserIsLogin() {
@@ -32,6 +31,7 @@ export class ClientService {
         this.onUserInLoggedIn.next(true);
         this.onUserDataInfo.next(userData);
         this.userRawData = userData;
+        localStorage.setItem('shopId', userData.uid);
       }
     });
   }
