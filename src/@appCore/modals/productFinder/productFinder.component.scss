@@ -87,31 +87,26 @@
     .product {
       position: relative;
       cursor: pointer;
-      height: 84px;
+      height: 70px;
     }
-
+    .mat-row {
+      &:hover {
+        zoom: 0.5px;
+      }
+    }
     .mat-cell {
       min-width: 0;
       display: flex;
       align-items: center;
     }
 
-    .mat-column-id {
-      flex: 0 1 84px;
-    }
-
-    .mat-column-image {
-      flex: 0 1 84px;
-
-      .product-image {
-        width: 52px;
-        height: 52px;
-        border: 1px solid rgba(0, 0, 0, 0.12);
-      }
+    .mat-column-name {
+      flex: 0 1 250px;
     }
 
     .mat-column-category {
-      flex: 0 1 240px;
+      flex: 0 1 200px;
+      justify-content: center;
     }
 
     .mat-column-price {

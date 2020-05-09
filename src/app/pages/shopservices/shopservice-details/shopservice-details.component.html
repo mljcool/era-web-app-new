@@ -82,29 +82,38 @@
 
             <mat-tab label="Pricing & Items">
               <div class="tab-content p-24" fusePerfectScrollbar>
-                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Service Price</mat-label>
-                  <input
-                    matInput
-                    placeholder="Tax Excluded Price"
-                    name="priceTaxExcl"
-                    formControlName="price"
-                    type="number"
-                  />
-                  <span matPrefix>₱&nbsp;</span>
-                </mat-form-field>
                 <div fxLayout="row" fxLayoutAlign="space-between">
-                  <mat-form-field appearance="outline" floatLabel="always" fxFlex="30">
-                    <mat-label>Total Price</mat-label>
-                    <input
-                      matInput
-                      placeholder="Tax Excluded Price"
-                      name="priceTaxExcl"
-                      formControlName="price"
-                      type="number"
-                    />
-                    <span matPrefix>₱&nbsp;</span>
-                  </mat-form-field>
+                  <div fxLayout="row" fxLayoutAlign="space-between">
+                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="60">
+                      <mat-label>Service Price</mat-label>
+                      <input
+                        (blur)="computeValues()"
+                        matInput
+                        placeholder="Service Price"
+                        name="servicePrice"
+                        formControlName="servicePrice"
+                        type="number"
+                      />
+                      <span matPrefix>₱&nbsp;</span>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="60">
+                      <mat-label>Item Total Price</mat-label>
+                      <input matInput placeholder="Item Price" name="totalPrice" formControlName="totalPrice" />
+                      <span matPrefix>₱&nbsp;</span>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" floatLabel="always" fxFlex="60">
+                      <mat-label>Grand Total Price</mat-label>
+                      <input
+                        matInput
+                        placeholder="Grand total Price"
+                        name="totalPrice"
+                        formControlName="grandTotal"
+                        type="number"
+                      />
+                      <span matPrefix>₱&nbsp;</span>
+                    </mat-form-field>
+                  </div>
                   <button
                     mat-mini-fab
                     color="mat-primary"
@@ -119,26 +128,33 @@
                 <table class="simple">
                   <thead>
                     <tr>
-                      <th class="w-20">ID</th>
                       <th class="w-20">Name</th>
                       <th class="w-20">Price</th>
                       <th class="w-20">Quantity</th>
+                      <th class="w-40"></th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr class="product-row">
+                  <tbody *ngIf="producsNeeded && producsNeeded.length">
+                    <tr class="product-row" *ngFor="let item of producsNeeded; let i = index">
                       <td>
-                        dsadasdsa
-                      </td>
-
-                      <td>
-                        dadsadas
+                        {{ item.name }}
                       </td>
                       <td>
-                        231312321
+                        {{ item.priceTaxIncl }}
                       </td>
                       <td>
-                        3
+                        <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">
+                          <mat-button-toggle class="item-qty" value="bold"> {{ item.quantity }}</mat-button-toggle>
+                          <mat-button-toggle value="italic" (click)="onItemsQty('remove', item)">
+                            <mat-icon>remove</mat-icon></mat-button-toggle
+                          >
+                          <mat-button-toggle value="underline" (click)="onItemsQty('add', item)">
+                            <mat-icon>add</mat-icon></mat-button-toggle
+                          >
+                        </mat-button-toggle-group>
+                      </td>
+                      <td>
+                        <button mat-raised-button class="mat-accent mr-16" (click)="removeItems(item)">Remove</button>
                       </td>
                     </tr>
                   </tbody>

@@ -10,6 +10,7 @@ import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operato
 
 import { FuseUtils } from '@fuse/utils';
 import { fuseAnimations } from '@fuse/animations';
+import { ShopServiceDetailsService } from 'app/pages/shopservices/shopservice-details/shopservice-details.service';
 
 @Component({
   selector: 'app-product-finder',
@@ -21,7 +22,7 @@ import { fuseAnimations } from '@fuse/animations';
 })
 export class ProductFinderModalComponent implements OnInit, OnDestroy {
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id', 'name', 'category', 'price', 'quantity', 'active'];
+  displayedColumns = ['name', 'category', 'price', 'quantity', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
@@ -39,7 +40,8 @@ export class ProductFinderModalComponent implements OnInit, OnDestroy {
   constructor(
     public matDialogRef: MatDialogRef<ProductFinderModalComponent>,
     @Inject(MAT_DIALOG_DATA) private _data: any,
-    private _ecommerceProductsService: ProductsService
+    private _ecommerceProductsService: ProductsService,
+    private _shopSrvc: ShopServiceDetailsService
 
   ) {
     this._unsubscribeAll = new Subject();
@@ -55,6 +57,10 @@ export class ProductFinderModalComponent implements OnInit, OnDestroy {
 
   }
 
+  selectProduct(prod): void {
+    console.log(prod);
+    this._shopSrvc.setProducts.next(prod);
+  }
 
 
   getProducts(): void {

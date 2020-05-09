@@ -20,6 +20,7 @@ export class ProductDetails {
     taxRate: number;
     comparedPrice: number;
     quantity: number;
+    origQty: number;
     sku: string;
     width: string;
     height: string;
@@ -47,6 +48,7 @@ export class ProductDetails {
         this.taxRate = product.taxRate || 0;
         this.comparedPrice = product.comparedPrice || 0;
         this.quantity = product.quantity || 0;
+        this.origQty = product.origQty || 0;
         this.sku = product.sku || 0;
         this.width = product.width || 0;
         this.height = product.height || 0;

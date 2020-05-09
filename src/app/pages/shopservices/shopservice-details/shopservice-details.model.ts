@@ -12,6 +12,9 @@ export class ShopServiceDetailsModel {
     price: number;
     taxRate: number;
     quantity: number;
+    servicePrice: number;
+    totalPrice: number;
+    grandTotal: number;
     hours: string;
     active: boolean;
 
@@ -28,11 +31,13 @@ export class ShopServiceDetailsModel {
         this.description = product.description || '';
         this.categories = product.categories || [];
         this.tags = product.tags || [];
-        this.price = product.price || 0;
         this.taxRate = product.taxRate || 0;
         this.quantity = product.quantity || 0;
         this.hours = product.hours || 0;
         this.active = product.active || true;
+        this.servicePrice = product.servicePrice || 0;
+        this.totalPrice = product.totalPrice || 0;
+        this.grandTotal = product.grandTotal || 0;
     }
 
 }

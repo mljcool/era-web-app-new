@@ -5,13 +5,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProductFinderModalComponent } from '@appCore/modals/productFinder/productFinder.component';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ShopServiceDetailsService implements Resolve<any>
 {
     routeParams: any;
     product: any;
     dialogRef: any;
-    onProductChanged: BehaviorSubject<any>;
+    onServiceChanged: BehaviorSubject<any>;
+    setProducts: BehaviorSubject<any>;
 
     /**
      * Constructor
@@ -23,7 +26,8 @@ export class ShopServiceDetailsService implements Resolve<any>
         private _matDialog: MatDialog,
     ) {
         // Set the defaults
-        this.onProductChanged = new BehaviorSubject({});
+        this.onServiceChanged = new BehaviorSubject({});
+        this.setProducts = new BehaviorSubject({});
     }
 
     /**
@@ -57,14 +61,14 @@ export class ShopServiceDetailsService implements Resolve<any>
     getProduct(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.routeParams.id === 'new') {
-                this.onProductChanged.next(false);
+                this.onServiceChanged.next(false);
                 resolve(false);
             }
             else {
                 this._httpClient.get('api/e-commerce-products/' + this.routeParams.id)
                     .subscribe((response: any) => {
                         this.product = response;
-                        this.onProductChanged.next(this.product);
+                        this.onServiceChanged.next(this.product);
                         resolve(response);
                     }, reject);
             }
@@ -106,8 +110,8 @@ export class ShopServiceDetailsService implements Resolve<any>
 
         dialogConfig.autoFocus = true;
         dialogConfig.panelClass = 'product-finder-dialogs';
-        dialogConfig.width = '600px';
-        dialogConfig.maxHeight = '700px';
+        dialogConfig.width = '900px';
+        dialogConfig.maxHeight = '800px';
 
         this.dialogRef = this._matDialog.open(ProductFinderModalComponent, dialogConfig);
 

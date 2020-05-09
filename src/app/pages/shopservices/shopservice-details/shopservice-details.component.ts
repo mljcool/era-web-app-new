@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Observable } from 'rxjs';
@@ -12,6 +12,7 @@ import { ShopServiceDetailsService } from './shopservice-details.service';
 import { ShopServiceDetailsModel } from './shopservice-details.model';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
+import { ProductDetails } from 'app/pages/products/product-details/product-details.model';
 
 @Component({
     selector: 'shopservice-details',
@@ -24,7 +25,8 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     serviceModel: ShopServiceDetailsModel;
     pageType: string;
     serviceForm: FormGroup;
-
+    producsNeeded: ProductDetails[] = [];
+    totalValues: number = 0;
 
 
     visible = true;
@@ -70,6 +72,33 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+        this._shopServiceDetailsService.setProducts.
+            pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(products => {
+
+                const isExist = this.producsNeeded.some(data => data.id === products.id);
+                console.log(isExist);
+                if (isExist) {
+                    this._matSnackBar.open('Product already added', 'OK', {
+                        verticalPosition: 'top',
+                        duration: 1000
+                    });
+                    return;
+                }
+
+                if (!!Object.keys(products).length) {
+                    this._matSnackBar.open('Product added', 'OK', {
+                        verticalPosition: 'top',
+                        duration: 1000
+                    });
+                    this.producsNeeded.push(products);
+                    const uniqueArray = this.producsNeeded.filter((item, pos, self) => {
+                        return self.indexOf(item) == pos;
+                    })
+                    this.computeValues();
+                    console.log('totalValues', this.totalValues);
+                }
+            })
 
     }
 
@@ -82,7 +111,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         // Subscribe to update serviceModel on changes
-        this._shopServiceDetailsService.onProductChanged
+        this._shopServiceDetailsService.onServiceChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(serviceModel => {
 
@@ -98,6 +127,9 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                 this.serviceForm = this.createServiceForm();
             });
 
+
+
+
         this.filteredCategories = this.categoriestCtrl.valueChanges.pipe(
             startWith(null),
             map((category: string | null) => category ? this._filter(category) : this.allCategories.slice())).pipe(takeUntil(this._unsubscribeAll));
@@ -108,6 +140,42 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
             startWith(null),
             map((personnel: string | null) => personnel ? this._filterPersonnel(personnel) : this.allPersonnel.slice())).pipe(takeUntil(this._unsubscribeAll));
 
+
+    }
+
+    computeValues() {
+        this.totalValues = 0;
+        const totalvalues = this.producsNeeded.reduce((result, item: any) => {
+            const sum: any = parseInt(item.priceTaxIncl, 10) * parseInt(item.quantity, 10);
+            console.log(sum);
+            return result + sum;
+        }, 0);
+        const servicePrice: any = this.serviceForm.get('servicePrice').value;
+        this.totalValues = totalvalues;
+        this.serviceForm.patchValue({ totalPrice: this.totalValues });
+        this.serviceForm.patchValue({ grandTotal: this.totalValues + parseInt(servicePrice) });
+    }
+
+    onItemsQty(type: string, item) {
+        const itemIndex = this.producsNeeded.indexOf(item);
+
+        console.log(type);
+        if (type === 'remove') {
+            const deductedQty = this.producsNeeded[itemIndex].quantity - 1;
+            if (deductedQty < 1) {
+                return;
+            }
+            this.producsNeeded[itemIndex].quantity = deductedQty;
+        } else {
+            const addeddQty = this.producsNeeded[itemIndex].quantity + 1;
+            const origQty = this.producsNeeded[itemIndex].origQty;
+            if (addeddQty > origQty) {
+                return;
+            }
+            this.producsNeeded[itemIndex].quantity = addeddQty;
+        }
+
+        // console.log(items);
 
     }
 
@@ -237,11 +305,14 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
             description: [this.serviceModel.description],
             categories: [this.serviceModel.categories],
             tags: [this.serviceModel.tags],
-            price: [this.serviceModel.price],
             taxRate: [this.serviceModel.taxRate],
             quantity: [this.serviceModel.quantity],
             hours: [this.serviceModel.hours],
-            active: [this.serviceModel.active]
+            active: [this.serviceModel.active],
+            servicePrice: [this.serviceModel.price],
+            // totalPrice: [{ value: this.serviceModel.totalPrice, disabled: true }],
+            totalPrice: new FormControl({ value: this.serviceModel.totalPrice, disabled: true }),
+            grandTotal: new FormControl({ value: this.serviceModel.grandTotal, disabled: true }),
         });
     }
 
@@ -256,16 +327,24 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
             .then(() => {
 
                 // Trigger the subscription with new data
-                this._shopServiceDetailsService.onProductChanged.next(data);
+                this._shopServiceDetailsService.onServiceChanged.next(data);
 
                 // Show the success message
-                this._matSnackBar.open('ShopServiceDetailsModel saved', 'OK', {
+                this._matSnackBar.open('Shop service saved', 'OK', {
                     verticalPosition: 'top',
                     duration: 2000
                 });
             });
     }
 
+    removeItems(item) {
+        const index = this.producsNeeded.indexOf(item);
+        console.log(index);
+        if (index >= 0) {
+            this.producsNeeded.splice(index, 1);
+            this.computeValues();
+        }
+    }
     /**
      * Add serviceModel
      */
@@ -277,7 +356,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
             .then(() => {
 
                 // Trigger the subscription with new data
-                this._shopServiceDetailsService.onProductChanged.next(data);
+                this._shopServiceDetailsService.onServiceChanged.next(data);
 
                 // Show the success message
                 this._matSnackBar.open('ShopServiceDetailsModel added', 'OK', {

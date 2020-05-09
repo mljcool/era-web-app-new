@@ -75,7 +75,7 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-md>Total</mat-header-cell>
           <mat-cell *matCellDef="let order" fxHide fxShow.gt-md>
             <p class="total-price text-truncate">
-              {{ order.total | currency: 'USD':'symbol' }}
+              {{ order.total | currency: '₱':'symbol' }}
             </p>
           </mat-cell>
         </ng-container>
