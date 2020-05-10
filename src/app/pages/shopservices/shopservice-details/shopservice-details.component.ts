@@ -78,7 +78,6 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
             .subscribe(products => {
 
                 const isExist = this.producsNeeded.some(data => data.id === products.id);
-                console.log(isExist);
                 if (isExist) {
                     this._matSnackBar.open('Product already added', 'OK', {
                         verticalPosition: 'top',
@@ -163,7 +162,6 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                             }
                         });
                     }
-                    console.log('getAllPersonnel', this.servicePersonnel);
                 }
 
             })
@@ -204,7 +202,6 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     onItemsQty(type: string, item) {
         const itemIndex = this.producsNeeded.indexOf(item);
 
-        console.log(type);
         if (type === 'remove') {
             const deductedQty = this.producsNeeded[itemIndex].srvcQty - 1;
             if (deductedQty < 1) {
@@ -365,8 +362,6 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         data.handle = FuseUtils.handleize(data.name);
         data.shopuid = localStorage.getItem('shopId');
 
-        console.log(data);
-        console.log(this.producsNeeded);
         return data;
 
     }

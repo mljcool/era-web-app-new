@@ -85,7 +85,6 @@ export class MechanicService implements Resolve<any>
 
                     this.onFilterChanged.subscribe(filter => {
                         this.filterBy = filter;
-                        console.log('filter :', filter);
                         this.getContacts();
                     });
 

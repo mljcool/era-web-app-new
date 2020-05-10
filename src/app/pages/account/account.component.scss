@@ -1,0 +1,147 @@
+@import 'src/@fuse/scss/fuse';
+#account {
+  .timeline-item {
+    margin-bottom: 32px;
+    overflow: hidden;
+    border-radius: 4px;
+    @include mat-elevation(2);
+
+    .time {
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 9px;
+      font-style: italic;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    header {
+      padding: 16px 0 8px 16px;
+
+      .title {
+        font-weight: 600;
+
+        .username {
+          margin-right: 2px;
+        }
+      }
+    }
+
+    .content {
+      .message {
+        padding: 16px;
+      }
+
+      .media {
+        padding: 16px;
+
+        img,
+        iframe {
+          width: 100%;
+        }
+
+        a {
+          color: inherit;
+        }
+      }
+
+      .like-button,
+      .share-button {
+        padding: 4px 6px;
+        text-transform: inherit;
+        font-size: 13px;
+        font-weight: normal;
+        margin: 0 0 16px 8px;
+        min-width: inherit;
+        line-height: inherit;
+
+        &:hover {
+          background-color: transparent;
+        }
+
+        mat-icon {
+          margin: 0 8px 0 0;
+        }
+      }
+
+      .article {
+        border: 1px solid;
+        margin: 16px;
+
+        .media {
+          padding: 0;
+          overflow: hidden;
+          border-bottom: 1px solid;
+
+          img {
+            display: block;
+            padding: 0;
+          }
+        }
+
+        .title {
+          font-size: 15px;
+          padding: 16px 16px 4px 16px;
+        }
+
+        .subtitle {
+          padding: 0 16px;
+        }
+
+        .excerpt {
+          padding: 16px 16px;
+        }
+      }
+    }
+
+    footer {
+      padding: 16px;
+
+      .comment-count {
+        margin-bottom: 16px;
+        cursor: pointer;
+
+        mat-icon {
+          margin-left: 8px;
+        }
+      }
+
+      .comment {
+        margin-bottom: 24px !important;
+
+        .username {
+          font-weight: 600;
+          margin-right: 4px;
+        }
+
+        .actions {
+          margin-top: 8px;
+
+          .reply-button {
+            margin-right: 16px;
+            cursor: pointer;
+          }
+
+          .report-button {
+            margin: 0;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .reply {
+        form {
+          textarea {
+            width: 100% !important;
+            min-height: 72px;
+            padding: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            border: 1px solid;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+  }
+}

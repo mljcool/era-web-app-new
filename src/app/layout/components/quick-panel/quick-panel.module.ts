@@ -19,6 +19,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatButtonModule,
 
         FuseSharedModule,
+
     ],
     exports: [
         QuickPanelComponent

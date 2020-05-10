@@ -1,0 +1,123 @@
+<div id="account" class="page-layout simple">
+  <div class="timeline-item" *ngIf="isLoadedUser && isLoadedShop && userInfo.uid && checkIfirst()">
+    <header fxLayout="row" fxLayoutAlign="space-between start">
+      <div class="user" fxLayout="row" fxLayoutAlign="start center">
+        <img class="avatar" [src]="userInfo.photoURL" />
+
+        <div fxLayout="column">
+          <div class="title">
+            <span class="username">{{ userInfo.displayName }}</span>
+          </div>
+          <div class="time">Date created: {{ shopData.dateCreated.toDate() | date: 'dd MMM hh:mm' }}</div>
+        </div>
+      </div>
+
+      <button mat-icon-button aria-label="More">
+        <mat-icon>settings_applications</mat-icon>
+      </button>
+    </header>
+
+    <div class="content">
+      <div class="message">
+        <div class="section pb-5">
+          <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16 secondary-text">settings_applications</mat-icon>
+            <div class="h2 secondary-text">Shop Information</div>
+          </div>
+        </div>
+
+        <div class="customer mb-32">
+          <table class="simple">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Secondary Name</th>
+                <th>Founded</th>
+                <th>status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div fxLayout="row" fxLayoutAlign="start center">
+                    <span class="name text-truncate">
+                      {{ shopData.name }}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="email text-truncate"> {{ shopData.secondName }}</span>
+                </td>
+                <td>
+                  <span class="phone text-truncate"> {{ shopData.founded }}</span>
+                </td>
+                <td>
+                  <span class="status h6 p-4 green-500" *ngIf="shopData.status === 'PENDING'">
+                    {{ shopData.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="section pb-5">
+          <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16 secondary-text">assignment</mat-icon>
+            <div class="h2 secondary-text">Contacts</div>
+          </div>
+        </div>
+        <div class="customer mb-32">
+          <table class="simple">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Phone</th>
+                <th>Domain</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="email text-truncate"> {{ shopData.email }}</span>
+                </td>
+                <td>
+                  <span class="phone text-truncate"> {{ shopData.mobile }}</span>
+                </td>
+                <td>
+                  <span class="phone text-truncate"> {{ shopData.phone }}</span>
+                </td>
+                <td>
+                  <span class="phone text-truncate"> {{ shopData.domain }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <mat-accordion class="addresses">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Shop Address</mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div fxFlex fxLayout="column">
+              <div class="address h4 py-24">{{ shopData.address }}</div>
+              <agm-map
+                class="w-100-p h-400"
+                [zoom]="15"
+                [latitude]="shopData.shopLocation.latitude"
+                [longitude]="shopData.shopLocation.longitude"
+              >
+                <agm-marker [latitude]="shopData.shopLocation.latitude" [longitude]="shopData.shopLocation.longitude">
+                </agm-marker>
+              </agm-map>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+
+    <footer class="" fxLayout="column" fxLayoutAlign="start start"></footer>
+  </div>
+</div>

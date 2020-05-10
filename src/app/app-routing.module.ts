@@ -62,6 +62,7 @@ const routes: Routes = [
         (m) => m.ProgressModule
       ),
   },
+  { path: 'account', loadChildren: () => import('./pages/account/account.module').then(m => m.AccountModule) },
 ];
 
 @NgModule({

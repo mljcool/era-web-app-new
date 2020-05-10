@@ -44,7 +44,6 @@ export class ClientCheckerModalComponent implements OnInit {
     this._StoreServices.onAutoShop.subscribe((response) => {
 
       setTimeout(() => {
-        console.log(response.uid);
         if (!!response.uid) {
           this.isReg = true;
           this.isLoad = true;
@@ -77,7 +76,6 @@ export class ClientCheckerModalComponent implements OnInit {
   }
 
   patchValuesHere(data) {
-    console.log(data);
     this.contactForm.patchValue({ address: data });
   }
 
@@ -90,7 +88,6 @@ export class ClientCheckerModalComponent implements OnInit {
     formData.dateCreated = firebase.firestore.Timestamp.fromDate(new Date());
     formData.shopLocation = this.shopLocation;
 
-    console.log(formData);
     setTimeout(() => {
       this._CrudServiceShop.insertNewShop(formData).then(() => {
         Swal.fire('Good job!', 'Submission completed!', 'success');

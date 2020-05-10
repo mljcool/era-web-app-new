@@ -68,6 +68,5 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   errorCallback(errorData: FirebaseUISignInFailure): void {
-    console.log(errorData);
   }
 }
