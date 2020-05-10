@@ -16,6 +16,7 @@ import { ProductDetails } from 'app/pages/products/product-details/product-detai
 import { categories, Catergories } from '@appCore/constants/categories';
 import Swal from 'sweetalert2';
 import { StoreServices } from '@appCore/services/store.services';
+import { Mechanics } from 'app/pages/mechanics/mechanics.model';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     totalValues: number = 0;
 
 
+    isSaving = false;
+
     visible = true;
     selectable = true;
     separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -44,9 +47,9 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
 
     personneltCtrl = new FormControl();
-    filteredPersonnels: Observable<string[]>;
-    servicePersonnel: string[] = ['Sample'];
-    allPersonnel: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+    filteredPersonnels: Observable<Mechanics[]>;
+    servicePersonnel: Mechanics[] = [];
+    allPersonnel: Mechanics[] = [];
 
     @ViewChild('personnelInput') personnelInput: ElementRef<HTMLInputElement>;
     @ViewChild('categoriesInput') categoriesInput: ElementRef<HTMLInputElement>;
@@ -57,20 +60,13 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     // Private
     private _unsubscribeAll: Subject<any>;
 
-    /**
-     * Constructor
-     *
-     * @param {EcommerceProductService} _shopServiceDetailsService
-     * @param {FormBuilder} _formBuilder
-     * @param {Location} _location
-     * @param {MatSnackBar} _matSnackBar
-     */
     constructor(
         private _shopServiceDetailsService: ShopServiceDetailsService,
         private _formBuilder: FormBuilder,
         private _location: Location,
         private _matSnackBar: MatSnackBar,
         private _StoreServices: StoreServices,
+
     ) {
         // Set the default
         this.serviceModel = new ShopServiceDetailsModel();
@@ -119,7 +115,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         this._shopServiceDetailsService.onServiceChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(serviceModel => {
-                console.log('here', serviceModel);
+
                 if (serviceModel) {
                     this.serviceModel = new ShopServiceDetailsModel(serviceModel);
                     this.pageType = 'edit';
@@ -129,8 +125,9 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                     this.pageType = 'new';
                     this.serviceModel = new ShopServiceDetailsModel();
                 }
-
+                this.getAllPersonnel(this.serviceModel.personnels);
                 this.serviceForm = this.createServiceForm();
+
             });
 
         this.filteredCategories = this.categoriestCtrl.valueChanges.pipe(
@@ -142,8 +139,34 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
         this.filteredPersonnels = this.personneltCtrl.valueChanges.pipe(
             startWith(null),
-            map((personnel: string | null) => personnel ? this._filterPersonnel(personnel) : this.allPersonnel.slice())).pipe(takeUntil(this._unsubscribeAll));
+            map((personnel: Mechanics | null) => (personnel || {}).id ? this._filterPersonnel(personnel.id) : this.allPersonnel.slice()))
+            .pipe(takeUntil(this._unsubscribeAll));
 
+
+    }
+
+
+    getAllPersonnel(personnel = []): void {
+        this._StoreServices.onMechanicsAutoShop
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(response => {
+                if (response && response.length) {
+                    this.allPersonnel = response;
+                    if (this.pageType === 'new') {
+
+                        this.servicePersonnel.push(response[0]);
+                    } else {
+                        response.forEach(element => {
+                            const isFound = personnel.filter(data => data.id === element.id);
+                            if (isFound.length) {
+                                this.servicePersonnel.push(element);
+                            }
+                        });
+                    }
+                    console.log('getAllPersonnel', this.servicePersonnel);
+                }
+
+            })
 
     }
 
@@ -252,7 +275,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     }
 
 
-    removePersonnel(personnel: string): void {
+    removePersonnel(personnel: Mechanics): void {
         const index = this.servicePersonnel.indexOf(personnel);
 
         if (index >= 0) {
@@ -263,19 +286,18 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     selectedPersonnel(event: MatAutocompleteSelectedEvent): void {
 
         if ((event.option.viewValue || '').trim()) {
-            let index = this.servicePersonnel.indexOf(event.option.viewValue.trim())
+            let index = this.servicePersonnel.indexOf(event.option.value)
             if (index == -1)
-                this.servicePersonnel.push(event.option.viewValue.trim());
+                this.servicePersonnel.push(event.option.value);
         }
 
         this.personnelInput.nativeElement.value = '';
         this.personneltCtrl.setValue(null);
     }
 
-    private _filterPersonnel(value: string): string[] {
-        const filterValue = value.toLowerCase();
+    private _filterPersonnel(value: string): Mechanics[] {
 
-        return this.allPersonnel.filter(personnel => personnel.toLowerCase().indexOf(filterValue) === 0);
+        return this.allPersonnel.filter(personnel => personnel.name === value || personnel.lastName === value);
     }
 
 
@@ -314,7 +336,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
      * Add serviceModel
      */
     addService(): void {
-
+        this.isSaving = true;
         const newData = this.structFormatData();
         setTimeout(() => {
             this._shopServiceDetailsService.
@@ -326,7 +348,7 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                         showConfirmButton: false,
                         timer: 900
                     })
-
+                    this.isSaving = false;
 
                     this._location.go('apps/e-commerce/products/' + this.serviceModel.id + '/' + this.serviceModel.handle);
 

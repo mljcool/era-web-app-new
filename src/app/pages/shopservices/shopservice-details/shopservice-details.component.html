@@ -34,7 +34,7 @@
       <button
         mat-raised-button
         class="save-product-button"
-        [disabled]="serviceForm.invalid"
+        [disabled]="serviceForm.invalid || isSaving"
         *ngIf="pageType === 'new'"
         (click)="addService()"
       >
@@ -44,7 +44,7 @@
       <button
         mat-raised-button
         class="save-product-button"
-        [disabled]="serviceForm.invalid || serviceForm.pristine"
+        [disabled]="serviceForm.invalid || serviceForm.pristine || isSaving"
         *ngIf="pageType === 'edit'"
         (click)="addService()"
       >
@@ -55,6 +55,7 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card">
+      <mat-progress-bar mode="indeterminate" *ngIf="isSaving"></mat-progress-bar>
       <!-- CONTENT -->
       <div class="content">
         <form name="serviceForm" [formGroup]="serviceForm" class="product w-100-p" fxLayout="column" fxFlex>
@@ -214,7 +215,7 @@
                       [removable]="true"
                       (removed)="removePersonnel(personnel)"
                     >
-                      {{ personnel }}
+                      {{ personnel.name }} {{ personnel.lastName }}
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
                     <input
@@ -228,7 +229,7 @@
                   </mat-chip-list>
                   <mat-autocomplete #autoPersonnel="matAutocomplete" (optionSelected)="selectedPersonnel($event)">
                     <mat-option *ngFor="let personnel of filteredPersonnels | async" [value]="personnel">
-                      {{ personnel }}
+                      {{ personnel.name }} {{ personnel.lastName }}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>

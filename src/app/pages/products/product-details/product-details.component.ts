@@ -28,6 +28,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     pageType: string;
     productForm: FormGroup;
 
+    isSaving = false;
 
     visible = true;
     selectable = true;
@@ -187,17 +188,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
      * Add product
      */
     addProduct(): void {
+        this.isSaving = true;
         const data = this.productForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
         data.categories = this.productCatergory;
         data.shopuid = localStorage.getItem('shopId');
 
-        console.log('addNew', data);
 
         this._ecommerceProductService.addNewProduct(data)
             .then(() => {
-
-                // Trigger the subscription with new data
                 this._ecommerceProductService.onProductChanged.next(data);
 
 
@@ -208,7 +207,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
                     timer: 900
                 })
 
-
+                this.isSaving = false;
                 // Change the location with new one
                 this._location.go('/products');
             });
