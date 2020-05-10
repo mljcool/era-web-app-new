@@ -72,11 +72,11 @@
         </ng-container>
 
         <!-- Category Column -->
-        <ng-container matColumnDef="category">
-          <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Description</mat-header-cell>
           <mat-cell *matCellDef="let product" fxHide fxShow.gt-md>
             <p class="category text-truncate">
-              {{ product.categories[0] }}
+              {{ product.description }}
             </p>
           </mat-cell>
         </ng-container>
@@ -86,26 +86,26 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
           <mat-cell *matCellDef="let product" fxHide fxShow.gt-xs>
             <p class="price text-truncate">
-              {{ product.price | currency: '₱':'symbol' }}
+              {{ product.grandTotal | currency: '₱':'symbol' }}
             </p>
           </mat-cell>
         </ng-container>
 
         <!-- Quantity Column -->
-        <ng-container matColumnDef="quantity">
+        <ng-container matColumnDef="hours">
           <mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Hours</mat-header-cell>
           <mat-cell *matCellDef="let product" fxHide fxShow.gt-sm>
             <span
               class="quantity-indicator text-truncate"
               [ngClass]="{
-                'red-500': product.quantity <= 5,
-                'amber-500': product.quantity > 5 && product.quantity <= 25,
-                'green-600': product.quantity > 25
+                'red-500': product.hours <= 5,
+                'amber-500': product.hours > 5 && product.quantity <= 25,
+                'green-600': product.hours > 25
               }"
             >
             </span>
             <span>
-              {{ product.quantity }}
+              {{ product.hours }}
             </span>
           </mat-cell>
         </ng-container>

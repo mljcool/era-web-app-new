@@ -20,7 +20,7 @@ import { ShopOffersService } from './shopservices.service';
 })
 export class ShopservicesComponent implements OnInit {
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id', 'name', 'category', 'price', 'quantity', 'active'];
+  displayedColumns = ['id', 'name', 'description', 'price', 'hours', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
@@ -181,13 +181,13 @@ export class FilesDataSource extends DataSource<any>
         case 'name':
           [propertyA, propertyB] = [a.name, b.name];
           break;
-        case 'categories':
-          [propertyA, propertyB] = [a.categories[0], b.categories[0]];
+        case 'description':
+          [propertyA, propertyB] = [a.description[0], b.description[0]];
           break;
         case 'price':
           [propertyA, propertyB] = [a.price, b.price];
           break;
-        case 'quantity':
+        case 'hours':
           [propertyA, propertyB] = [a.quantity, b.quantity];
           break;
         case 'active':

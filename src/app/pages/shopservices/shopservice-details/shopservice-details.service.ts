@@ -10,6 +10,8 @@ import {
     AngularFirestoreCollection,
 } from '@angular/fire/firestore';
 
+import { StoreServices } from '@appCore/services/store.services';
+
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +23,7 @@ export class ShopServiceDetailsService implements Resolve<any>
 
 
     routeParams: any;
-    product: any;
+    myServices: any;
     dialogRef: any;
     onServiceChanged: BehaviorSubject<any>;
     setProducts: BehaviorSubject<any>;
@@ -34,7 +36,8 @@ export class ShopServiceDetailsService implements Resolve<any>
     constructor(
         private _httpClient: HttpClient,
         private _matDialog: MatDialog,
-        private db: AngularFirestore
+        private db: AngularFirestore,
+        private _StoreServices: StoreServices,
     ) {
 
         this.newShopServicesRef = db.collection(this.dbPath);
@@ -56,7 +59,7 @@ export class ShopServiceDetailsService implements Resolve<any>
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getProduct()
+                this.getMyServices()
             ]).then(
                 () => {
                     resolve();
@@ -67,54 +70,23 @@ export class ShopServiceDetailsService implements Resolve<any>
     }
 
     /**
-     * Get product
+     * Get myServices
      *
      * @returns {Promise<any>}
      */
-    getProduct(): Promise<any> {
+    getMyServices(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.routeParams.id === 'new') {
                 this.onServiceChanged.next(false);
                 resolve(false);
             }
             else {
-                this._httpClient.get('api/e-commerce-products/' + this.routeParams.id)
-                    .subscribe((response: any) => {
-                        this.product = response;
-                        this.onServiceChanged.next(this.product);
-                        resolve(response);
-                    }, reject);
+                this._StoreServices.onServicesAutoShop.subscribe((response: any) => {
+                    this.myServices = response.find(srvc => srvc.id === this.routeParams.id);
+                    this.onServiceChanged.next(this.myServices);
+                    resolve(response);
+                }, reject);
             }
-        });
-    }
-
-    /**
-     * Save product
-     *
-     * @param product
-     * @returns {Promise<any>}
-     */
-    saveProduct(product): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this._httpClient.post('api/e-commerce-products/' + product.id, product)
-                .subscribe((response: any) => {
-                    resolve(response);
-                }, reject);
-        });
-    }
-
-    /**
-     * Add product
-     *
-     * @param product
-     * @returns {Promise<any>}
-     */
-    addProduct(product): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this._httpClient.post('api/e-commerce-products/', product)
-                .subscribe((response: any) => {
-                    resolve(response);
-                }, reject);
         });
     }
 

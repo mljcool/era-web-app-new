@@ -2,8 +2,11 @@ import { InMemoryDbService } from 'angular-in-memory-web-api';
 import { CalendarFakeDb } from './dummies';
 import { ECommerceFakeDb } from './dummiesOrder';
 import { ContactsFakeDb } from './contacts';
+import { AllShopServices } from './shop-services-list';
 
 export class FakeDbService implements InMemoryDbService {
+
+
     createDb(): any {
         return {
 
@@ -11,6 +14,7 @@ export class FakeDbService implements InMemoryDbService {
             'calendar': CalendarFakeDb.data,
             'e-commerce-orders': ECommerceFakeDb.orders,
             'e-commerce-products': ECommerceFakeDb.products,
+            'all-shop-services': AllShopServices.products,
 
             // Contacts
             'contacts-contacts': ContactsFakeDb.contacts,

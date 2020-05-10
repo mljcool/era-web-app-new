@@ -22,7 +22,7 @@ import { ShopServiceDetailsService } from 'app/pages/shopservices/shopservice-de
 })
 export class ProductFinderModalComponent implements OnInit, OnDestroy {
   dataSource: FilesDataSource | null;
-  displayedColumns = ['name', 'category', 'price', 'quantity', 'active'];
+  displayedColumns = ['name', 'description', 'category', 'price', 'quantity', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
@@ -196,6 +196,8 @@ export class FilesDataSource extends DataSource<any>
           break;
         case 'name':
           [propertyA, propertyB] = [a.name, b.name];
+        case 'description':
+          [propertyA, propertyB] = [a.description, b.description];
           break;
         case 'categories':
           [propertyA, propertyB] = [a.categories[0], b.categories[0]];

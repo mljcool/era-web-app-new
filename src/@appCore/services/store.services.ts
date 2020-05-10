@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { firebase } from '@appCore/firebase/firebase-config';
 import { IShop } from '@appCore/models/Shop';
+import { ShopServiceDetailsModel } from 'app/pages/shopservices/shopservice-details/shopservice-details.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,19 @@ import { IShop } from '@appCore/models/Shop';
 export class StoreServices {
 
   onAutoShop: BehaviorSubject<IShop>;
+  onServicesAutoShop: BehaviorSubject<ShopServiceDetailsModel[] | any>;
+  onProductsAutoShop: BehaviorSubject<ShopServiceDetailsModel[] | any>;
 
   constructor() {
     this.onAutoShop = new BehaviorSubject({});
+    this.onServicesAutoShop = new BehaviorSubject([]);
+    this.onProductsAutoShop = new BehaviorSubject([]);
 
   }
 
   getMassiveData(uid: string) {
-    const getData = firebase.firestore().collection('newShopList').where('uid', '==', uid);
-    getData.onSnapshot((snapshot) => {
+    const newShopList = firebase.firestore().collection('newShopList').where('uid', '==', uid);
+    newShopList.onSnapshot((snapshot) => {
       const allShop = snapshot.docs.map((shop) => ({
         key: shop.id,
         ...shop.data(),
@@ -28,6 +33,32 @@ export class StoreServices {
       this.onAutoShop.next(allShop);
       console.log(allShop);
     });
+
+
+    const newShopServices = firebase.firestore().collection('newShopServices').where('shopuid', '==', uid);
+    newShopServices.onSnapshot((snapshot) => {
+      const allServices = snapshot.docs.map((shop) => ({
+        key: shop.id,
+        ...shop.data(),
+      }));
+
+      this.onServicesAutoShop.next(allServices);
+      console.log(allServices);
+    });
+
+    const newShopProducts = firebase.firestore().collection('newShopProducts').where('shopuid', '==', uid);
+    newShopProducts.onSnapshot((snapshot) => {
+      const allProducts = snapshot.docs.map((shop) => ({
+        key: shop.id,
+        ...shop.data(),
+      }));
+
+      this.onProductsAutoShop.next(allProducts);
+      console.log(allProducts);
+    });
+
+
+
   }
 
 

@@ -10,9 +10,13 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 import { ShopServiceDetailsService } from './shopservice-details.service';
 import { ShopServiceDetailsModel } from './shopservice-details.model';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { ProductDetails } from 'app/pages/products/product-details/product-details.model';
+
+import { categories, Catergories } from '@appCore/constants/categories';
+import Swal from 'sweetalert2';
+import { StoreServices } from '@appCore/services/store.services';
+
 
 @Component({
     selector: 'shopservice-details',
@@ -34,9 +38,9 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     separatorKeysCodes: number[] = [ENTER, COMMA];
 
     categoriestCtrl = new FormControl();
-    filteredCategories: Observable<string[]>;
-    serviceCategory: string[] = ['Lemon'];
-    allCategories: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+    filteredCategories: Observable<Catergories[]>;
+    serviceCategory: Catergories[] = [categories[0]];
+    allCategories: Catergories[] = categories;
 
 
     personneltCtrl = new FormControl();
@@ -65,7 +69,8 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         private _shopServiceDetailsService: ShopServiceDetailsService,
         private _formBuilder: FormBuilder,
         private _location: Location,
-        private _matSnackBar: MatSnackBar
+        private _matSnackBar: MatSnackBar,
+        private _StoreServices: StoreServices,
     ) {
         // Set the default
         this.serviceModel = new ShopServiceDetailsModel();
@@ -114,10 +119,11 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         this._shopServiceDetailsService.onServiceChanged
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(serviceModel => {
-
+                console.log('here', serviceModel);
                 if (serviceModel) {
                     this.serviceModel = new ShopServiceDetailsModel(serviceModel);
                     this.pageType = 'edit';
+                    this.getProductsNeedeEditMode(this.serviceModel.products);
                 }
                 else {
                     this.pageType = 'new';
@@ -127,12 +133,10 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                 this.serviceForm = this.createServiceForm();
             });
 
-
-
-
         this.filteredCategories = this.categoriestCtrl.valueChanges.pipe(
             startWith(null),
-            map((category: string | null) => category ? this._filter(category) : this.allCategories.slice())).pipe(takeUntil(this._unsubscribeAll));
+            map((category: Catergories | null) => !!(category || {}).value ? this._filter(category.value) : this.allCategories.slice()))
+            .pipe(takeUntil(this._unsubscribeAll));
 
         // =====================================
 
@@ -143,13 +147,28 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
     }
 
+    getProductsNeedeEditMode(products = []): void {
+        this._StoreServices.onProductsAutoShop
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(response => {
+                response.forEach(element => {
+                    const isFound = products.filter(data => data.id === element.id);
+                    if (isFound.length) {
+                        element.srvcQty = isFound[0].quantity;
+                        this.producsNeeded.push(element);
+                    }
+                });
+            });
+    }
+
+
     computeValues() {
         this.totalValues = 0;
         const totalvalues = this.producsNeeded.reduce((result, item: any) => {
             const sum: any = parseFloat(item.price) * parseInt(item.srvcQty, 10);
             return result + sum;
         }, 0);
-        const servicePrice: any = this.serviceForm.get('servicePrice').value;
+        const servicePrice: any = this.serviceForm.get('servicePrice').value || 0;
         this.totalValues = totalvalues;
 
         const roundOftotalValues = FuseUtils.round(this.totalValues, 2);
@@ -205,27 +224,8 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
-
-    add(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-
-        if ((value || '').trim()) {
-            let index = this.serviceCategory.indexOf(value.trim())
-            if (index == -1)
-                this.serviceCategory.push(value.trim());
-        }
-
-        // Reset the input value
-        if (input) {
-            input.value = '';
-        }
-
-        this.categoriestCtrl.setValue(null);
-    }
-
-    remove(fruit: string): void {
-        const index = this.serviceCategory.indexOf(fruit);
+    remove(category: Catergories): void {
+        const index = this.serviceCategory.indexOf(category);
 
         if (index >= 0) {
             this.serviceCategory.splice(index, 1);
@@ -235,42 +235,22 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
     selected(event: MatAutocompleteSelectedEvent): void {
 
         if ((event.option.viewValue || '').trim()) {
-            let index = this.serviceCategory.indexOf(event.option.viewValue.trim())
+            let index = this.serviceCategory.indexOf(event.option.value);
             if (index == -1)
-                this.serviceCategory.push(event.option.viewValue.trim());
+                this.serviceCategory.push(event.option.value);
         }
 
         this.categoriesInput.nativeElement.value = '';
         this.categoriestCtrl.setValue(null);
     }
 
-    private _filter(value: string): string[] {
-        const filterValue = value.toLowerCase();
+    private _filter(filterValue: number): Catergories[] {
 
-        return this.allCategories.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
+        const filteredValues = this.allCategories.filter(category => category.value === filterValue)
+
+        return filteredValues;
     }
 
-
-    // ---------------------------------------------------------------------
-
-
-    addPersonnel(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-
-        if ((value || '').trim()) {
-            let index = this.servicePersonnel.indexOf(value.trim())
-            if (index == -1)
-                this.servicePersonnel.push(value.trim());
-        }
-
-        // Reset the input value
-        if (input) {
-            input.value = '';
-        }
-
-        this.personneltCtrl.setValue(null);
-    }
 
     removePersonnel(personnel: string): void {
         const index = this.servicePersonnel.indexOf(personnel);
@@ -330,30 +310,6 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
-    /**
-     * Save serviceModel
-     */
-    saveProduct(): void {
-        const data = this.serviceForm.getRawValue();
-        data.handle = FuseUtils.handleize(data.name);
-
-        this._shopServiceDetailsService.saveProduct(data)
-            .then(() => {
-
-                // Trigger the subscription with new data
-                this._shopServiceDetailsService.onServiceChanged.next(data);
-
-                // Show the success message
-                this._matSnackBar.open('Shop service saved', 'OK', {
-                    verticalPosition: 'top',
-                    duration: 2000
-                });
-            });
-    }
-
-
     /**
      * Add serviceModel
      */
@@ -369,24 +325,10 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
                         verticalPosition: 'top',
                         duration: 2000
                     });
+                    this._location.go('apps/e-commerce/products/' + this.serviceModel.id + '/' + this.serviceModel.handle);
 
                 })
         }, 100);
-        // this._shopServiceDetailsService.addProduct(data)
-        //     .then(() => {
-
-        //         // Trigger the subscription with new data
-        //         this._shopServiceDetailsService.onServiceChanged.next(data);
-
-        //         // Show the success message
-        //         this._matSnackBar.open('ShopServiceDetailsModel added', 'OK', {
-        //             verticalPosition: 'top',
-        //             duration: 2000
-        //         });
-
-        //         // Change the location with new one
-        //         this._location.go('apps/e-commerce/products/' + this.serviceModel.id + '/' + this.serviceModel.handle);
-        //     });
     }
 
 

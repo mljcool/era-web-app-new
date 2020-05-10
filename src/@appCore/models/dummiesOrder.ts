@@ -1,4 +1,5 @@
 export class ECommerceFakeDb {
+
   public static products = [
     {
       'id': '1',

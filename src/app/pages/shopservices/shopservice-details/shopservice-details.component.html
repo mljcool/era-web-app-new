@@ -181,7 +181,7 @@
                       [removable]="true"
                       (removed)="remove(category)"
                     >
-                      {{ category }}
+                      {{ category.name }}
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
                     <input
@@ -191,12 +191,11 @@
                       [matAutocomplete]="auto"
                       [matChipInputFor]="chipList"
                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      (matChipInputTokenEnd)="add($event)"
                     />
                   </mat-chip-list>
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
                     <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
-                      {{ category }}
+                      {{ category.name }}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -225,7 +224,6 @@
                       [matAutocomplete]="autoPersonnel"
                       [matChipInputFor]="personnelList"
                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                      (matChipInputTokenEnd)="addPersonnel($event)"
                     />
                   </mat-chip-list>
                   <mat-autocomplete #autoPersonnel="matAutocomplete" (optionSelected)="selectedPersonnel($event)">

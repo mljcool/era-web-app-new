@@ -1,16 +1,21 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+
+
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil, startWith, map } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations';
 import { FuseUtils } from '@fuse/utils';
 
 import { ProductDetailsService } from './product-details.service';
 import { ProductDetails } from './product-details.model';
-
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { categories, Catergories } from '@appCore/constants/categories';
+import Swal from 'sweetalert2';
 @Component({
     selector: 'e-commerce-product',
     templateUrl: './product-details.component.html',
@@ -23,8 +28,21 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     pageType: string;
     productForm: FormGroup;
 
+
+    visible = true;
+    selectable = true;
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+
     // Private
     private _unsubscribeAll: Subject<any>;
+    categoriestCtrl = new FormControl();
+    filteredCategories: Observable<Catergories[]>;
+    productCatergory: Catergories[] = [categories[0]];
+    allCategories: Catergories[] = categories;
+
+    @ViewChild('categoriesInput') categoriesInput: ElementRef<HTMLInputElement>;
+    @ViewChild('auto') matAutocomplete: MatAutocomplete;
+
 
     /**
      * Constructor
@@ -71,6 +89,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
                 this.productForm = this.createProductForm();
             });
+
+        this.filteredCategories = this.categoriestCtrl.valueChanges.pipe(
+            startWith(null),
+            map((category: Catergories | null) => !!(category || {}).value ? this._filter(category.value) : this.allCategories.slice()))
+            .pipe(takeUntil(this._unsubscribeAll));
     }
 
     /**
@@ -80,6 +103,34 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+    }
+
+
+    remove(category: Catergories): void {
+
+        const index = this.productCatergory.indexOf(category);
+
+        if (index >= 0) {
+            this.productCatergory.splice(index, 1);
+        }
+    }
+
+    selected(event: MatAutocompleteSelectedEvent): void {
+        if ((event.option.viewValue || '').trim()) {
+            let index = this.productCatergory.indexOf(event.option.value);
+            if (index == -1)
+                this.productCatergory.push(event.option.value);
+        }
+
+        this.categoriesInput.nativeElement.value = '';
+        this.categoriestCtrl.setValue(null);
+    }
+
+    private _filter(filterValue: number): Catergories[] {
+
+        const filteredValues = this.allCategories.filter(category => category.value === filterValue)
+
+        return filteredValues;
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -98,12 +149,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
             handle: [this.product.handle],
             description: [this.product.description],
             categories: [this.product.categories],
-            tags: [this.product.tags],
-            images: [this.product.images],
-            priceTaxExcl: [this.product.priceTaxExcl],
             price: [this.product.price],
             taxRate: [this.product.taxRate],
-            comparedPrice: [this.product.comparedPrice],
             quantity: [this.product.quantity],
             sku: [this.product.sku],
             width: [this.product.width],
@@ -142,21 +189,28 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     addProduct(): void {
         const data = this.productForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
+        data.categories = this.productCatergory;
+        data.shopuid = localStorage.getItem('shopId');
 
-        this._ecommerceProductService.addProduct(data)
+        console.log('addNew', data);
+
+        this._ecommerceProductService.addNewProduct(data)
             .then(() => {
 
                 // Trigger the subscription with new data
                 this._ecommerceProductService.onProductChanged.next(data);
 
-                // Show the success message
-                this._matSnackBar.open('ProductDetails added', 'OK', {
-                    verticalPosition: 'top',
-                    duration: 2000
-                });
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Your product has been saved',
+                    showConfirmButton: false,
+                    timer: 900
+                })
+
 
                 // Change the location with new one
-                this._location.go('apps/e-commerce/products/' + this.product.id + '/' + this.product.handle);
+                this._location.go('/products');
             });
     }
 }

@@ -23,7 +23,7 @@ import { ProductsService } from './products.service';
 })
 export class ProductsComponent implements OnInit {
   dataSource: FilesDataSource | null;
-  displayedColumns = ['id', 'name', 'category', 'price', 'quantity', 'active'];
+  displayedColumns = ['id', 'name', 'description', 'category', 'price', 'quantity', 'active'];
 
   @ViewChild(MatPaginator, { static: true })
   paginator: MatPaginator;
@@ -183,6 +183,9 @@ export class FilesDataSource extends DataSource<any>
           break;
         case 'name':
           [propertyA, propertyB] = [a.name, b.name];
+          break;
+        case 'description':
+          [propertyA, propertyB] = [a.name, b.description];
           break;
         case 'categories':
           [propertyA, propertyB] = [a.categories[0], b.categories[0]];

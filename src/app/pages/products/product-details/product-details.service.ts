@@ -3,6 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { StoreServices } from '@appCore/services/store.services';
+import {
+    AngularFirestore,
+    AngularFirestoreCollection,
+} from '@angular/fire/firestore';
+
 @Injectable()
 export class ProductDetailsService implements Resolve<any>
 {
@@ -10,14 +16,21 @@ export class ProductDetailsService implements Resolve<any>
     product: any;
     onProductChanged: BehaviorSubject<any>;
 
+    private dbPath = '/newShopProducts';
+    newShopProducts: AngularFirestoreCollection<any> = null;
+
+
     /**
      * Constructor
      *
      * @param {HttpClient} _httpClient
      */
     constructor(
-        private _httpClient: HttpClient
+        private _httpClient: HttpClient,
+        private db: AngularFirestore,
+        private _StoreServices: StoreServices,
     ) {
+        this.newShopProducts = db.collection(this.dbPath);
         // Set the defaults
         this.onProductChanged = new BehaviorSubject({});
     }
@@ -57,12 +70,12 @@ export class ProductDetailsService implements Resolve<any>
                 resolve(false);
             }
             else {
-                this._httpClient.get('api/e-commerce-products/' + this.routeParams.id)
-                    .subscribe((response: any) => {
-                        this.product = response;
-                        this.onProductChanged.next(this.product);
-                        resolve(response);
-                    }, reject);
+
+                this._StoreServices.onProductsAutoShop.subscribe((response: any) => {
+                    this.product = response.find(srvc => srvc.id === this.routeParams.id);
+                    this.onProductChanged.next(this.product);
+                    resolve(response);
+                }, reject);
             }
         });
     }
@@ -95,5 +108,9 @@ export class ProductDetailsService implements Resolve<any>
                     resolve(response);
                 }, reject);
         });
+    }
+
+    addNewProduct(data: any): Promise<any> {
+        return this.newShopProducts.add(data);
     }
 }

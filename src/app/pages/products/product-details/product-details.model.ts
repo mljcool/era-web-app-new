@@ -8,17 +8,8 @@ export class ProductDetails {
     handle: string;
     description: string;
     categories: string[];
-    tags: string[];
-    images: {
-        default: boolean,
-        id: string,
-        url: string,
-        type: string
-    }[];
-    priceTaxExcl: number;
     price: number;
     taxRate: number;
-    comparedPrice: number;
     quantity: number;
     origQty: number;
     sku: string;
@@ -42,12 +33,8 @@ export class ProductDetails {
         this.handle = product.handle || FuseUtils.handleize(this.name);
         this.description = product.description || '';
         this.categories = product.categories || [];
-        this.tags = product.tags || [];
-        this.images = product.images || [];
-        this.priceTaxExcl = product.priceTaxExcl || 0;
         this.price = product.price || 0;
         this.taxRate = product.taxRate || 0;
-        this.comparedPrice = product.comparedPrice || 0;
         this.quantity = product.quantity || 0;
         this.origQty = product.origQty || 0;
         this.sku = product.sku || 0;
@@ -60,69 +47,4 @@ export class ProductDetails {
         this.active = product.active || true;
     }
 
-    /**
-     * Add category
-     *
-     * @param {MatChipInputEvent} event
-     */
-    addCategory(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-
-        // Add category
-        if (value) {
-            this.categories.push(value);
-        }
-
-        // Reset the input value
-        if (input) {
-            input.value = '';
-        }
-    }
-
-    /**
-     * Remove category
-     *
-     * @param category
-     */
-    removeCategory(category): void {
-        const index = this.categories.indexOf(category);
-
-        if (index >= 0) {
-            this.categories.splice(index, 1);
-        }
-    }
-
-    /**
-     * Add tag
-     *
-     * @param {MatChipInputEvent} event
-     */
-    addTag(event: MatChipInputEvent): void {
-        const input = event.input;
-        const value = event.value;
-
-        // Add tag
-        if (value) {
-            this.tags.push(value);
-        }
-
-        // Reset the input value
-        if (input) {
-            input.value = '';
-        }
-    }
-
-    /**
-     * Remove tag
-     *
-     * @param tag
-     */
-    removeTag(tag): void {
-        const index = this.tags.indexOf(tag);
-
-        if (index >= 0) {
-            this.tags.splice(index, 1);
-        }
-    }
 }

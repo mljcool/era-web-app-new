@@ -43,12 +43,22 @@
           </mat-cell>
         </ng-container>
 
+        <!-- Description Column -->
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef mat-sort-header fxHide mat-sort-header fxShow.gt-md
+            >Description</mat-header-cell
+          >
+          <mat-cell *matCellDef="let product">
+            <p class="text-truncate">{{ product.description }}</p>
+          </mat-cell>
+        </ng-container>
+
         <!-- Category Column -->
         <ng-container matColumnDef="category">
           <mat-header-cell *matHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
           <mat-cell *matCellDef="let product" fxHide fxShow.gt-md>
             <p class="category text-truncate">
-              {{ product.categories[0] }}
+              {{ product.categories[0].name }}
             </p>
           </mat-cell>
         </ng-container>

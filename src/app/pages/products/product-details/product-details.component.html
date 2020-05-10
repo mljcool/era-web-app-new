@@ -79,41 +79,36 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Categories</mat-label>
-
-                  <mat-chip-list #categoryList name="categories" formControlName="categories">
+                  <mat-label>Select Catergory</mat-label>
+                  <mat-chip-list
+                    #chipList
+                    aria-label="product selection"
+                    name="categories"
+                    formControlName="categories"
+                  >
                     <mat-chip
-                      *ngFor="let category of product.categories"
+                      *ngFor="let product of productCatergory"
+                      [selectable]="selectable"
                       [removable]="true"
-                      (removed)="product.removeCategory(category)"
+                      (removed)="remove(product)"
                     >
-                      {{ category }}
+                      {{ product.name }}
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
-
                     <input
-                      [matChipInputFor]="categoryList"
-                      [matChipInputAddOnBlur]="true"
-                      (matChipInputTokenEnd)="product.addCategory($event)"
+                      placeholder="Categories..."
+                      #categoriesInput
+                      [formControl]="categoriestCtrl"
+                      [matAutocomplete]="auto"
+                      [matChipInputFor]="chipList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     />
                   </mat-chip-list>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Tags</mat-label>
-
-                  <mat-chip-list #tagList name="tags" formControlName="tags">
-                    <mat-chip *ngFor="let tag of product.tags" [removable]="true" (removed)="product.removeTag(tag)">
-                      {{ tag }}
-                      <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-
-                    <input
-                      [matChipInputFor]="tagList"
-                      [matChipInputAddOnBlur]="true"
-                      (matChipInputTokenEnd)="product.addTag($event)"
-                    />
-                  </mat-chip-list>
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                    <mat-option *ngFor="let product of filteredCategories | async" [value]="product">
+                      {{ product.name }}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
               </div>
             </mat-tab>
@@ -121,40 +116,16 @@
             <mat-tab label="Pricing">
               <div class="tab-content p-24" fusePerfectScrollbar>
                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Tax Excluded Price</mat-label>
-                  <input
-                    matInput
-                    placeholder="Tax Excluded Price"
-                    name="priceTaxExcl"
-                    formControlName="priceTaxExcl"
-                    type="number"
-                  />
-                  <span matPrefix>$&nbsp;</span>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Tax Included Price</mat-label>
-                  <input matInput placeholder="Tax Included Price" name="price" formControlName="price" type="number" />
-                  <span matPrefix>$&nbsp;</span>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Tax Rate</mat-label>
+                  <mat-label>Tax </mat-label>
                   <input matInput placeholder="Tax Rate" name="taxRate" formControlName="taxRate" type="number" />
                   <span matPrefix>&#37;&nbsp;</span>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-                  <mat-label>Compared Price</mat-label>
-                  <input
-                    matInput
-                    placeholder="Compared Price"
-                    name="comparedPrice"
-                    formControlName="comparedPrice"
-                    type="number"
-                  />
-                  <span matPrefix>$&nbsp;</span>
-                  <mat-hint align="start">Add a compare price to show next to the real price </mat-hint>
+                  <mat-label> Price</mat-label>
+                  <input matInput placeholder="Compared Price" name="price" formControlName="price" type="number" />
+                  <span matPrefix>₱&nbsp;</span>
+                  <mat-hint align="start">Product price </mat-hint>
                 </mat-form-field>
               </div>
             </mat-tab>
@@ -210,7 +181,7 @@
                     formControlName="extraShippingFee"
                     type="number"
                   />
-                  <span matPrefix>$&nbsp;</span>
+                  <span matPrefix>₱&nbsp;</span>
                 </mat-form-field>
               </div>
             </mat-tab>

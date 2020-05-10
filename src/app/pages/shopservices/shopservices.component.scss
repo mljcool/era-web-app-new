@@ -71,20 +71,10 @@ app-shopservices {
     }
 
     .mat-column-id {
-      flex: 0 1 84px;
+      flex: 0 1 240px;
     }
 
-    .mat-column-image {
-      flex: 0 1 84px;
-
-      .product-image {
-        width: 52px;
-        height: 52px;
-        border: 1px solid rgba(0, 0, 0, 0.12);
-      }
-    }
-
-    .mat-column-category {
+    .mat-column-description {
       flex: 0 1 240px;
     }
 
@@ -92,7 +82,7 @@ app-shopservices {
       flex: 0 1 160px;
     }
 
-    .mat-column-quantity {
+    .mat-column-hours {
       flex: 0 1 160px;
     }
 
