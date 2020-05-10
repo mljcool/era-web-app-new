@@ -1,3 +1,4 @@
+import { MatButtonModule } from '@angular/material/button';
 import { NgModule } from '@angular/core';
 
 import { FuseSharedModule } from '@fuse/shared.module';
@@ -15,6 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatDividerModule,
         MatListModule,
         MatSlideToggleModule,
+        MatButtonModule,
 
         FuseSharedModule,
     ],

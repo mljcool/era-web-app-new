@@ -31,13 +31,6 @@ export const navigation: FuseNavigation[] = [
                 exactMatch: true
             },
             {
-                id: 'progress',
-                title: 'View Progress',
-                type: 'item',
-                icon: 'alarm',
-                url: '/progress'
-            },
-            {
                 id: 'orderDetail',
                 title: 'Order Detail',
                 type: 'item',

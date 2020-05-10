@@ -55,13 +55,6 @@ const routes: Routes = [
         (m) => m.MechanicsModule
       ),
   },
-  {
-    path: 'progress',
-    loadChildren: () =>
-      import('./pages/progress/progress.module').then(
-        (m) => m.ProgressModule
-      ),
-  },
 ];
 
 @NgModule({

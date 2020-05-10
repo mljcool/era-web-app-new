@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'quick-panel',

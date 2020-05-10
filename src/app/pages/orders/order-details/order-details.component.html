@@ -48,15 +48,13 @@
                       <tr>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Phone</th>
-                        <th>Company</th>
+                        <th>Mobile Number</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>
                           <div fxLayout="row" fxLayoutAlign="start center">
-                            <img class="avatar" [src]="order.customer.avatar" />
                             <span class="name text-truncate"
                               >{{ order.customer.firstName }}
                               {{ order.customer.lastName }}
@@ -68,9 +66,6 @@
                         </td>
                         <td>
                           <span class="phone text-truncate">{{ order.customer.phone }}</span>
-                        </td>
-                        <td>
-                          <span class="company text-truncate">{{ order.customer.company }} </span>
                         </td>
                       </tr>
                     </tbody>
@@ -155,48 +150,6 @@
 
               <div class="section pb-48">
                 <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
-                  <mat-icon class="m-0 mr-16 secondary-text">attach_money</mat-icon>
-                  <div class="h2 secondary-text">Payment</div>
-                </div>
-
-                <table class="simple">
-                  <thead>
-                    <tr>
-                      <th>TransactionID</th>
-                      <th>Payment Method</th>
-                      <th>Amount</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <span class="text-truncate">
-                          {{ order.payment.transactionId }}
-                        </span>
-                      </td>
-                      <td>
-                        <span class="text-truncate">
-                          {{ order.payment.method }}
-                        </span>
-                      </td>
-                      <td>
-                        <span class="text-truncate">
-                          {{ order.payment.amount }}
-                        </span>
-                      </td>
-                      <td>
-                        <span class="text-truncate">
-                          {{ order.payment.date | date }}
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="section pb-48">
-                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
                   <mat-icon class="m-0 mr-16 secondary-text">local_shipping</mat-icon>
                   <div class="h2 secondary-text">Shipping</div>
                 </div>
@@ -241,7 +194,6 @@
                 <thead>
                   <tr>
                     <th class="w-80">ID</th>
-                    <th class="w-120">Image</th>
                     <th>Name</th>
                     <th class="w-120">Price</th>
                     <th class="w-80">Quantity</th>
@@ -255,9 +207,6 @@
                   >
                     <td>
                       {{ product.id }}
-                    </td>
-                    <td>
-                      <img class="product-image" [src]="product.image" />
                     </td>
                     <td>
                       {{ product.name }}
@@ -337,13 +286,13 @@
                               </div>
                             </td>
                             <td class="text-right">
-                              {{ product.price | currency: 'USD':'symbol' }}
+                              {{ product.price | currency: '₱':'symbol' }}
                             </td>
                             <td class="text-right">
                               {{ product.quantity }}
                             </td>
                             <td class="text-right">
-                              {{ product.total | currency: 'USD':'symbol' }}
+                              {{ product.total | currency: '₱':'symbol' }}
                             </td>
                           </tr>
                         </tbody>
@@ -353,19 +302,19 @@
                         <tbody>
                           <tr class="subtotal">
                             <td>SUBTOTAL</td>
-                            <td>{{ order.subtotal | currency: 'USD':'symbol' }}</td>
+                            <td>{{ order.subtotal | currency: '₱':'symbol' }}</td>
                           </tr>
                           <tr class="tax">
                             <td>TAX</td>
-                            <td>{{ order.tax | currency: 'USD':'symbol' }}</td>
+                            <td>{{ order.tax | currency: '₱':'symbol' }}</td>
                           </tr>
                           <tr class="discount">
                             <td>DISCOUNT</td>
-                            <td>-{{ order.discount | currency: 'USD':'symbol' }}</td>
+                            <td>-{{ order.discount | currency: '₱':'symbol' }}</td>
                           </tr>
                           <tr class="total">
                             <td>TOTAL</td>
-                            <td>{{ order.total | currency: 'USD':'symbol' }}</td>
+                            <td>{{ order.total | currency: '₱':'symbol' }}</td>
                           </tr>
                         </tbody>
                       </table>

@@ -10,11 +10,11 @@
 
   .cal-day-cell {
     @include media-breakpoint(lg) {
-      min-height: 150px;
+      min-height: 110px;
     }
 
     @include media-breakpoint(gt-lg) {
-      min-height: 200px;
+      min-height: 110px;
     }
 
     &.cal-selected {
@@ -69,7 +69,7 @@
 
       mwl-calendar-event-actions {
         .cal-event-actions {
-          display: flex;
+          display: none;
           flex-direction: row;
           align-items: center;
 
@@ -179,12 +179,10 @@
 
 #calendar {
   .header {
-    height: 150px;
-    min-height: 150px;
-    max-height: 150px;
+    height: 100px;
+    min-height: 100px;
+    max-height: 100px;
     position: relative;
-    background-size: 100% auto;
-    background-position: 0 50%;
     background-repeat: no-repeat;
     background-color: #fafafa;
     color: #ffffff;
