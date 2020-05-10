@@ -13,6 +13,7 @@ import { FuseSplashScreenService } from '@fuse/services/splash-screen.service';
 import { navigation } from 'app/navigation/navigation';
 import { Router, NavigationEnd } from '@angular/router';
 import { StoreServices } from '@appCore/services/store.services';
+import { BadgeNotificationService } from '@appCore/services/badge-notificaton.service';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private _fuseConfigService: FuseConfigService,
     private _fuseNavigationService: FuseNavigationService,
     private _fuseSplashScreenService: FuseSplashScreenService,
+    private _BadgeNotificationService: BadgeNotificationService,
     private _clientSrvc: ClientService,
     private _checkerSrvc: CheckerServices,
     private _StoreServices: StoreServices,
@@ -60,6 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this._clientSrvc.onUserDataInfo.pipe(takeUntil(this._unsubscribeAll)).subscribe((islog) => {
       if (islog.uid) {
         this._StoreServices.getMassiveData(islog.uid);
+        this._BadgeNotificationService.servedNotificationBadges();
       }
     });
   }

@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { ClientService } from '@appCore/services/client.service';
 import { CheckerServices } from '@appCore/services/checker.service';
 import { StoreServices } from '@appCore/services/store.services';
+import { BadgeNotificationService } from '@appCore/services/badge-notificaton.service';
 
 @NgModule({
   imports: [
@@ -21,7 +22,7 @@ export class ServicesSharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: ServicesSharedModule,
-      providers: [ClientService, CheckerServices, StoreServices],
+      providers: [ClientService, CheckerServices, StoreServices, BadgeNotificationService],
     }
   }
 
