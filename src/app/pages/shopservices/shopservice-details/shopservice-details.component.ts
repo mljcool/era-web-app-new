@@ -320,11 +320,14 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
             this._shopServiceDetailsService.
                 insertNewServices(newData).then(() => {
 
-                    //         // Show the success message
-                    this._matSnackBar.open('ShopServiceDetailsModel added', 'OK', {
-                        verticalPosition: 'top',
-                        duration: 2000
-                    });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Your service has been saved',
+                        showConfirmButton: false,
+                        timer: 900
+                    })
+
+
                     this._location.go('apps/e-commerce/products/' + this.serviceModel.id + '/' + this.serviceModel.handle);
 
                 })

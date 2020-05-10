@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { firebase } from '@appCore/firebase/firebase-config';
 import { IShop } from '@appCore/models/Shop';
 import { ShopServiceDetailsModel } from 'app/pages/shopservices/shopservice-details/shopservice-details.model';
+import { Mechanics } from 'app/pages/mechanics/mechanics.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,13 @@ export class StoreServices {
   onAutoShop: BehaviorSubject<IShop>;
   onServicesAutoShop: BehaviorSubject<ShopServiceDetailsModel[] | any>;
   onProductsAutoShop: BehaviorSubject<ShopServiceDetailsModel[] | any>;
+  onMechanicsAutoShop: BehaviorSubject<Mechanics[] | any>;
 
   constructor() {
     this.onAutoShop = new BehaviorSubject({});
     this.onServicesAutoShop = new BehaviorSubject([]);
     this.onProductsAutoShop = new BehaviorSubject([]);
+    this.onMechanicsAutoShop = new BehaviorSubject([]);
 
   }
 
@@ -56,6 +59,19 @@ export class StoreServices {
       this.onProductsAutoShop.next(allProducts);
       console.log(allProducts);
     });
+
+
+    const newShopMechanics = firebase.firestore().collection('newShopMechanics').where('shopuid', '==', uid);
+    newShopMechanics.onSnapshot((snapshot) => {
+      const allMechanics = snapshot.docs.map((shop) => ({
+        key: shop.id,
+        ...shop.data(),
+      }));
+
+      this.onMechanicsAutoShop.next(allMechanics);
+      console.log(allMechanics);
+    });
+
 
 
 

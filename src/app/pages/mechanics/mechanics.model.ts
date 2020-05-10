@@ -5,7 +5,6 @@ export class Mechanics {
     name: string;
     lastName: string;
     nickname: string;
-    jobTitle: string;
     email: string;
     phone: string;
     address: string;
@@ -23,7 +22,6 @@ export class Mechanics {
             this.name = contact.name || '';
             this.lastName = contact.lastName || '';
             this.nickname = contact.nickname || '';
-            this.jobTitle = contact.jobTitle || '';
             this.email = contact.email || '';
             this.phone = contact.phone || '';
             this.address = contact.address || '';

@@ -8,6 +8,9 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { MechanicService } from './mechanics.service';
+import { firebase } from '@appCore/firebase/firebase-config';
+import * as moment from 'moment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mechanics',
@@ -98,7 +101,21 @@ export class MechanicsComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this._contactsService.updateContact(response.getRawValue());
+        const personnelData = response.getRawValue();
+        personnelData.shopuid = localStorage.getItem('shopId');
+        personnelData.founded = moment(personnelData.founded).format('MM-DD-YYYY');
+        personnelData.dateCreated = firebase.firestore.Timestamp.fromDate(new Date());
+
+        this._contactsService.insertNewMechanics(personnelData).then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Personnel Data has been saved',
+            showConfirmButton: false,
+            timer: 1500
+          })
+
+
+        });
       });
   }
 

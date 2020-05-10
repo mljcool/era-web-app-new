@@ -36,9 +36,14 @@
 
       <div fxLayout="row" fxLayoutAlign="start start">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Phone number</mat-label>
-          <mat-icon matSuffix class="secondary-text">phone</mat-icon>
+          <mat-label>Mobile number</mat-label>
+          <mat-icon matSuffix class="secondary-text">mobile_friendly</mat-icon>
           <input formControlName="phone" matInput />
+          <mat-error *ngIf="contactForm.controls.phone.errors">
+            <ng-container *ngIf="contactForm.controls.phone.errors.pattern">
+              Invalid Mobile number
+            </ng-container>
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -47,22 +52,11 @@
           <mat-label>Email</mat-label>
           <mat-icon matSuffix class="secondary-text">email</mat-icon>
           <input name="email" formControlName="email" matInput type="email" />
-        </mat-form-field>
-      </div>
-
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Company</mat-label>
-          <mat-icon matSuffix class="secondary-text">domain</mat-icon>
-          <input name="company" formControlName="company" matInput />
-        </mat-form-field>
-      </div>
-
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Job title</mat-label>
-          <mat-icon matSuffix class="secondary-text">work</mat-icon>
-          <input name="jobTitle" formControlName="jobTitle" matInput />
+          <mat-error
+            *ngIf="!contactForm.get('email').hasError('required') && contactForm.get('email').hasError('email')"
+          >
+            Please enter a valid email address
+          </mat-error>
         </mat-form-field>
       </div>
 

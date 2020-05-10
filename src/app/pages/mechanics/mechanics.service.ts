@@ -6,10 +6,25 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FuseUtils } from '@fuse/utils';
 import { Mechanics } from './mechanics.model';
 
+import {
+    AngularFirestore,
+    AngularFirestoreCollection,
+} from '@angular/fire/firestore';
+import { StoreServices } from '@appCore/services/store.services';
+
+
 
 @Injectable()
 export class MechanicService implements Resolve<any>
 {
+
+
+
+    private dbPath = '/newShopMechanics';
+    newShopMechanicsRef: AngularFirestoreCollection<any> = null;
+
+
+
     onContactsChanged: BehaviorSubject<any>;
     onSelectedContactsChanged: BehaviorSubject<any>;
     onUserDataChanged: BehaviorSubject<any>;
@@ -29,8 +44,12 @@ export class MechanicService implements Resolve<any>
      * @param {HttpClient} _httpClient
      */
     constructor(
-        private _httpClient: HttpClient
+        private _httpClient: HttpClient,
+        private _StoreServices: StoreServices,
+        private db: AngularFirestore,
     ) {
+
+        this.newShopMechanicsRef = db.collection(this.dbPath);
         // Set the defaults
         this.onContactsChanged = new BehaviorSubject([]);
         this.onSelectedContactsChanged = new BehaviorSubject([]);
@@ -85,34 +104,20 @@ export class MechanicService implements Resolve<any>
      */
     getContacts(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this._httpClient.get('api/contacts-contacts')
-                .subscribe((response: any) => {
+            this._StoreServices.onMechanicsAutoShop.subscribe((response: any) => {
+                this.contacts = response;
 
-                    this.contacts = response;
+                if (this.searchText && this.searchText !== '') {
+                    this.contacts = FuseUtils.filterArrayByString(this.contacts, this.searchText);
+                }
 
-                    if (this.filterBy === 'starred') {
-                        this.contacts = this.contacts.filter(_contact => {
-                            return this.user.starred.includes(_contact.id);
-                        });
-                    }
+                this.contacts = this.contacts.map(contact => {
+                    return new Mechanics(contact);
+                });
 
-                    if (this.filterBy === 'frequent') {
-                        this.contacts = this.contacts.filter(_contact => {
-                            return this.user.frequentContacts.includes(_contact.id);
-                        });
-                    }
-
-                    if (this.searchText && this.searchText !== '') {
-                        this.contacts = FuseUtils.filterArrayByString(this.contacts, this.searchText);
-                    }
-
-                    this.contacts = this.contacts.map(contact => {
-                        return new Mechanics(contact);
-                    });
-
-                    this.onContactsChanged.next(this.contacts);
-                    resolve(this.contacts);
-                }, reject);
+                this.onContactsChanged.next(this.contacts);
+                resolve(this.contacts);
+            }, reject);
         }
         );
     }
@@ -263,6 +268,10 @@ export class MechanicService implements Resolve<any>
         }
         this.onContactsChanged.next(this.contacts);
         this.deselectContacts();
+    }
+
+    insertNewMechanics(data: any): Promise<any> {
+        return this.newShopMechanicsRef.add(data);
     }
 
 }

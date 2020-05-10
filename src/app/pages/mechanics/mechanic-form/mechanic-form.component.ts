@@ -1,5 +1,5 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Mechanics } from '../mechanics.model';
 
@@ -54,18 +54,17 @@ export class MechanicsFormDialogComponent {
      * @returns {FormGroup}
      */
     createContactForm(): FormGroup {
+        const mobilePattern = '^((\\+91-?)|0)?[0-9]{10}$';
+
         return this._formBuilder.group({
             id: [this.mechanics.id],
-            name: [this.mechanics.name],
-            lastName: [this.mechanics.lastName],
-            avatar: [this.mechanics.avatar],
-            nickname: [this.mechanics.nickname],
-            company: [this.mechanics.company],
-            jobTitle: [this.mechanics.jobTitle],
-            email: [this.mechanics.email],
-            phone: [this.mechanics.phone],
-            address: [this.mechanics.address],
-            birthday: [this.mechanics.birthday],
+            name: [this.mechanics.name, Validators.required],
+            lastName: [this.mechanics.lastName, Validators.required],
+            nickname: [this.mechanics.nickname, Validators.required],
+            email: [this.mechanics.email, [Validators.required, Validators.email]],
+            phone: [this.mechanics.phone, [Validators.required, Validators.pattern(mobilePattern)]],
+            address: [this.mechanics.address, Validators.required],
+            birthday: [this.mechanics.birthday, Validators.required],
             notes: [this.mechanics.notes]
         });
     }
