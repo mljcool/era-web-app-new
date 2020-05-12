@@ -28,6 +28,8 @@ export class ClientCheckerModalComponent implements OnInit {
   contactForm: FormGroup;
   shopLocation: any = {};
   private fgn: String;
+  
+  shopStatus: string ='';
 
   constructor(
     public matDialogRef: MatDialogRef<ClientCheckerModalComponent>,
@@ -42,14 +44,18 @@ export class ClientCheckerModalComponent implements OnInit {
       this.clientData = userData;
     });
     this._StoreServices.onAutoShop.subscribe((response) => {
-
+      const statuses:string[] = ['REJECTED', 'PENDING'];
       setTimeout(() => {
-        if (!!response.uid) {
+        if (!!(response|| {}).uid) {
+          this.shopStatus = response.status;
           this.isReg = true;
           this.isLoad = true;
-          if (this.isReg) {
+          if (this.isReg && !statuses.includes( response.status)) {
             this.matDialogRef.close();
           }
+        }else {
+          this.isLoad = true;
+          this.isReg = false;
         }
       }, 1000);
     });

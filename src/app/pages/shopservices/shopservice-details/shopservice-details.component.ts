@@ -322,7 +322,6 @@ export class ShopServiceDetailsComponent implements OnInit, OnDestroy {
 
     removeItems(item) {
         const index = this.producsNeeded.indexOf(item);
-        console.log(index);
         if (index >= 0) {
             this.producsNeeded.splice(index, 1);
             this.computeValues();
