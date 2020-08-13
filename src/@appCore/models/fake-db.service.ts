@@ -3,6 +3,7 @@ import { CalendarFakeDb } from './dummies';
 import { ECommerceFakeDb } from './dummiesOrder';
 import { ContactsFakeDb } from './contacts';
 import { AllShopServices } from './shop-services-list';
+import { AssistanceFakeDb } from './FakDBAssistance';
 
 export class FakeDbService implements InMemoryDbService {
 
@@ -15,6 +16,7 @@ export class FakeDbService implements InMemoryDbService {
             'e-commerce-orders': ECommerceFakeDb.orders,
             'e-commerce-products': ECommerceFakeDb.products,
             'all-shop-services': AllShopServices.products,
+            'all-assistance': AssistanceFakeDb.assistanceList,
 
             // Contacts
             'contacts-contacts': ContactsFakeDb.contacts,

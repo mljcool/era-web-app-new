@@ -1,10 +1,11 @@
+import { MaterialModule } from '@fuse/material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AssistanceRoutingModule } from './assistance-routing.module';
 import { AssistanceComponent } from './assistance.component';
 import { AgmMapModule } from '@fuse/agMap.module';
 import { FuseSharedModule } from '@fuse/shared.module';
+import { AssistanceServices } from './assistance.service';
 
 
 @NgModule({
@@ -13,7 +14,12 @@ import { FuseSharedModule } from '@fuse/shared.module';
     CommonModule,
     AssistanceRoutingModule,
     AgmMapModule,
-    FuseSharedModule
+    FuseSharedModule,
+    MaterialModule
+
+  ],
+  providers: [
+    AssistanceServices
   ]
 })
 export class AssistanceModule { }

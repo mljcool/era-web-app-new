@@ -52,7 +52,10 @@
                   <span class="phone text-truncate"> {{ shopData.founded }}</span>
                 </td>
                 <td>
-                  <span class="status h6 p-4 green-500" *ngIf="shopData.status === 'PENDING'">
+                  <span class="status h6 p-4 green-500" *ngIf="shopData.status === 'ACCEPTED'">
+                    {{ shopData.status }}
+                  </span>
+                  <span class="status h6 p-4 yellow-500" *ngIf="shopData.status === 'PENDING'">
                     {{ shopData.status }}
                   </span>
                 </td>

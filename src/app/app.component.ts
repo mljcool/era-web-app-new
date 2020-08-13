@@ -62,7 +62,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this._clientSrvc.onUserDataInfo.pipe(takeUntil(this._unsubscribeAll)).subscribe((islog) => {
       if (islog.uid) {
         this._StoreServices.getMassiveData(islog.uid);
-        this._BadgeNotificationService.servedNotificationBadges();
+        this._StoreServices.onAllAssistance.pipe(takeUntil(this._unsubscribeAll)).subscribe((assistance) => {
+          this._BadgeNotificationService.servedNotificationBadges('assistance', assistance.length);
+        });
       }
     });
   }

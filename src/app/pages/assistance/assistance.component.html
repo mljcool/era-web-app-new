@@ -2,11 +2,23 @@
   <div class="content-card pad-10">
     <!-- Widget 6 -->
     <div class="pb-24 font-size-18 font-weight-300">
-      Where are your clients?
+      Your actions:
+      <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle (click)="onPending()" value="bold"
+          >Pending <mat-icon>access_time</mat-icon></mat-button-toggle
+        >
+        <mat-button-toggle (click)="onInprogress()" value="italic"
+          >Inprogress <mat-icon>build</mat-icon></mat-button-toggle
+        >
+        <mat-button-toggle (click)="onDone()" value="underline"
+          >Done <mat-icon>check_circle</mat-icon></mat-button-toggle
+        >
+      </mat-button-toggle-group>
     </div>
 
     <div class="fuse-card auto-width">
       <agm-map
+        *ngIf="allAssistance.length"
         class="h-640 w-100-p map-container"
         [minZoom]="2"
         [maxZoom]="20"
@@ -20,6 +32,17 @@
         [longitude]="longitude"
         [zoom]="12"
       >
+        <agm-marker
+          *ngFor="let m of allAssistance; let i = index"
+          (markerClick)="viewAssistancetails(m)"
+          [latitude]="m.userLocation.latitude"
+          [longitude]="m.userLocation.longitude"
+          [iconUrl]="m.iconUrl"
+        >
+          <agm-info-window>
+            <strong>{{ m.notes }}</strong>
+          </agm-info-window>
+        </agm-marker>
       </agm-map>
     </div>
     <!-- / Widget 6 -->

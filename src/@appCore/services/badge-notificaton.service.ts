@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -14,11 +12,11 @@ export class BadgeNotificationService {
 
   }
 
-  servedNotificationBadges(): void {
+  servedNotificationBadges(navigation = '', counter = 0): void {
 
-    this._fuseNavigationService.updateNavigationItem('assistance', {
+    this._fuseNavigationService.updateNavigationItem(navigation, {
       badge: {
-        title: '2',
+        title: (counter || '').toString(),
         bg: '#F44336',
         fg: '#FFFFFF'
       }

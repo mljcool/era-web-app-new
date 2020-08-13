@@ -51,7 +51,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   checkIfirst(): boolean {
-    const isloadNow = Object.keys(this.shopData).length;
+    const isloadNow = Object.keys((this.shopData || {})).length;
     return !!isloadNow;
   }
 
