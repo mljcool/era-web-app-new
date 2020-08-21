@@ -3,8 +3,10 @@ import { Marker } from '@appCore/models/Marker';
 import { fuseAnimations } from '@fuse/animations';
 import { AssistanceServices } from './assistance.service';
 import { StoreServices } from '@appCore/services/store.services';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
+import { Subject, zip } from 'rxjs';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AssistanceDetailsModalComponent } from '@appCore/modals/AssistanceDetails/assistance-details.component';
 
 @Component({
   selector: 'app-assistance',
@@ -38,31 +40,63 @@ export class AssistanceComponent implements OnInit, OnDestroy {
   };
 
   allAssistance: any[] = [];
+  allClients: any[] = [];
   private _unsubscribeAll: Subject<any>;
 
   constructor(
     private _assistanceServices: AssistanceServices,
+    private _matDialog: MatDialog,
     private _StoreServices: StoreServices) {
     this._unsubscribeAll = new Subject();
-    this._StoreServices.onAllAssistance
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((assistance) => {
-        this.allAssistance = assistance.map((data) => {
-          data.iconUrl = this.userIcon;
-          return data;
-        });
-        console.log('allAssistance', this.allAssistance);
-      });
+
   }
 
   ngOnInit(): void {
     this._assistanceServices.getAssistance().then((response) => {
       console.log('cool', response);
+      this.getAllObservers();
     });
   }
 
-  viewAssistancetails(data): void {
+  getAllObservers() {
+    const onAllAssistance$ = this._StoreServices.onAllAssistance;
+    const onAllClients$ = this._StoreServices.onAllClients;
 
+    zip(onAllAssistance$, onAllClients$)
+      .pipe(
+        takeUntil(this._unsubscribeAll),
+        map(([onAllAssistance$, onAllClients$]) => ({
+          onAllAssistance$,
+          onAllClients$,
+        }))
+      )
+      .subscribe((observers) => {
+        const { onAllAssistance$, onAllClients$ } = observers;
+        console.log('observers$', observers);
+        console.log('onAllAssistance$', onAllAssistance$);
+        console.log('onAllClients$', onAllClients$);
+        this.allAssistance = onAllAssistance$.map((data) => {
+          data.iconUrl = this.userIcon;
+          return data;
+        });
+        this.allClients = onAllClients$;
+      });
+  }
+
+  viewAssistancetails(data): void {
+    const dialogConfig = new MatDialogConfig();
+    const getClientData = this.allClients.find(client => client.id === data.userId);
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.panelClass = 'assistance-details-dialog';
+    dialogConfig.data = {
+      ...data,
+      clientData: getClientData
+    }
+
+    this.dialogRef = this._matDialog.open(AssistanceDetailsModalComponent, dialogConfig);
   }
 
   ngOnDestroy(): void { }

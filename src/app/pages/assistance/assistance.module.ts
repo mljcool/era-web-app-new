@@ -6,10 +6,11 @@ import { AssistanceComponent } from './assistance.component';
 import { AgmMapModule } from '@fuse/agMap.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { AssistanceServices } from './assistance.service';
+import { AssistanceDetailsModalComponent } from '@appCore/modals/AssistanceDetails/assistance-details.component';
 
 
 @NgModule({
-  declarations: [AssistanceComponent],
+  declarations: [AssistanceComponent, AssistanceDetailsModalComponent],
   imports: [
     CommonModule,
     AssistanceRoutingModule,
@@ -20,6 +21,9 @@ import { AssistanceServices } from './assistance.service';
   ],
   providers: [
     AssistanceServices
+  ],
+  entryComponents: [
+    AssistanceDetailsModalComponent
   ]
 })
 export class AssistanceModule { }

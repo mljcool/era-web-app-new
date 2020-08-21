@@ -15,6 +15,7 @@ export class StoreServices {
   onProductsAutoShop: BehaviorSubject<ShopServiceDetailsModel[] | any>;
   onMechanicsAutoShop: BehaviorSubject<Mechanics[] | any>;
   onAllAssistance: BehaviorSubject<any[]>;
+  onAllClients: BehaviorSubject<any[]>;
 
   constructor() {
     this.onAutoShop = new BehaviorSubject({});
@@ -22,6 +23,7 @@ export class StoreServices {
     this.onProductsAutoShop = new BehaviorSubject([]);
     this.onMechanicsAutoShop = new BehaviorSubject([]);
     this.onAllAssistance = new BehaviorSubject([]);
+    this.onAllClients = new BehaviorSubject([]);
   }
 
   getMassiveData(uid: string) {
@@ -77,6 +79,17 @@ export class StoreServices {
       }));
 
       this.onAllAssistance.next(allAssistance);
+      console.log(allAssistance);
+    });
+
+    const newClients = firebase.firestore().collection('newCustomers');
+    newClients.onSnapshot((snapshot) => {
+      const allAssistance = snapshot.docs.map((shop) => ({
+        key: shop.id,
+        ...shop.data(),
+      }));
+
+      this.onAllClients.next(allAssistance);
       console.log(allAssistance);
     });
   }

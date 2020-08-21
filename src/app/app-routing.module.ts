@@ -30,6 +30,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'assistance-proceed',
+    loadChildren: () =>
+      import('./pages/assistance-proceed/assistance-proceed.module').then(
+        (m) => m.AssistanceProceedModule
+      ),
+  },
+  {
     path: 'orders',
     loadChildren: () =>
       import('./pages/orders/orders.module').then((m) => m.OrdersModule),
