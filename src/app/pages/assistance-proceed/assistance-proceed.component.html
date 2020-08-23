@@ -1,6 +1,121 @@
 <div class="page-layout blank" fusePerfectScrollbar>
-  <div class="content-card pad-10">
-    <div class="fuse-card auto-width"></div>
-    <!-- / Widget 6 -->
+  <div class="content-card pad-10 assistance-page">
+    <div class="client-info">
+      <div class="fuse-card">
+        <div class="p-16">
+          <div class="h2">Client Details</div>
+        </div>
+        <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+          <img class="w-40 h-40 border-radius-100" [src]="clientDetails.imageUrl" />
+          <div class="ml-16">
+            <div class="text-bold">{{ clientDetails.name }}</div>
+            <div class="h5 text-bold secondary-text">
+              {{ clientDetails.email }}
+            </div>
+          </div>
+        </div>
+        <div class="p-16">
+          <div class="h2">{{ clientDetails.mobileNumber }}</div>
+        </div>
+
+        <div class="p-16 pt-0 line-height-1.75">(Address) → {{ clientDetails.address.formattedAddres }}</div>
+
+        <div class="p-16 pt-0 line-height-1.75">(Car Details) → {{ clientDetails.address.formattedAddres }}</div>
+      </div>
+
+      <!-- =========================================== -->
+
+      <div class="fuse-card mt-16">
+        <div class="p-16">
+          <div class="h2">Mechanic Details</div>
+        </div>
+        <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+          <ng-container *ngIf="assistanceDetails.status !== 'PENDING'">
+            <img class="w-40 h-40 border-radius-100" [src]="'assets/images/avatars/profile.jpg'" />
+            <div class="ml-16">
+              <div class="text-bold">{{ clientDetails.name }}</div>
+              <div class="h5 text-bold secondary-text">
+                {{ clientDetails.email }}
+              </div>
+            </div>
+            <div class="p-16">
+              <div class="h2">{{ clientDetails.mobileNumber }}</div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="assistanceDetails.status === 'PENDING'">
+            <div class="none-details">
+              <div class="p-16 none-labels">
+                <div class="h2">NONE</div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+
+      <div class="fuse-card mt-16">
+        <div class="p-16">
+          <div class="h2">Status</div>
+        </div>
+        <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+          <ng-container *ngIf="assistanceDetails.status !== 'PENDING'"> </ng-container>
+          <ng-container *ngIf="assistanceDetails.status === 'PENDING'">
+            <div class="none-details">
+              <div class="p-16 none-labels">
+                <div class="h2">NONE</div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="assistance-info">
+      <div class="p-12 header-assistance">
+        <div class="h2">Assistance Details</div>
+        <div class="h2">
+          <button mat-raised-button color="accent" class="post-comment-button" aria-label="Accommodate">
+            Accommodate
+          </button>
+        </div>
+      </div>
+      <div class="p-12" fxLayout="row" fxLayoutAlign="start center">
+        <div class="ml-5">
+          <div class="h3 text-bold">{{ getAssistanceName }}</div>
+          <div class="h5 text-bold secondary-text">
+            Date: {{ assistanceDetails.dateCreated.toDate() | date: 'dd MMM hh:mm' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="p-16 pt-0">(Address) → {{ assistanceDetails.writtenAddress }}</div>
+
+      <div class="p-16 pt-0">(note) → {{ assistanceDetails.notes }}</div>
+      <div>
+        <agm-map
+          class="h-640 w-100-p map-container"
+          [minZoom]="2"
+          [maxZoom]="20"
+          [fullscreenControl]="true"
+          [rotateControl]="true"
+          [zoomControl]="true"
+          [scaleControl]="true"
+          [streetViewControl]="true"
+          [scrollwheel]="true"
+          [latitude]="latitude"
+          [longitude]="longitude"
+          [zoom]="12"
+        >
+          <agm-direction
+            [origin]="origin"
+            [destination]="destination"
+            [markerOptions]="markerOptions"
+            [travelMode]="'DRIVING'"
+            [renderOptions]="renderOptions"
+          >
+          </agm-direction>
+        </agm-map>
+      </div>
+    </div>
   </div>
 </div>

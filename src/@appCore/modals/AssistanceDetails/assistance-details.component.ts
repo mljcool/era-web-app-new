@@ -4,7 +4,8 @@ import { ClientService } from '@appCore/services/client.service';
 import { StoreServices } from '@appCore/services/store.services';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IAssistance } from '@appCore/models/assistance.model';
-
+import { Router } from '@angular/router';
+import { getAssistanceName } from '@appCore/utils/GetAssistanceServiceType';
 
 export const assistTanceList = [
   {
@@ -38,10 +39,8 @@ export const assistTanceList = [
   {
     id: 8,
     label: 'General Inspection',
-  }
+  },
 ];
-
-
 
 @Component({
   selector: 'app-assistance-details',
@@ -50,10 +49,8 @@ export const assistTanceList = [
   encapsulation: ViewEncapsulation.None,
 })
 export class AssistanceDetailsModalComponent implements OnInit {
-
-
   shopStatus: string = '';
-  contact: IAssistance;
+  assistanceData: IAssistance;
   contactForm: FormGroup;
 
   constructor(
@@ -61,34 +58,42 @@ export class AssistanceDetailsModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private _data: any,
     private _clientSrvc: ClientService,
     private _StoreServices: StoreServices,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _router: Router
   ) {
     console.log('Coool', this._data);
     const { clientData, assistanceTypeId } = this._data;
-    const assistanceTypeName = assistTanceList.find(service => service.id === assistanceTypeId).label;
-    this.contact = new IAssistance({
+    const assistanceTypeName = getAssistanceName(assistanceTypeId);
+    this.assistanceData = new IAssistance({
       ...clientData,
       assistanceTypeName,
       assistanceWrittenAddress: this._data.writtenAddress,
-      notes: this._data.notes
+      notes: this._data.notes,
     });
-    console.log(this.contact);
+    console.log(this.assistanceData);
+    this.contactForm = this.createContactForm();
     this.contactForm = this.createContactForm();
   }
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
+  onProceed() {
+    this.matDialogRef.close();
+    const proceedTo = setTimeout(() => {
+      const { assistanceUId } = this._data;
+      this._router.navigate(['/assistance-proceed'], { queryParams: { id: assistanceUId } });
+      clearTimeout(proceedTo);
+    }, 500);
   }
 
   createContactForm(): FormGroup {
     return this._formBuilder.group({
-      id: [this.contact.id],
-      name: [this.contact.name],
-      email: [this.contact.email],
-      mobileNumber: [this.contact.mobileNumber],
-      assistanceTypeName: [this.contact.assistanceTypeName],
-      assistanceWrittenAddress: [this.contact.assistanceWrittenAddress],
-      notes: [this.contact.notes]
+      id: [this.assistanceData.id],
+      name: [this.assistanceData.name],
+      email: [this.assistanceData.email],
+      mobileNumber: [this.assistanceData.mobileNumber],
+      assistanceTypeName: [this.assistanceData.assistanceTypeName],
+      assistanceWrittenAddress: [this.assistanceData.assistanceWrittenAddress],
+      notes: [this.assistanceData.notes],
     });
   }
-
 }
