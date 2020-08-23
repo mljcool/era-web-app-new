@@ -5,17 +5,11 @@ import { AssistanceProceedRoutingModule } from './assistance-proceed-routing.mod
 import { AssistanceProceedComponent } from './assistance-proceed.component';
 import { AgmMapModule } from '@fuse/agMap.module';
 import { FuseSharedModule } from '@fuse/shared.module';
-
+import { AccommodateAssistanceModalComponent } from '@appCore/modals/AccommoDateAssistance/accommodate-assistance.component';
 
 @NgModule({
-  declarations: [AssistanceProceedComponent],
-  imports: [
-    CommonModule,
-    AssistanceProceedRoutingModule,
-    AgmMapModule,
-    FuseSharedModule,
-    MaterialModule
-
-  ],
+  declarations: [AssistanceProceedComponent, AccommodateAssistanceModalComponent],
+  imports: [CommonModule, AssistanceProceedRoutingModule, AgmMapModule, FuseSharedModule, MaterialModule],
+  entryComponents: [AccommodateAssistanceModalComponent],
 })
-export class AssistanceProceedModule { }
+export class AssistanceProceedModule {}

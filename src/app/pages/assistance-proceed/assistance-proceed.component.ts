@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Marker } from '@appCore/models/Marker';
 import { fuseAnimations } from '@fuse/animations';
 import { StoreServices } from '@appCore/services/store.services';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { getAssistanceDetails, getClientDetails, getShopDetails } from '@appCore/firebaseRef/FetchData';
 import { getAssistanceName } from '@appCore/utils/GetAssistanceServiceType';
+import { AccommodateAssistanceModalComponent } from '@appCore/modals/AccommoDateAssistance/accommodate-assistance.component';
 
 @Component({
   selector: 'app-assistance=proceed',
@@ -26,7 +27,6 @@ export class AssistanceProceedComponent implements OnInit {
   dialogRef: any;
   latitude = 7.0514;
   longitude = 125.594772;
-  markers: Marker[] = [];
 
   markerOptions = {
     origin: {
@@ -48,23 +48,6 @@ export class AssistanceProceedComponent implements OnInit {
       },
     },
   };
-  myLocations = {
-    iconUrl: {
-      url: 'assets/img/markers/marker-shop.png',
-      scaledSize: {
-        height: 50,
-        width: 40,
-      },
-    },
-  };
-
-  userIcon = {
-    url: 'assets/svg/my-marker.svg',
-    scaledSize: {
-      height: 70,
-      width: 60,
-    },
-  };
 
   getShopDetails: any = '';
   getAssistanceName: any = '';
@@ -83,7 +66,7 @@ export class AssistanceProceedComponent implements OnInit {
   };
   private _unsubscribeAll: Subject<any>;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private _matDialog: MatDialog) {
     this._unsubscribeAll = new Subject();
     this.route.queryParams.pipe(takeUntil(this._unsubscribeAll)).subscribe((params) => {
       const { id } = params;
@@ -141,5 +124,17 @@ export class AssistanceProceedComponent implements OnInit {
       lat: shopLocation.latitude,
       lng: shopLocation.longitude,
     };
+  }
+
+  onAccommodate(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.panelClass = 'assistance-accommodate-dialog';
+    dialogConfig.data = {};
+
+    this.dialogRef = this._matDialog.open(AccommodateAssistanceModalComponent, dialogConfig);
   }
 }

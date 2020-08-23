@@ -1,0 +1,38 @@
+@import 'src/@fuse/scss/fuse';
+
+.assistance-accommodate-dialog {
+  @include media-breakpoint('xs') {
+    width: 100%;
+  }
+
+  @include media-breakpoint('gt-xs') {
+    width: 400px;
+  }
+
+  .mat-dialog-container {
+    padding: 0;
+
+    .mat-toolbar {
+      flex: 1 0 auto;
+      min-height: initial;
+    }
+
+    .toolbar-bottom {
+      height: auto;
+    }
+  }
+
+  .dialog-content-wrapper {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    .divider {
+      border-bottom: grey solid 2px;
+      padding-bottom: 1px;
+      margin-bottom: 20px;
+    }
+    .title-label {
+      margin: 1px 0px;
+    }
+  }
+}

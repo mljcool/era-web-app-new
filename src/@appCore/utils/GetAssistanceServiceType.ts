@@ -1,4 +1,4 @@
-export const getAssistanceName = (assistanceTypeId) => {
+export const getAssistanceName = (assistanceTypeId = 1) => {
   const assistTanceList = [
     {
       id: 1,

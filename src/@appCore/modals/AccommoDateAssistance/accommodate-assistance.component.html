@@ -1,0 +1,105 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">Details</span>
+      <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
+    <form [formGroup]="contactForm">
+      <h3 class="title-label">Search for Mechanics</h3>
+      <div class="divider"></div>
+
+      <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
+        <mat-label>Select Personnel</mat-label>
+        <mat-chip-list #personnelList aria-label="personnel selection" name="personnels" formControlName="personnels">
+          <mat-chip
+            *ngFor="let personnel of servicePersonnel"
+            [selectable]="selectable"
+            [removable]="true"
+            (removed)="removePersonnel(personnel)"
+          >
+            {{ personnel.name }} {{ personnel.lastName }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input
+            placeholder="Personnel..."
+            #personnelInput
+            [matAutocomplete]="autoPersonnel"
+            [matChipInputFor]="personnelList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          />
+        </mat-chip-list>
+        <mat-autocomplete #autoPersonnel="matAutocomplete" (optionSelected)="selectedPersonnel($event)">
+          <mat-option *ngFor="let personnel of filteredPersonnels | async" [value]="personnel">
+            {{ personnel.name }} {{ personnel.lastName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Name</mat-label>
+          <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+          <input name="name" formControlName="name" matInput required />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Mobile number</mat-label>
+          <mat-icon matSuffix class="secondary-text">phone</mat-icon>
+          <input formControlName="mobileNumber" matInput />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Email</mat-label>
+          <mat-icon matSuffix class="secondary-text">email</mat-icon>
+          <input name="email" formControlName="email" matInput type="email" />
+        </mat-form-field>
+      </div>
+
+      <h3 class="title-label">Cost & Time Estimation Details</h3>
+      <div class="divider"></div>
+
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Service Type</mat-label>
+          <mat-icon matSuffix class="secondary-text">domain</mat-icon>
+          <input name="assistanceType" formControlName="assistanceTypeName" matInput />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Address </mat-label>
+          <textarea
+            name="assistanceWrittenAddress"
+            formControlName="assistanceWrittenAddress"
+            matInput
+            type="text"
+            max-rows="4"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Notes</mat-label>
+          <textarea name="notes" formControlName="notes" matInput type="text" max-rows="4"></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+    <button mat-button class="save-button" (click)="onProceed()" aria-label="SAVE">
+      Proceed
+    </button>
+  </div>
+</div>

@@ -74,7 +74,13 @@
       <div class="p-12 header-assistance">
         <div class="h2">Assistance Details</div>
         <div class="h2">
-          <button mat-raised-button color="accent" class="post-comment-button" aria-label="Accommodate">
+          <button
+            mat-raised-button
+            (click)="onAccommodate()"
+            color="accent"
+            class="post-comment-button"
+            aria-label="Accommodate"
+          >
             Accommodate
           </button>
         </div>
