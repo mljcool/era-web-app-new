@@ -21,6 +21,7 @@ import { startWith, map, takeUntil } from 'rxjs/operators';
 export class AccommodateAssistanceModalComponent implements OnInit {
   shopStatus: string = '';
   pageType: string = '';
+  assistanceTypeName: string = '';
   assistanceData: IAssistance;
   contactForm: FormGroup;
   servicePersonnel: Mechanics[] = [];
@@ -41,20 +42,14 @@ export class AccommodateAssistanceModalComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _router: Router
   ) {
-    console.log('Coool', this._data);
+    console.log('AccommodateAssistanceModalComponent', this._data);
     this._unsubscribeAll = new Subject();
 
-    const { clientData, assistanceTypeId } = this._data;
-    const assistanceTypeName = getAssistanceName(assistanceTypeId);
-    this.assistanceData = new IAssistance({
-      ...clientData,
-      assistanceTypeName,
-      assistanceWrittenAddress: this._data.writtenAddress,
-      notes: this._data.notes,
-    });
-    console.log(this.assistanceData);
+    const { assistanceTypeId } = this._data;
+    this.assistanceTypeName = getAssistanceName(assistanceTypeId);
     this.contactForm = this.createContactForm();
   }
+
   ngOnInit(): void {
     this.filteredPersonnels = this.contactForm
       .get('personnels')
@@ -73,19 +68,26 @@ export class AccommodateAssistanceModalComponent implements OnInit {
   }
 
   onProceed() {
-    this.matDialogRef.close();
+    const newList = this.servicePersonnel.map(({ id }) => ({ id }));
+
+    this.matDialogRef.close({
+      data: this.contactForm.getRawValue(),
+      personnels: newList,
+    });
   }
 
   createContactForm(): FormGroup {
+    const { costNotes, costAmount, timeType, timeValue, mechanicId } = this._data.dataForm;
+
     return this._formBuilder.group({
       id: [''],
-      name: [''],
-      email: [''],
-      personnels: [''],
-      mobileNumber: [''],
-      assistanceTypeName: [''],
-      assistanceWrittenAddress: [''],
-      notes: [''],
+      personnels: [mechanicId],
+      assistanceTypeName: [this.assistanceTypeName],
+      assistanceCost: [costAmount],
+      assistanceTimeEstimate: [''],
+      timeType: [timeType],
+      timeValue: [timeValue],
+      notes: [costNotes],
     });
   }
 

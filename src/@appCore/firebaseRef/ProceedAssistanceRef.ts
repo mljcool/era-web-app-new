@@ -13,3 +13,18 @@ export const getClientDetails = (id: string) => {
 export const getShopDetails = (id: string) => {
   return ref.collection('newShopList').where('uid', '==', id);
 };
+
+export const getMechanic = (id: string) => {
+  return ref.collection('newShopMechanics').where('id', '==', id);
+};
+
+export const updateAssistance = (docId: string, data) => {
+  return ref
+    .collection('newAssistance')
+    .doc(docId)
+    .update({ ...data });
+};
+
+export const updateTimeAssistance = (docId: string) => {
+  return ref.collection('newAssistance').doc(docId).update({ timeValue: '0' });
+};

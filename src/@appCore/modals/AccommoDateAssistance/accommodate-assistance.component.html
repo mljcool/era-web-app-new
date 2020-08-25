@@ -9,12 +9,12 @@
   </mat-toolbar>
 
   <div mat-dialog-content class="p-24 pb-0 m-0" fusePerfectScrollbar>
-    <form [formGroup]="contactForm">
+    <form [formGroup]="contactForm" fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
       <h3 class="title-label">Search for Mechanics</h3>
       <div class="divider"></div>
 
       <mat-form-field appearance="outline" floatLabel="always" class="w-100-p">
-        <mat-label>Select Personnel</mat-label>
+        <mat-label>Select Mechanic</mat-label>
         <mat-chip-list #personnelList aria-label="personnel selection" name="personnels" formControlName="personnels">
           <mat-chip
             *ngFor="let personnel of servicePersonnel"
@@ -40,51 +40,43 @@
         </mat-autocomplete>
       </mat-form-field>
 
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Name</mat-label>
-          <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-          <input name="name" formControlName="name" matInput required />
-        </mat-form-field>
-      </div>
-
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Mobile number</mat-label>
-          <mat-icon matSuffix class="secondary-text">phone</mat-icon>
-          <input formControlName="mobileNumber" matInput />
-        </mat-form-field>
-      </div>
-
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Email</mat-label>
-          <mat-icon matSuffix class="secondary-text">email</mat-icon>
-          <input name="email" formControlName="email" matInput type="email" />
-        </mat-form-field>
-      </div>
-
       <h3 class="title-label">Cost & Time Estimation Details</h3>
       <div class="divider"></div>
 
       <div fxLayout="row" fxLayoutAlign="start start">
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Service Type</mat-label>
-          <mat-icon matSuffix class="secondary-text">domain</mat-icon>
-          <input name="assistanceType" formControlName="assistanceTypeName" matInput />
+          <mat-icon matSuffix class="secondary-text">settings</mat-icon>
+          <input readonly name="assistanceTypeName" formControlName="assistanceTypeName" matInput />
         </mat-form-field>
       </div>
 
-      <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start">
+      <div fxLayout="row" fxLayoutAlign="start start">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Address </mat-label>
-          <textarea
-            name="assistanceWrittenAddress"
-            formControlName="assistanceWrittenAddress"
-            matInput
-            type="text"
-            max-rows="4"
-          ></textarea>
+          <mat-label>Cost</mat-label>
+          <mat-icon matSuffix class="secondary-text">money</mat-icon>
+          <input name="assistanceCost" type="number" formControlName="assistanceCost" matInput />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+          <mat-label>@ IN</mat-label>
+          <mat-select formControlName="timeType" required>
+            <mat-option [value]="'Hours'">
+              Hours
+            </mat-option>
+            <mat-option [value]="'Minutes'">
+              Minutes
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix class="secondary-text">access_time</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+          <mat-label>time</mat-label>
+          <input matInput formControlName="timeValue" required />
+          <mat-icon matSuffix class="secondary-text">access_time</mat-icon>
         </mat-form-field>
       </div>
 

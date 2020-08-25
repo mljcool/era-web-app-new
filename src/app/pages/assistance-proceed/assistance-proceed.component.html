@@ -29,37 +29,47 @@
         <div class="p-16">
           <div class="h2">Mechanic Details</div>
         </div>
-        <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
-          <ng-container *ngIf="assistanceDetails.status !== 'PENDING'">
+        <ng-container *ngIf="assistanceDetails.status !== 'PENDING'">
+          <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
             <img class="w-40 h-40 border-radius-100" [src]="'assets/images/avatars/profile.jpg'" />
             <div class="ml-16">
-              <div class="text-bold">{{ clientDetails.name }}</div>
+              <div class="text-bold">{{ getMechanicDetails.name }} {{ getMechanicDetails.lastName }}</div>
               <div class="h5 text-bold secondary-text">
-                {{ clientDetails.email }}
+                {{ getMechanicDetails.email }}
               </div>
             </div>
-            <div class="p-16">
-              <div class="h2">{{ clientDetails.mobileNumber }}</div>
+          </div>
+          <div class="p-16">
+            <div class="h2">{{ getMechanicDetails.phone }}</div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="assistanceDetails.status === 'PENDING'">
+          <div class="none-details">
+            <div class="p-16 none-labels">
+              <div class="h2">NONE</div>
             </div>
-          </ng-container>
-          <ng-container *ngIf="assistanceDetails.status === 'PENDING'">
-            <div class="none-details">
-              <div class="p-16 none-labels">
-                <div class="h2">NONE</div>
-              </div>
-            </div>
-          </ng-container>
-        </div>
+          </div>
+        </ng-container>
       </div>
 
       <!-- ============================================== -->
 
       <div class="fuse-card mt-16">
         <div class="p-16">
-          <div class="h2">Status</div>
+          <div class="h2">Status ({{ assistanceDetails.status }})</div>
         </div>
         <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
-          <ng-container *ngIf="assistanceDetails.status !== 'PENDING'"> </ng-container>
+          <ng-container *ngIf="assistanceDetails.status !== 'PENDING'">
+            <div class="time-status">
+              <img
+                src="assets/svg/new-timer.svg"
+                *ngIf="assistanceDetails.timeValue !== '0'"
+                width="100px"
+                height="100px"
+              />
+              <span class="h2">{{ time }}</span>
+            </div>
+          </ng-container>
           <ng-container *ngIf="assistanceDetails.status === 'PENDING'">
             <div class="none-details">
               <div class="p-16 none-labels">
@@ -75,13 +85,23 @@
         <div class="h2">Assistance Details</div>
         <div class="h2">
           <button
+            *ngIf="assistanceDetails.status === 'IN-PROGRESS' && assistanceDetails.timeValue !== '0'"
+            mat-raised-button
+            (click)="forceArrived()"
+            color="accent"
+            class="post-comment-button override-arrived"
+            aria-label="Accommodate"
+          >
+            Arrived
+          </button>
+          <button
             mat-raised-button
             (click)="onAccommodate()"
             color="accent"
             class="post-comment-button"
             aria-label="Accommodate"
           >
-            Accommodate
+            {{ assistanceDetails.status !== 'PENDING' ? 'Update' : 'Accommodate' }}
           </button>
         </div>
       </div>
