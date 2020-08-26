@@ -53,9 +53,8 @@
       </div>
 
       <!-- ============================================== -->
-
       <div class="fuse-card mt-16">
-        <div class="p-16">
+        <div *ngIf="assistanceDetails.status !== 'DONE'" class="p-16">
           <div class="h2">Status ({{ assistanceDetails.status }})</div>
         </div>
         <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
@@ -67,7 +66,8 @@
                 width="100px"
                 height="100px"
               />
-              <span class="h2">{{ time }}</span>
+              <span class="h2" *ngIf="assistanceDetails.status === 'IN-PROGRESS'">{{ time }}</span>
+              <span class="h2" *ngIf="assistanceDetails.status === 'DONE'">DONE</span>
             </div>
           </ng-container>
           <ng-container *ngIf="assistanceDetails.status === 'PENDING'">
@@ -77,6 +77,25 @@
               </div>
             </div>
           </ng-container>
+        </div>
+      </div>
+      <div class="fuse-card mt-16" *ngIf="assistanceDetails.status === 'DONE'">
+        <div class="p-16">
+          <div class="h1">Customer Rating</div>
+        </div>
+        <div class="p-9" fxLayout="row" fxLayoutAlign="start center">
+          <div class="p-16">
+            <star-rating
+              [value]="assistanceDetails.ratings"
+              totalstars="5"
+              checkedcolor="orange"
+              size="34px"
+              readonly="true"
+            ></star-rating>
+          </div>
+        </div>
+        <div class="p-16 pt-0 line-height-1.75">
+          <span class="h2">{{ assistanceDetails.comments }}</span>
         </div>
       </div>
     </div>
@@ -95,6 +114,7 @@
             Arrived
           </button>
           <button
+            *ngIf="assistanceDetails.status !== 'DONE'"
             mat-raised-button
             (click)="onAccommodate()"
             color="accent"

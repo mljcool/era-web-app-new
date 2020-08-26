@@ -18,15 +18,15 @@
 
   <mat-divider cdkFocusRegionEnd></mat-divider>
 
-  <div class="fuse-card">
+  <div class="fuse-card" *ngFor="let item of allRAtings">
     <div class="p-12" fxLayout="row" fxLayoutAlign="start center">
-      <img class="w-40 h-40 border-radius-100" src="assets/images/avatars/profile.jpg" />
+      <img class="w-40 h-40 border-radius-100" [src]="item.userData.imageUrl" />
 
       <div class="ml-16">
-        <div class="text-bold">Christy</div>
-        <div class="h5 text-bold secondary-text">20 mins. ago</div>
+        <div class="text-bold">{{ item.userData.name }}</div>
+        <div class="h5 text-bold secondary-text">{{ item.timeSince }}</div>
         <star-rating
-          value="5"
+          [value]="item.ratings"
           totalstars="5"
           checkedcolor="orange"
           uncheckedcolor="black"

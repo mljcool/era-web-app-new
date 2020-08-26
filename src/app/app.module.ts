@@ -22,24 +22,19 @@ import { FirebaseUIModule } from 'firebaseui-angular';
 import { firebaseUiAuthConfig } from '@appCore/firebase/auth-config';
 import { AuthServiceGuard } from '@appCore/auth/auth-service.guard';
 import { ClientCheckerModalComponent } from '@appCore/modals/checker/checker.component';
-import { GooglePlaceModule } from "ngx-google-places-autocomplete";
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { FakeDbService } from '@appCore/models/fake-db.service';
 
-
-
+import { RatingModule } from 'ng-starrating';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ClientCheckerModalComponent
-  ],
+  declarations: [AppComponent, ClientCheckerModalComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-
 
     // Material moment date module
     MatMomentDateModule,
@@ -60,15 +55,13 @@ import { FakeDbService } from '@appCore/models/fake-db.service';
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     InMemoryWebApiModule.forRoot(FakeDbService, {
       delay: 0,
-      passThruUnknownUrl: true
+      passThruUnknownUrl: true,
     }),
-    GooglePlaceModule
-
+    GooglePlaceModule,
+    RatingModule,
   ],
   providers: [AuthServiceGuard],
-  entryComponents: [
-    ClientCheckerModalComponent
-  ],
-  bootstrap: [AppComponent]
+  entryComponents: [ClientCheckerModalComponent],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
