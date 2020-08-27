@@ -22,6 +22,20 @@ quick-panel {
   .fuse-card {
     max-width: 280px;
     min-width: 280px;
+    .user-sec {
+      padding-bottom: 0 !important;
+    }
+  }
+  .comments-label {
+    margin-left: 45px;
+  }
+  .comments {
+    margin-left: 45px;
+    padding-bottom: 10px;
+    border-top: solid grey 1px;
+    .h1 {
+      font-size: 15px;
+    }
   }
   .read-comments {
     width: 100%;

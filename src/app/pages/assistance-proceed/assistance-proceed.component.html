@@ -17,10 +17,18 @@
         <div class="p-16">
           <div class="h2">{{ clientDetails.mobileNumber }}</div>
         </div>
-
-        <div class="p-16 pt-0 line-height-1.75">(Address) → {{ clientDetails.address.formattedAddres }}</div>
-
-        <div class="p-16 pt-0 line-height-1.75">(Car Details) → {{ clientDetails.address.formattedAddres }}</div>
+        <div class="car-card">
+          <div class="p-16">
+            <div class="h4 secondary-text">Car Details</div>
+            <div class="h1">{{ clientCar.modelName }}</div>
+            <div class="h4 secondary-text">Model year {{ clientCar.modelYear }}</div>
+            <div class="h4 secondary-text">Plate Number{{ clientCar.plateNumber }}</div>
+            <div class="h4 secondary-text">Color {{ clientCar.color }}</div>
+            <div class="h4 secondary-text">Fuel Type {{ clientCar.fuelName }}</div>
+            <div class="h4 secondary-text">Description {{ clientCar.description }}</div>
+          </div>
+        </div>
+        <!-- <div class="p-16 pt-0 line-height-1.75">(Car Details) → {{ clientDetails.address.formattedAddres }}</div> -->
       </div>
 
       <!-- =========================================== -->
@@ -44,9 +52,11 @@
           </div>
         </ng-container>
         <ng-container *ngIf="assistanceDetails.status === 'PENDING'">
-          <div class="none-details">
-            <div class="p-16 none-labels">
-              <div class="h2">NONE</div>
+          <div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+            <div class="none-details">
+              <div class="p-16 none-labels">
+                <div class="h2">NONE</div>
+              </div>
             </div>
           </div>
         </ng-container>
@@ -137,6 +147,10 @@
       <div class="p-16 pt-0">(Address) → {{ assistanceDetails.writtenAddress }}</div>
 
       <div class="p-16 pt-0">(note) → {{ assistanceDetails.notes }}</div>
+      <div class="p-16 pt-0 map-details">
+        (Goggle MAP ROUTE DETAILS) → {{ getApproximate.distanceKM }} / {{ getApproximate.esitamteTravelTime }} Estimated
+        Travel time
+      </div>
       <div>
         <agm-map
           class="h-640 w-100-p map-container"

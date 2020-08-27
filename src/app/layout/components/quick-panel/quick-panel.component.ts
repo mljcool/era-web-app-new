@@ -75,4 +75,6 @@ export class QuickPanelComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
   }
+
+  ViewComments() {}
 }

@@ -19,7 +19,7 @@
   <mat-divider cdkFocusRegionEnd></mat-divider>
 
   <div class="fuse-card" *ngFor="let item of allRAtings">
-    <div class="p-12" fxLayout="row" fxLayoutAlign="start center">
+    <div class="p-12 user-sec" fxLayout="row" fxLayoutAlign="start center">
       <img class="w-40 h-40 border-radius-100" [src]="item.userData.imageUrl" />
 
       <div class="ml-16">
@@ -35,8 +35,13 @@
         ></star-rating>
       </div>
     </div>
-    <div class="p-5 read-comments">
-      <a color="accent">READ COMMENTS</a>
+
+    <small class="comments-label">comments</small>
+    <div class="p-2 comments">
+      <span class="h1">{{ item.comments }}</span>
     </div>
+    <!-- <div class="p-5 read-comments">
+      <a color="accent" (click)="ViewComments();">READ COMMENTS</a>
+    </div> -->
   </div>
 </div>

@@ -25,6 +25,10 @@ export const updateAssistance = (docId: string, data) => {
     .update({ ...data });
 };
 
+export const getClientCar = (userId) => {
+  return ref.collection('newMyCars').where('userId', '==', userId);
+};
+
 export const updateTimeAssistance = (docId: string) => {
   return ref.collection('newAssistance').doc(docId).update({ timeValue: '0' });
 };

@@ -8,6 +8,7 @@ export class IAssistance {
   assistanceWrittenAddress: string;
   email: string;
   notes: string;
+  displayName?: string;
 
   /**
    * Constructor

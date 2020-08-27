@@ -17,6 +17,7 @@ export class AssistanceDetailsModalComponent implements OnInit {
   shopStatus: string = '';
   assistanceData: IAssistance;
   contactForm: FormGroup;
+  clientData: any = {};
 
   constructor(
     public matDialogRef: MatDialogRef<AssistanceDetailsModalComponent>,
@@ -26,15 +27,17 @@ export class AssistanceDetailsModalComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _router: Router
   ) {
-    console.log('Coool', this._data);
     const { clientData, assistanceTypeId } = this._data;
     const assistanceTypeName = getAssistanceName(assistanceTypeId);
+    this.clientData = clientData;
     this.assistanceData = new IAssistance({
       ...clientData,
       assistanceTypeName,
       assistanceWrittenAddress: this._data.writtenAddress,
       notes: this._data.notes,
     });
+    console.log('Coool1', this.assistanceData);
+    console.log('Coool2', clientData);
     this.contactForm = this.createContactForm();
   }
   ngOnInit(): void {}
@@ -49,9 +52,11 @@ export class AssistanceDetailsModalComponent implements OnInit {
   }
 
   createContactForm(): FormGroup {
+    const name = (this.clientData || {}).name || (this.clientData || {}).displayName;
+    console.log('Coool2', name);
     return this._formBuilder.group({
       id: [this.assistanceData.id],
-      name: [this.assistanceData.name],
+      name: [name],
       email: [this.assistanceData.email],
       mobileNumber: [this.assistanceData.mobileNumber],
       assistanceTypeName: [this.assistanceData.assistanceTypeName],

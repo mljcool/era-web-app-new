@@ -18,7 +18,6 @@
 
     <div class="fuse-card auto-width">
       <agm-map
-        *ngIf="allAssistance.length"
         class="h-640 w-100-p map-container"
         [minZoom]="2"
         [maxZoom]="20"
@@ -39,9 +38,6 @@
           [longitude]="m.userLocation.longitude"
           [iconUrl]="m.iconUrl"
         >
-          <agm-info-window>
-            <strong>{{ m.notes }}</strong>
-          </agm-info-window>
         </agm-marker>
       </agm-map>
     </div>

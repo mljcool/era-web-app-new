@@ -11,6 +11,11 @@
         margin-top: 10px;
       }
     }
+    .car-card {
+      -webkit-box-shadow: -5px -2px 15px -5px rgba(0, 0, 0, 0.32);
+      -moz-box-shadow: -5px -2px 15px -5px rgba(0, 0, 0, 0.32);
+      box-shadow: -5px -2px 15px -5px rgba(0, 0, 0, 0.32);
+    }
   }
 
   .assistance-info {
@@ -38,5 +43,8 @@
   }
   .override-arrived {
     margin-right: 15px;
+  }
+  .map-details {
+    font-weight: bolder;
   }
 }

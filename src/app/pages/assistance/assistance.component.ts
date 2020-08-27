@@ -7,6 +7,7 @@ import { takeUntil, map } from 'rxjs/operators';
 import { Subject, zip } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AssistanceDetailsModalComponent } from '@appCore/modals/AssistanceDetails/assistance-details.component';
+import { myLocationsMarker, inprogressMarkerNew, userIconMarker, doneMarkerNew } from './assistance-marker';
 
 @Component({
   selector: 'app-assistance',
@@ -21,34 +22,23 @@ export class AssistanceComponent implements OnInit, OnDestroy {
   latitude = 7.0514;
   longitude = 125.594772;
   markers: Marker[] = [];
-  myLocations = {
-    iconUrl: {
-      url: 'assets/img/markers/marker-shop.png',
-      scaledSize: {
-        height: 50,
-        width: 40,
-      },
-    },
-  };
 
-  userIcon = {
-    url: 'assets/svg/my-marker.svg',
-    scaledSize: {
-      height: 70,
-      width: 60,
-    },
-  };
+  myLocations = myLocationsMarker;
+  userIcon = userIconMarker;
+  inprogressMarker = inprogressMarkerNew;
+  doneMarker = doneMarkerNew;
 
   allAssistance: any[] = [];
+  assistancePlaceHolder: any[] = [];
   allClients: any[] = [];
   private _unsubscribeAll: Subject<any>;
 
   constructor(
     private _assistanceServices: AssistanceServices,
     private _matDialog: MatDialog,
-    private _StoreServices: StoreServices) {
+    private _StoreServices: StoreServices
+  ) {
     this._unsubscribeAll = new Subject();
-
   }
 
   ngOnInit(): void {
@@ -75,41 +65,61 @@ export class AssistanceComponent implements OnInit, OnDestroy {
         console.log('observers$', observers);
         console.log('onAllAssistance$', onAllAssistance$);
         console.log('onAllClients$', onAllClients$);
-        this.allAssistance = onAllAssistance$.map((data) => {
-          data.iconUrl = this.userIcon;
+        const getAssistance = onAllAssistance$.map((data) => {
+          if (data.status === 'PENDING') {
+            data.iconUrl = this.userIcon;
+          } else if (data.status === 'IN-PROGRESS') {
+            data.iconUrl = this.inprogressMarker;
+          } else if (data.status === 'DONE') {
+            data.iconUrl = this.doneMarker;
+          }
           return data;
         });
+        this.allAssistance = getAssistance.filter((show) => show.status === 'PENDING');
         this.allClients = onAllClients$;
+        this.assistancePlaceHolder = getAssistance;
       });
   }
 
   viewAssistancetails(data): void {
     const dialogConfig = new MatDialogConfig();
-    const getClientData = this.allClients.find(client => client.id === data.userId);
-
+    const getClientData = this.allClients.find((client) => client.id === data.userId);
+    console.log('getClientData', getClientData);
+    console.log('data', data);
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.hasBackdrop = true;
     dialogConfig.panelClass = 'assistance-details-dialog';
     dialogConfig.data = {
       ...data,
-      clientData: getClientData
-    }
+      clientData: getClientData,
+    };
 
     this.dialogRef = this._matDialog.open(AssistanceDetailsModalComponent, dialogConfig);
   }
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   onPending(): void {
     console.log('onPending');
+    console.log('this.allAssistance', this.allAssistance);
+    this.allAssistance = this.assistancePlaceHolder;
+    this.allAssistance = this.allAssistance.filter((assistance) => assistance.status === 'PENDING');
+    console.log('this.allAssistance', this.allAssistance);
   }
 
   onInprogress(): void {
-    console.log('onInprogress');
+    console.log('this.allAssistance', this.allAssistance);
+    this.allAssistance = this.assistancePlaceHolder;
+    this.allAssistance = this.allAssistance.filter((assistance) => assistance.status === 'IN-PROGRESS');
+    console.log('this.allAssistance', this.allAssistance);
   }
 
   onDone(): void {
     console.log('onDone');
+    console.log('this.allAssistance', this.allAssistance);
+    this.allAssistance = this.assistancePlaceHolder;
+    this.allAssistance = this.allAssistance.filter((assistance) => assistance.status === 'DONE');
+    console.log('this.allAssistance', this.allAssistance);
   }
 }

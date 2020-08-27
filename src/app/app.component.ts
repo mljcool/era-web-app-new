@@ -63,7 +63,8 @@ export class AppComponent implements OnInit, OnDestroy {
       if (islog.uid) {
         this._StoreServices.getMassiveData(islog.uid);
         this._StoreServices.onAllAssistance.pipe(takeUntil(this._unsubscribeAll)).subscribe((assistance) => {
-          this._BadgeNotificationService.servedNotificationBadges('assistance', assistance.length);
+          const assistanceNew = assistance.filter((assist) => assist.status === 'PENDING');
+          this._BadgeNotificationService.servedNotificationBadges('assistance', assistanceNew.length);
         });
       }
     });

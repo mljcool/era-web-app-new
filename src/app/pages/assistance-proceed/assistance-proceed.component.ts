@@ -13,11 +13,13 @@ import {
   updateAssistance,
   getMechanic,
   updateTimeAssistance,
+  getClientCar,
 } from '@appCore/firebaseRef/ProceedAssistanceRef';
 import { getAssistanceName } from '@appCore/utils/GetAssistanceServiceType';
 import { AccommodateAssistanceModalComponent } from '@appCore/modals/AccommoDateAssistance/accommodate-assistance.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { minsToHrs } from '@appCore/utils/ConvertHrstoMins';
+import { calculateDistanceNearest } from '@appCore/utils/DirectionService';
 
 @Component({
   selector: 'app-assistance=proceed',
@@ -62,6 +64,7 @@ export class AssistanceProceedComponent implements OnInit {
   getShopDetails: any = '';
   getAssistanceName: any = '';
   getMechanicDetails: any = '';
+  clientCar: any = {};
   assistanceDetails: any = {
     dateCreated: {
       toDate: () => {
@@ -74,10 +77,43 @@ export class AssistanceProceedComponent implements OnInit {
     address: {
       formattedAddres: '',
     },
+    imageUrl: 'assets/images/avatars/profile.jpg',
   };
   private _unsubscribeAll: Subject<any>;
 
   time: any = '00:00';
+  getApproximate = {
+    distanceKM: '',
+    esitamteTravelTime: '',
+    writtenAddress: '',
+  };
+
+  fuelType = [
+    {
+      value: 'G',
+      label: 'Gasoline',
+    },
+    {
+      value: 'D',
+      label: 'Diesel',
+    },
+    {
+      value: 'E',
+      label: 'Ethanol',
+    },
+    {
+      value: 'LP',
+      label: 'liquified Petroleum',
+    },
+    {
+      value: 'BD',
+      label: 'Bio-diesel',
+    },
+    {
+      value: 'CNG',
+      label: 'Compressed Natural Gas',
+    },
+  ];
 
   constructor(private route: ActivatedRoute, private _matDialog: MatDialog, private _matSnackBar: MatSnackBar) {
     this._unsubscribeAll = new Subject();
@@ -109,6 +145,17 @@ export class AssistanceProceedComponent implements OnInit {
       this.getMechanicData(mechanicId);
       clearInterval(this.intervalHandle);
       this.runningTime({ timeType, timeValue });
+
+      getClientCar(userId).onSnapshot((snapshot) => {
+        this.clientCar = snapshot.docs
+          .map((client) => ({
+            key: client.id,
+            ...client.data(),
+          }))
+          .find((car: any) => car.insUsed);
+        this.clientCar.fuelName = this.fuelType.find((fuel) => fuel.value === this.clientCar.fuelType).label;
+        console.log('getClientCar', this.clientCar);
+      });
 
       console.log('assistance', assistance);
       getClientDetails(userId).onSnapshot((snapshot) => {
@@ -218,6 +265,12 @@ export class AssistanceProceedComponent implements OnInit {
       lat: shopLocation.latitude,
       lng: shopLocation.longitude,
     };
+    calculateDistanceNearest(this.origin, this.destination).then((result: any) => {
+      if (result) {
+        console.log('getApproximate', result);
+        this.getApproximate = { ...this.getApproximate, ...result };
+      }
+    });
   }
 
   forceArrived() {
