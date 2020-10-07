@@ -1,0 +1,62 @@
+.assistance-page {
+	display: flex;
+	.client-info {
+		.none-details {
+			border: 2px dashed hsla(0, 0%, 31%, 0.37);
+			width: 100%;
+			height: 80px;
+			> .none-labels {
+				text-align: center;
+				color: darkgrey;
+				margin-top: 10px;
+			}
+		}
+		.car-card {
+			-webkit-box-shadow: -5px -2px 15px -5px rgba(0, 0, 0, 0.32);
+			-moz-box-shadow: -5px -2px 15px -5px rgba(0, 0, 0, 0.32);
+			box-shadow: -5px -2px 15px -5px rgba(0, 0, 0, 0.32);
+		}
+	}
+	.inner-card {
+		padding: 20px;
+		.fuse-card {
+			margin-bottom: 20px;
+		}
+	}
+	.mat-tab-body-content {
+		display: flex !important;
+		> .map {
+			width: 100%;
+		}
+	}
+
+	.assistance-info {
+		background: blue;
+		margin-left: 20px;
+		width: 100% !important;
+		background: white;
+		border-radius: 8px;
+		border: 1px solid rgba(100, 100, 100, 0.12);
+		> .header-assistance {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+	.time-status {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		> span {
+			align-self: center;
+			font-size: 45px;
+			font-weight: bolder;
+			color: darkgrey;
+		}
+	}
+	.override-arrived {
+		margin-right: 15px;
+	}
+	.map-details {
+		font-weight: bolder;
+	}
+}

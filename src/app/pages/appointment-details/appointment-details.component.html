@@ -1,0 +1,209 @@
+<div class="page-layout blank" fusePerfectScrollbar>
+	<div class="content-card pad-10 assistance-page">
+		<div class="client-info">
+			<div class="fuse-card">
+				<div class="p-16">
+					<div class="h2">Client Details</div>
+				</div>
+				<div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+					<img class="w-40 h-40 border-radius-100" [src]="clientDetails.imageUrl" />
+					<div class="ml-16">
+						<div class="text-bold">{{ clientDetails.name }}</div>
+						<div class="h5 text-bold secondary-text">
+							{{ clientDetails.email }}
+						</div>
+					</div>
+				</div>
+				<div class="p-16">
+					<div class="h2">{{ clientDetails.mobileNumber }}</div>
+				</div>
+				<div class="car-card">
+					<div class="p-16">
+						<div class="h4 secondary-text">Car Details</div>
+						<div class="h1">{{ clientCar.modelName }}</div>
+						<div class="h4 secondary-text">Model year {{ clientCar.modelYear }}</div>
+						<div class="h4 secondary-text">Plate Number{{ clientCar.plateNumber }}</div>
+						<div class="h4 secondary-text">Color {{ clientCar.color }}</div>
+						<div class="h4 secondary-text">Fuel Type {{ clientCar.fuelName }}</div>
+						<div class="h4 secondary-text">Description {{ clientCar.description }}</div>
+					</div>
+				</div>
+				<!-- <div class="p-16 pt-0 line-height-1.75">(Car Details) → {{ clientDetails.address.formattedAddres }}</div> -->
+			</div>
+
+			<!-- ============================================== -->
+			<div class="fuse-card mt-16">
+				<div class="p-16">
+					<div class="h2">Status</div>
+				</div>
+				<div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+					<ng-container>
+						<div class="time-status">
+							<span class="h2">{{ bookingDetails.status }}</span>
+						</div>
+					</ng-container>
+				</div>
+			</div>
+			<!-- <div class="fuse-card mt-16" *ngIf="bookingDetails.status === 'DONE'">
+				<div class="p-16">
+					<div class="h1">Customer Rating</div>
+				</div>
+				<div class="p-9" fxLayout="row" fxLayoutAlign="start center">
+					<div class="p-16">
+						<star-rating
+							[value]="bookingDetails.ratings"
+							totalstars="5"
+							checkedcolor="orange"
+							size="34px"
+							readonly="true"
+						></star-rating>
+					</div>
+				</div>
+				<div class="p-16 pt-0 line-height-1.75">
+					<span class="h2">{{ bookingDetails.comments }}</span>
+				</div>
+			</div> -->
+		</div>
+		<div class="assistance-info">
+			<div class="p-12 header-assistance">
+				<div class="h2">Service Details ( {{ bookingDetails.serviceDetail.name }})</div>
+				<div class="h2">
+					<button
+						*ngIf="bookingDetails.status === 'PENDING'"
+						mat-raised-button
+						(click)="cancelBooking()"
+						color="warn"
+						class="post-comment-button override-arrived"
+						aria-label="Accommodate"
+					>
+						Declined
+					</button>
+					<button
+						*ngIf="bookingDetails.status === 'PENDING'"
+						mat-raised-button
+						(click)="acceptBooking()"
+						color="accent"
+						class="post-comment-button"
+						aria-label="Accommodate"
+					>
+						Accept
+					</button>
+				</div>
+			</div>
+
+			<mat-tab-group>
+				<mat-tab label="Main Details" class="date-details">
+					<div class="inner-card">
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Date</small>
+								<fuse-countdown eventDate="{{ bookingDetails.endDate.toDate() | date: 'y-MM-d' }}"></fuse-countdown>
+							</div>
+						</div>
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Additional Contact</small>
+								<div class="h4 secondary-text">{{ bookingDetails.AdditionalContact }}</div>
+							</div>
+						</div>
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Notes</small>
+								<div class="h4 secondary-text">{{ bookingDetails.notes }}</div>
+							</div>
+						</div>
+						<ng-container *ngFor="let item of bookingDetails.serviceDetail.personnels">
+							<div class="fuse-card">
+								<div class="p-16" fxLayout="row" fxLayoutAlign="start center">
+									<img class="w-40 h-40 border-radius-100" src="assets/images/avatars/profile.jpg" />
+
+									<div class="ml-16">
+										<div class="text-bold">{{ item.name }} {{ item.lastName }}</div>
+										<div class="h5 text-bold secondary-text">{{ item.phone }}</div>
+									</div>
+								</div>
+							</div>
+						</ng-container>
+					</div>
+					<!-- ==================================== -->
+					<div class="inner-card">
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Service Price</small>
+
+								<div class="h4 secondary-text">
+									{{ bookingDetails.serviceDetail.servicePrice | currency: 'PHP':'₱' }}
+								</div>
+							</div>
+						</div>
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Hours</small>
+								<div class="h4 secondary-text">{{ bookingDetails.serviceDetail.hours }}</div>
+							</div>
+						</div>
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Description</small>
+								<div class="h4 secondary-text">{{ bookingDetails.serviceDetail.description }}</div>
+							</div>
+						</div>
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Items</small>
+								<mat-list>
+									<ng-container *ngFor="let item of bookingDetails.serviceDetail.products">
+										<mat-list-item
+											>Name{{ item.name }} &nbsp;&nbsp; Qty: {{ item.quantity }} &nbsp;&nbsp; Price: {{ item.price }}
+										</mat-list-item>
+										<mat-divider></mat-divider>
+									</ng-container>
+								</mat-list>
+							</div>
+						</div>
+						<div class="fuse-card">
+							<div class="p-16">
+								<small>Grand Total</small>
+
+								<div class="h4 secondary-text">
+									{{ bookingDetails.serviceDetail.grandTotal | currency: 'PHP':'₱' }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</mat-tab>
+				<mat-tab label="Client Location">
+					<div class="map">
+						<div class="p-16">
+							<small>Address</small>
+
+							<div class="h4 secondary-text">
+								{{ bookingDetails.userData.address.formattedAddres }}
+							</div>
+						</div>
+						<agm-map
+							class="h-640 w-100-p map-container"
+							[minZoom]="2"
+							[maxZoom]="20"
+							[fullscreenControl]="true"
+							[rotateControl]="true"
+							[zoomControl]="true"
+							[scaleControl]="true"
+							[streetViewControl]="true"
+							[scrollwheel]="true"
+							[latitude]="bookingDetails.userData.address.latitude"
+							[longitude]="bookingDetails.userData.address.longitude"
+							[zoom]="12"
+						>
+							<agm-marker
+								[latitude]="bookingDetails.userData.address.latitude"
+								[longitude]="bookingDetails.userData.address.longitude"
+							>
+							</agm-marker>
+						</agm-map>
+					</div>
+				</mat-tab>
+			</mat-tab-group>
+		</div>
+	</div>
+</div>

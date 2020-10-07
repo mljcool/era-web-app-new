@@ -1,74 +1,84 @@
 <div class="dialog-content-wrapper">
-  <mat-toolbar class="mat-accent m-0">
-    <mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-      <span class="title dialog-title">{{ dialogTitle }}</span>
-      <button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-toolbar-row>
-  </mat-toolbar>
+	<mat-toolbar class="mat-accent m-0">
+		<mat-toolbar-row fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+			<span class="title dialog-title">{{ dialogTitle }} - ({{ newData.moreDetails.status }})</span>
+			<button mat-icon-button (click)="matDialogRef.close()" aria-label="Close dialog">
+				<mat-icon>close</mat-icon>
+			</button>
+		</mat-toolbar-row>
+	</mat-toolbar>
 
-  <div mat-dialog-content class="p-16 pb-0 m-0" fusePerfectScrollbar>
-    <form name="eventForm" [formGroup]="eventForm" class="event-form w-100-p" fxLayout="column" fxFlex>
-      <mat-form-field appearance="outline" class="w-100-p">
-        <mat-label>Title</mat-label>
-        <input matInput name="title" formControlName="title" required />
-      </mat-form-field>
+	<div mat-dialog-content class="p-16 pb-0 m-0" fusePerfectScrollbar>
+		<form name="eventForm" [formGroup]="eventForm" class="event-form w-100-p" fxLayout="column" fxFlex>
+			<mat-form-field appearance="outline" class="w-100-p">
+				<mat-label>Service Name</mat-label>
+				<input matInput name="title" formControlName="title" readonly />
+			</mat-form-field>
 
-      <mat-form-field appearance="outline" class="w-100-p">
-        <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="startDatePicker" name="start" formControlName="start" />
-        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #startDatePicker></mat-datepicker>
-      </mat-form-field>
+			<mat-form-field appearance="outline" class="w-100-p">
+				<mat-label>Date</mat-label>
+				<input matInput [matDatepicker]="startDatePicker" name="start" formControlName="start" readonly />
+				<mat-datepicker #startDatePicker></mat-datepicker>
+			</mat-form-field>
 
-      <mat-form-field appearance="outline" formGroupName="meta" class="w-100-p">
-        <mat-label>Location</mat-label>
-        <input matInput name="location" formControlName="location" />
-      </mat-form-field>
+			<mat-form-field appearance="outline" class="w-100-p">
+				<mat-label>Additional Contact</mat-label>
+				<input matInput name="additionalContact" formControlName="additionalContact" readonly />
+			</mat-form-field>
 
-      <mat-form-field appearance="outline" formGroupName="meta" class="w-100-p">
-        <mat-label>Notes</mat-label>
-        <textarea matInput formControlName="notes" mat-maxlength="250" max-rows="4"> </textarea>
-      </mat-form-field>
-    </form>
-  </div>
+			<mat-form-field appearance="outline" formGroupName="meta" class="w-100-p">
+				<mat-label>Location</mat-label>
+				<input matInput name="location" formControlName="location" readonly />
+			</mat-form-field>
 
-  <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
-    <button
-      *ngIf="action === 'edit'"
-      mat-button
-      color="primary"
-      class="mr-8"
-      (click)="matDialogRef.close(['delete', eventForm])"
-      aria-label="Delete"
-      matTooltip="Delete"
-    >
-      DELETE
-    </button>
+			<mat-form-field appearance="outline" formGroupName="meta" class="w-100-p">
+				<mat-label>Notes</mat-label>
+				<textarea matInput formControlName="notes" mat-maxlength="250" max-rows="4" readonly> </textarea>
+			</mat-form-field>
+		</form>
+	</div>
 
-    <button
-      *ngIf="action !== 'edit'"
-      mat-button
-      color="primary"
-      class="save-button"
-      (click)="matDialogRef.close(eventForm)"
-      [disabled]="eventForm.invalid"
-      aria-label="ADD"
-    >
-      ADD
-    </button>
+	<div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+		<ng-container *ngIf="newData.moreDetails.status !== 'CANCELLED'">
+			<button
+				*ngIf="action === 'edit'"
+				mat-button
+				color="primary"
+				class="mr-8"
+				(click)="cancelBooking()"
+				aria-label="Delete"
+				matTooltip="Delete"
+			>
+				DECLINE
+			</button>
 
-    <button
-      *ngIf="action === 'edit'"
-      mat-button
-      color="primary"
-      class="save-button"
-      (click)="matDialogRef.close(['save', eventForm])"
-      [disabled]="eventForm.invalid"
-      aria-label="SAVE"
-    >
-      SAVE
-    </button>
-  </div>
+			<button
+				*ngIf="action !== 'edit'"
+				mat-button
+				color="primary"
+				class="save-button"
+				(click)="matDialogRef.close(eventForm)"
+				[disabled]="eventForm.invalid"
+				aria-label="ADD"
+			>
+				ADD
+			</button>
+
+			<button
+				*ngIf="action === 'edit'"
+				mat-button
+				color="primary"
+				class="save-button"
+				(click)="acceptBooking()"
+				[disabled]="eventForm.invalid"
+				aria-label="SAVE"
+			>
+				ACCEPT
+			</button>
+
+			<button mat-icon-button matTooltip="More details" class="save-button" (click)="viewDetails()" aria-label="SAVE">
+				<mat-icon>open_in_new</mat-icon>
+			</button>
+		</ng-container>
+	</div>
 </div>
